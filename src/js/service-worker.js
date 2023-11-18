@@ -37,14 +37,14 @@ async function onInstalled(details) {
     } else if (options.showUpdate && details.reason === 'update') {
         const manifest = chrome.runtime.getManifest()
         if (manifest.version !== details.previousVersion) {
-            const url = `https://github.com/cssnr/open-in-tab/releases/tag/${manifest.version}`
+            const url = `https://github.com/cssnr/open-links-in-new-tab/releases/tag/${manifest.version}`
             console.log(`url: ${url}`)
             await chrome.tabs.create({ active: true, url })
         }
     }
     // Set Uninstall URL
     chrome.runtime.setUninstallURL(
-        'https://github.com/cssnr/open-in-tab/issues'
+        'https://github.com/cssnr/open-links-in-new-tab/issues'
     )
 }
 
