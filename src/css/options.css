@@ -1,0 +1,12 @@
+.card {
+    min-width: 380px;
+}
+
+.toast {
+    max-width: 320px;
+}
+
+#toast-container {
+    margin-bottom: 50px;
+    margin-right: 25px;
+}

@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Open Links in New Tab</title>
+    <link rel="icon" href="../media/logo16.png" sizes="any">
+    <link rel="stylesheet" type="text/css" href="../dist/bootstrap/bootstrap.min.css">
+<!--    <link rel="stylesheet" type="text/css" href="../dist/bootstrap/bootstrap-icons.min.css">-->
+    <link rel="stylesheet" type="text/css" href="../css/popup.css">
+    <script type="text/javascript" src="../js/theme.js"></script>
+</head>
+<body>
+
+<div class="container-fluid p-3">
+<!--    <button id="grant-perms" class="btn btn-outline-warning w-100 mb-3" style="display: block;">Grant Host Permissions</button>-->
+    <div id="site-switch" class="mb-3 text-center border border-secondary border-2 rounded p-1">
+        <p class="mb-1">
+            <label for="toggle-site"><kbd id="site-hostname">Invalid Site</kbd></label>
+        </p>
+        <div class="form-check form-switch fs-5">
+            <input class="form-check-input" type="checkbox" role="switch" id="toggle-site">
+            <label class="form-check-label w-100" for="toggle-site">Open Links in New Tab</label>
+        </div>
+    </div>
+    <a id="enable-temp" class="btn btn-outline-warning btn-sm w-100" role="button">
+        Enable Temporarily
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-stopwatch ms-1" viewBox="0 0 16 16">
+            <path d="M8.5 5.6a.5.5 0 1 0-1 0v2.9h-3a.5.5 0 0 0 0 1H8a.5.5 0 0 0 .5-.5V5.6z"/>
+            <path d="M6.5 1A.5.5 0 0 1 7 .5h2a.5.5 0 0 1 0 1v.57c1.36.196 2.594.78 3.584 1.64a.715.715 0 0 1 .012-.013l.354-.354-.354-.353a.5.5 0 0 1 .707-.708l1.414 1.415a.5.5 0 1 1-.707.707l-.353-.354-.354.354a.512.512 0 0 1-.013.012A7 7 0 1 1 7 2.071V1.5a.5.5 0 0 1-.5-.5zM8 3a6 6 0 1 0 .001 12A6 6 0 0 0 8 3z"/>
+        </svg>
+    </a>
+    <hr>
+    <div class="d-grid g-2 gap-2 mb-3">
+        <a class="btn btn-outline-info btn-sm popup-click" role="button" data-href="html/options.html">
+            Open Options
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-gear ms-1" viewBox="0 0 16 16">
+                <path d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492zM5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0z"/>
+                <path d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52l-.094-.319zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a1.873 1.873 0 0 0 2.692-1.115l.094-.319z"/>
+            </svg>
+        </a>
+    </div>
+<!--    <div class="form-check form-switch">-->
+<!--        <input class="form-check-input" type="checkbox" role="switch" id="autoReload">-->
+<!--        <label class="form-check-label" for="autoReload" aria-describedby="autoReloadHelp">Auto Reload on Disable</label>-->
+<!--    </div>-->
+<!--    <hr>-->
+    <div class="text-center">
+        <a class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover" type="button" rel="noopener"
+           data-href="https://github.com/cssnr/open-links-in-new-tab">Open Links in New Tab</a>
+        v<span data-locale="version"></span>
+    </div>
+</div>
+
+<script type="text/javascript" src="../dist/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../dist/bootstrap/bootstrap.bundle.min.js"></script>
+<script type="text/javascript" src="../js/main.js"></script>
+<script type="module" src="../js/popup.js"></script>
+
+</body>
+</html>

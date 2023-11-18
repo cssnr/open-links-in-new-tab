@@ -1,0 +1,50 @@
+name: "Build"
+
+on:
+  workflow_dispatch:
+  release:
+    types: [published]
+
+jobs:
+  build:
+    name: "Build"
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v3
+
+      - name: "Release Version Check"
+        if: ${{ github.event_name == 'release' }}
+        run: |
+          export version="$(jq '.version' < manifest.json | tr -d '"')"
+          if [ "${{ github.ref_name }}" != "${version}" ];then
+            echo "Manifest Version ${version} does not match release tag ${{ github.ref_name }}"
+            exit 1
+          fi
+
+      - name: "Setup Node"
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: "Build All"
+        run: |
+          npm install
+          npm run build
+
+      - name: "Upload to Actions"
+        uses: actions/upload-artifact@v3
+        with:
+          name: artifacts
+          path: web-ext-artifacts/
+
+      - name: "Upload to Release"
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: web-ext-artifacts/*
+          tag: ${{ github.ref }}
+          overwrite: true
+          file_glob: true

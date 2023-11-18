@@ -1,0 +1,60 @@
+{
+  "manifest_version": 3,
+  "version": "0.0.1",
+  "name": "Open Links in New Tab",
+  "description": "Modern Web Extension to Open Links in New Tabs for Specified Domains or Temporarily on Any Tab.",
+  "homepage_url": "https://github.com/cssnr/open-links-in-new-tab",
+  "author": "Shane",
+  "commands": {
+    "_execute_action": {
+      "suggested_key": {
+        "default": "Alt+Shift+X"
+      },
+      "description": "Show Popup"
+    },
+    "toggle-site": {
+      "suggested_key": {
+        "default": "Alt+Shift+N"
+      },
+      "description": "Toggle Current Domain"
+    },
+    "enable-temp": {
+      "suggested_key": {
+        "default": "Alt+Shift+W"
+      },
+      "description": "Enable Temporarily"
+    }
+  },
+  "permissions": ["activeTab", "contextMenus", "scripting", "storage"],
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["js/tab.js"]
+    }
+  ],
+  "background": {
+    "type": "module"
+  },
+  "options_ui": {
+    "page": "html/options.html",
+    "open_in_tab": true
+  },
+  "action": {
+    "default_title": "Open Links in New Tab",
+    "default_popup": "html/popup.html",
+    "default_icon": {
+      "16": "media/logo16.png",
+      "32": "media/logo32.png",
+      "48": "media/logo48.png",
+      "96": "media/logo96.png",
+      "128": "media/logo128.png"
+    }
+  },
+  "icons": {
+    "16": "media/logo16.png",
+    "32": "media/logo32.png",
+    "48": "media/logo48.png",
+    "96": "media/logo96.png",
+    "128": "media/logo128.png"
+  }
+}

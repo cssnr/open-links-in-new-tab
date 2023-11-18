@@ -1,0 +1,8 @@
+.idea/
+*.iml
+.vscode/
+**/dist/
+build/
+node_modules/
+web-ext-artifacts/
+src/manifest.json
