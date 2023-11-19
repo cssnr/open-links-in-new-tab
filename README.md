@@ -37,8 +37,8 @@ Modern Chrome Web Extension and Firefox Browser Addon to Open Links in New Tabs 
 All Chromium Based Browsers can install the extension from the
 [Chrome Web Store](https://chrome.google.com/webstore/detail/open-links-in-new-tab/efahmjakjnnmleokcaomicgfhobabdkc).
 
-*   Download the latest [Chrome Release](https://github.com/cssnr/aviation-tools/releases/latest/download/aviation_tools-chrome.crx) from GitHub
-*   Download the latest [Firefox Release](https://github.com/cssnr/aviation-tools/releases/latest/download/aviation_tools-firefox.xpi) from GitHub
+*   Download the latest [Chrome Release](https://github.com/cssnr/open-links-in-new-tab/releases/latest/download/open_links_in_new_tab-chrome.crx) from GitHub
+*   Download the latest [Firefox Release](https://github.com/cssnr/open-links-in-new-tab/releases/latest/download/open_links_in_new_tab-firefox.xpi) from GitHub
 
 # Features
 
