@@ -3,7 +3,7 @@
 [![Chrome Web Store Version](https://img.shields.io/chrome-web-store/v/efahmjakjnnmleokcaomicgfhobabdkc?label=chrome&logo=googlechrome)](https://chrome.google.com/webstore/detail/open-links-in-new-tab/efahmjakjnnmleokcaomicgfhobabdkc)
 [![Mozilla Add-on Version](https://img.shields.io/amo/v/open-links-in-new-tab?label=firefox&logo=firefox)](https://addons.mozilla.org/addon/open-links-in-new-tab)
 [![GitHub Release Version](https://img.shields.io/github/v/release/cssnr/open-links-in-new-tab?logo=github)](https://github.com/cssnr/open-links-in-new-tab/releases/latest)
-[![Manifest Version](https://img.shields.io/github/manifest-json/v/cssnr/open-links-in-new-tab?filename=manifest.json&logo=json&label=manifest)](https://github.com/cssnr/open-links-in-new-tab/blob/master/src/manifest.json)
+[![Manifest Version](https://img.shields.io/github/manifest-json/v/cssnr/open-links-in-new-tab?filename=manifest.json&logo=json&label=manifest)](https://github.com/cssnr/open-links-in-new-tab/blob/master/manifest.json)
 [![Build](https://github.com/cssnr/open-links-in-new-tab/actions/workflows/build.yaml/badge.svg)](https://github.com/cssnr/open-links-in-new-tab/actions/workflows/build.yaml)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=cssnr_open-links-in-new-tab&metric=alert_status&label=quality)](https://sonarcloud.io/summary/overall?id=cssnr_open-links-in-new-tab)
 # Open Links in New Tab
