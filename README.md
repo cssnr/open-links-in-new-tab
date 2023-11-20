@@ -33,10 +33,12 @@ Modern Chrome Web Extension and Firefox Browser Addon to Open Links in New Tabs 
     <img alt="Brave" src="https://raw.githubusercontent.com/raivo-otp/issuer-icons/master/vectors/brave.com/brave.svg" width="42" height="42" /></a>
 <a href="https://chrome.google.com/webstore/detail/open-links-in-new-tab/efahmjakjnnmleokcaomicgfhobabdkc" target="_blank">
     <img alt="Vivaldi" src="https://raw.githubusercontent.com/raivo-otp/issuer-icons/master/vectors/vivaldi.com/vivaldi.svg" width="42" height="42" /></a>
-
+  
+  
 All Chromium Based Browsers can install the extension from the
 [Chrome Web Store](https://chrome.google.com/webstore/detail/open-links-in-new-tab/efahmjakjnnmleokcaomicgfhobabdkc).
 
+Advanced Users can:
 *   Download the latest [Chrome Release](https://github.com/cssnr/open-links-in-new-tab/releases/latest/download/open_links_in_new_tab-chrome.crx) from GitHub
 *   Download the latest [Firefox Release](https://github.com/cssnr/open-links-in-new-tab/releases/latest/download/open_links_in_new_tab-firefox.xpi) from GitHub
 
