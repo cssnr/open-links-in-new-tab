@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', initPopup)
 document
     .getElementById('toggle-site')
     .addEventListener('click', toggleSiteClick)
+
 document
     .getElementById('enable-temp')
     .addEventListener('click', enableTempClick)
@@ -137,7 +138,6 @@ export async function getTabUrl() {
         active: true,
         currentWindow: true,
     })
-    console.log(tab)
     let url = ''
     if (tab.url) {
         url = new URL(tab.url)
