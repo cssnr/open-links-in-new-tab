@@ -173,7 +173,7 @@ function setDefaults(options, defaultOptions) {
         // console.log(`${key}: default: ${value} current: ${options[key]}`)
         if (options[key] === undefined) {
             options[key] = value
-            console.log(`Set ${options[key]} to ${value}`)
+            console.log(`Set ${key}:`, value)
         }
     }
     return options
