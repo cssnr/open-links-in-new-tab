@@ -7,6 +7,8 @@ chrome.commands.onCommand.addListener(onCommand)
 chrome.runtime.onMessage.addListener(onMessage)
 chrome.contextMenus.onClicked.addListener(onClicked)
 
+const ghUrl = 'https://github.com/cssnr/open-links-in-new-tab'
+
 /**
  * Installed Callback
  * @function onInstalled
@@ -22,30 +24,25 @@ async function onInstalled(details) {
         sites: [],
     }
     let { options } = await chrome.storage.sync.get(['options'])
-    if (!options) {
-        options = defaultOptions
-        await chrome.storage.sync.set({ options })
-    }
+    options = setDefaults(options, defaultOptions)
     console.log('options:', options)
+    await chrome.storage.sync.set({ options })
+
     if (options.contextMenu) {
         createContextMenus()
     }
-    // Show Options on Install else Check if Updated and Show Release Notes
     if (details.reason === 'install') {
         const url = chrome.runtime.getURL('/html/options.html')
         await chrome.tabs.create({ active: true, url })
     } else if (options.showUpdate && details.reason === 'update') {
         const manifest = chrome.runtime.getManifest()
         if (manifest.version !== details.previousVersion) {
-            const url = `https://github.com/cssnr/open-links-in-new-tab/releases/tag/${manifest.version}`
+            const url = `${ghUrl}/releases/tag/${manifest.version}`
             console.log(`url: ${url}`)
             await chrome.tabs.create({ active: true, url })
         }
     }
-    // Set Uninstall URL
-    chrome.runtime.setUninstallURL(
-        'https://github.com/cssnr/open-links-in-new-tab/issues'
-    )
+    chrome.runtime.setUninstallURL(`${ghUrl}/issues`)
 }
 
 /**
@@ -161,4 +158,23 @@ async function onClicked(ctx, tab) {
     } else {
         console.error(`Unknown ctx.menuItemId: ${ctx.menuItemId}`)
     }
+}
+
+/**
+ * Set Default Options
+ * @function setDefaults
+ * @param {Object} options
+ * @param {Object} defaultOptions
+ * @return {Object}
+ */
+function setDefaults(options, defaultOptions) {
+    options = options || {}
+    for (const [key, value] of Object.entries(defaultOptions)) {
+        // console.log(`${key}: default: ${value} current: ${options[key]}`)
+        if (options[key] === undefined) {
+            options[key] = value
+            console.log(`Set ${options[key]} to ${value}`)
+        }
+    }
+    return options
 }
