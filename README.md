@@ -52,6 +52,17 @@ For any issues, bugs or concerns; please [Open an Issue](https://github.com/cssn
 *   Automatic Dark/Light Mode based on Browser Setting
 *   Activate from Icon, Context Menu, or Keyboard Shortcuts
 
+## Planned Upcoming Features
+
+*   Enable for Specific URL Only
+*   Enable for Matching Regex URL Only
+*   Toggle Enable Globally
+*   Toggle Blacklist/Whitelist
+*   Export/Import URL List
+
+If you want to see any of these, or another, feature implemented faster, please open a
+[Feature Request](https://github.com/cssnr/open-links-in-new-tab/discussions/new?category=feature-requests).
+
 # Configuration
 
 You can pin the Addon by clicking the `Puzzle Piece`, find the Web Extension icon, then;  
