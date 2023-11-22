@@ -21,18 +21,13 @@ Modern Chrome Web Extension and Firefox Browser Addon to Open Links in New Tabs 
 *   [Google Chrome Web Store](https://chrome.google.com/webstore/detail/open-links-in-new-tab/efahmjakjnnmleokcaomicgfhobabdkc)
 *   [Mozilla Firefox Add-ons](https://addons.mozilla.org/addon/open-links-in-new-tab)
 
-<a href="https://chrome.google.com/webstore/detail/open-links-in-new-tab/efahmjakjnnmleokcaomicgfhobabdkc" target="_blank">
-    <img alt="Chrome" src="https://raw.githubusercontent.com/raivo-otp/issuer-icons/master/vectors/google.com/google-chrome.svg" width="42" height="42" /></a>
-<a href="https://addons.mozilla.org/addon/open-links-in-new-tab" target="_blank">
-    <img alt="Firefox" src="https://raw.githubusercontent.com/raivo-otp/issuer-icons/master/vectors/firefox.com/firefox.svg" width="42" height="42" /></a>
-<a href="https://chrome.google.com/webstore/detail/open-links-in-new-tab/efahmjakjnnmleokcaomicgfhobabdkc" target="_blank">
-    <img alt="Edge" src="https://raw.githubusercontent.com/raivo-otp/issuer-icons/master/vectors/microsoft.com/microsoft-edge.svg" width="42" height="42" /></a>
-<a href="https://chrome.google.com/webstore/detail/open-links-in-new-tab/efahmjakjnnmleokcaomicgfhobabdkc" target="_blank">
-    <img alt="Opera" src="https://raw.githubusercontent.com/raivo-otp/issuer-icons/master/vectors/opera.com/opera.svg" width="42" height="42" /></a>
-<a href="https://chrome.google.com/webstore/detail/open-links-in-new-tab/efahmjakjnnmleokcaomicgfhobabdkc" target="_blank">
-    <img alt="Brave" src="https://raw.githubusercontent.com/raivo-otp/issuer-icons/master/vectors/brave.com/brave.svg" width="42" height="42" /></a>
-<a href="https://chrome.google.com/webstore/detail/open-links-in-new-tab/efahmjakjnnmleokcaomicgfhobabdkc" target="_blank">
-    <img alt="Vivaldi" src="https://raw.githubusercontent.com/raivo-otp/issuer-icons/master/vectors/vivaldi.com/vivaldi.svg" width="42" height="42" /></a>
+[![Chrome](https://raw.githubusercontent.com/alrra/browser-logos/main/src/chrome/chrome_48x48.png)](https://chrome.google.com/webstore/detail/open-links-in-new-tab/efahmjakjnnmleokcaomicgfhobabdkc)
+[![Firefox](https://raw.githubusercontent.com/alrra/browser-logos/main/src/firefox/firefox_48x48.png)](https://addons.mozilla.org/addon/open-links-in-new-tab)
+[![Edge](https://raw.githubusercontent.com/alrra/browser-logos/main/src/edge/edge_48x48.png)](https://chrome.google.com/webstore/detail/open-links-in-new-tab/efahmjakjnnmleokcaomicgfhobabdkc)
+[![Chromium](https://raw.githubusercontent.com/alrra/browser-logos/main/src/chromium/chromium_48x48.png)](https://chrome.google.com/webstore/detail/open-links-in-new-tab/efahmjakjnnmleokcaomicgfhobabdkc)
+[![Brave](https://raw.githubusercontent.com/alrra/browser-logos/main/src/brave/brave_48x48.png)](https://chrome.google.com/webstore/detail/open-links-in-new-tab/efahmjakjnnmleokcaomicgfhobabdkc)
+[![Vivaldi](https://raw.githubusercontent.com/alrra/browser-logos/main/src/vivaldi/vivaldi_48x48.png)](https://chrome.google.com/webstore/detail/open-links-in-new-tab/efahmjakjnnmleokcaomicgfhobabdkc)
+[![Opera](https://raw.githubusercontent.com/alrra/browser-logos/main/src/opera/opera_48x48.png)](https://chrome.google.com/webstore/detail/open-links-in-new-tab/efahmjakjnnmleokcaomicgfhobabdkc)
 
 All Chromium Based Browsers can install the extension from the
 [Chrome Web Store](https://chrome.google.com/webstore/detail/open-links-in-new-tab/efahmjakjnnmleokcaomicgfhobabdkc).
