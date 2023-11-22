@@ -12,15 +12,17 @@
 
 <div class="container-fluid p-3">
 <!--    <a id="grant-perms" class="btn btn-outline-warning w-100 mb-3" role="button" style="display: block;">Grant Host Permissions</a>-->
-    <div id="site-switch" class="mb-3 text-center border border-secondary border-2 rounded p-1">
-        <p class="mb-1">
-            <label for="toggle-site"><kbd id="site-hostname">Invalid Site</kbd></label>
-        </p>
-        <div class="form-check form-switch fs-5">
-            <input class="form-check-input" type="checkbox" role="switch" id="toggle-site">
-            <label class="form-check-label w-100" for="toggle-site">Open Links in New Tab</label>
+    <label for="toggle-site" class="w-100 mb-3">
+        <div id="site-switch" class=" border border-secondary border-2 rounded p-1">
+            <p class="mb-1 text-center small mb-2">
+                <kbd id="site-hostname">Invalid Site</kbd>
+            </p>
+            <div class="form-check form-switch m-auto d-flex justify-content-center">
+                <input class="form-check-input me-3" type="checkbox" role="switch" id="toggle-site">
+                Open Links in New Tab
+            </div>
         </div>
-    </div>
+    </label>
     <a id="enable-temp" class="btn btn-outline-warning btn-sm w-100" role="button">
         Enable Temporarily
         <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-stopwatch ms-1" viewBox="0 0 16 16">
