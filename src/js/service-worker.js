@@ -18,7 +18,7 @@ async function onInstalled(details) {
     console.log('onInstalled:', details)
     const defaultOptions = {
         contextMenu: true,
-        showUpdate: true,
+        showUpdate: false,
         autoReload: true,
         isBlacklist: false,
         sites: [],
