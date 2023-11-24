@@ -1,6 +1,11 @@
 // JS for popup.html
 
-import { enableTemp, toggleSite } from './exports.js'
+import {
+    enableTemp,
+    saveOptions,
+    toggleSite,
+    updateOptions,
+} from './exports.js'
 
 document.addEventListener('DOMContentLoaded', initPopup)
 
@@ -132,37 +137,6 @@ async function enableTempClick(event) {
     console.log('enableTemp:', event, tab)
     await enableTemp(tab)
     window.close()
-}
-
-/**
- * Save Options Callback
- * TODO: Duplicate Function
- * @function saveOptions
- * @param {InputEvent} event
- */
-async function saveOptions(event) {
-    console.log('saveOptions:', event)
-    let { options } = await chrome.storage.sync.get(['options'])
-    options[event.target.id] = event.target.checked
-    console.log(`Set: options[${event.target.id}]: ${options[event.target.id]}`)
-    await chrome.storage.sync.set({ options })
-}
-
-/**
- * Update Options
- * TODO: Duplicate Function
- * @function initOptions
- * @param {Object} options
- */
-function updateOptions(options) {
-    for (const [key, value] of Object.entries(options)) {
-        // console.log(`${key}: ${value}`)
-        // document.getElementById(key).checked = value
-        const el = document.getElementById(key)
-        if (el) {
-            el.checked = value
-        }
-    }
 }
 
 /**

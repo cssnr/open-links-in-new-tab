@@ -207,14 +207,13 @@ async function setDefaultOptions(defaultOptions) {
         await chrome.storage.sync.set({ options })
         console.log(options)
     }
-    // Migrate Start - options.sites to sites
+    // Migrate options.sites to sites
     if (options.sites) {
         console.warn('Migrating options.sites to sites:', options.sites)
         sites = options.sites
         delete options.sites
         chrome.storage.sync.set({ options, sites }).then()
     }
-    // Migrate End
     if (!sites) {
         sites = []
         chrome.storage.sync.set({ sites }).then()

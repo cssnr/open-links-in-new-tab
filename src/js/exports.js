@@ -1,6 +1,35 @@
 // JS Exports
 
 /**
+ * Save Options Callback
+ * @function saveOptions
+ * @param {InputEvent} event
+ */
+export async function saveOptions(event) {
+    console.log('saveOptions:', event)
+    let { options } = await chrome.storage.sync.get(['options'])
+    options[event.target.id] = event.target.checked
+    console.log(`Set: options[${event.target.id}]: ${options[event.target.id]}`)
+    await chrome.storage.sync.set({ options })
+}
+
+/**
+ * Update Options
+ * @function initOptions
+ * @param {Object} options
+ */
+export function updateOptions(options) {
+    for (const [key, value] of Object.entries(options)) {
+        // console.log(`${key}: ${value}`)
+        // document.getElementById(key).checked = value
+        const el = document.getElementById(key)
+        if (el) {
+            el.checked = value
+        }
+    }
+}
+
+/**
  * Get URL for Current Tab
  * @function toggleSite
  * @param {URL} url
