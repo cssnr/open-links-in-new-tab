@@ -81,10 +81,7 @@ async function onClicked(ctx, tab) {
  */
 async function onCommand(command) {
     console.log(`onCommand: ${command}`)
-    const [tab] = await chrome.tabs.query({
-        active: true,
-        currentWindow: true,
-    })
+    const [tab] = await chrome.tabs.query({ currentWindow: true, active: true })
     if (command === 'toggle-site') {
         console.log('toggle-site')
         const hasPerms = await chrome.permissions.contains({
@@ -166,7 +163,6 @@ async function setDefaultOptions(defaultOptions) {
     console.log('options, sites:', options, sites)
     let changed = false
     for (const [key, value] of Object.entries(defaultOptions)) {
-        // console.log(`${key}: default: ${value} current: ${options[key]}`)
         if (options[key] === undefined) {
             changed = true
             options[key] = value

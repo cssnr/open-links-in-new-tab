@@ -20,8 +20,6 @@ export async function saveOptions(event) {
  */
 export function updateOptions(options) {
     for (const [key, value] of Object.entries(options)) {
-        // console.log(`${key}: ${value}`)
-        // document.getElementById(key).checked = value
         const el = document.getElementById(key)
         if (el) {
             el.checked = value

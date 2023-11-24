@@ -36,8 +36,9 @@ async function initPopup() {
         'options',
         'sites',
     ])
-    console.log('sites:', sites)
-    const { tab, url } = await getTabUrl()
+    console.log('options, sites:', options, sites)
+    const [tab] = await chrome.tabs.query({ currentWindow: true, active: true })
+    const url = new URL(tab.url)
     console.log(tab, url)
     console.log(`url.hostname: ${url.hostname}`)
     if (url.toString().startsWith('http')) {
@@ -108,9 +109,9 @@ async function toggleSiteClick(event) {
     }
     let { options, sites } = await chrome.storage.sync.get(['options', 'sites'])
     console.log('options, sites:', options, sites)
-    const { tab, url } = await getTabUrl()
-    console.log(tab, url)
-    const added = await toggleSite(url)
+    const [tab] = await chrome.tabs.query({ currentWindow: true, active: true })
+    console.log('tab:', tab)
+    const added = await toggleSite(new URL(tab.url))
     if (added) {
         await chrome.scripting.executeScript({
             target: { tabId: tab.id },
@@ -133,25 +134,9 @@ async function toggleSiteClick(event) {
  * @param {MouseEvent} event
  */
 async function enableTempClick(event) {
-    const { tab } = await getTabUrl()
-    console.log('enableTemp:', event, tab)
+    console.log('enableTemp:', event)
+    const [tab] = await chrome.tabs.query({ currentWindow: true, active: true })
+    console.log('tab:', tab)
     await enableTemp(tab)
     window.close()
-}
-
-/**
- * Get URL for Current Tab
- * @function getTabUrl
- * @return {tab, url}
- */
-export async function getTabUrl() {
-    const [tab] = await chrome.tabs.query({
-        active: true,
-        currentWindow: true,
-    })
-    let url = ''
-    if (tab.url) {
-        url = new URL(tab.url)
-    }
-    return { tab, url }
 }
