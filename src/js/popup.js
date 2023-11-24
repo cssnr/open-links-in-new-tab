@@ -6,6 +6,10 @@ document.addEventListener('DOMContentLoaded', initPopup)
 
 // document.getElementById('grant-perms').addEventListener('click', grantPermsBtn)
 
+document.querySelectorAll('[data-href]').forEach((el) => {
+    el.addEventListener('click', popupLink)
+})
+
 document
     .getElementById('toggle-site')
     .addEventListener('click', toggleSiteClick)
@@ -14,9 +18,8 @@ document
     .getElementById('enable-temp')
     .addEventListener('click', enableTempClick)
 
-document.querySelectorAll('[data-href]').forEach((el) => {
-    el.addEventListener('click', popupLink)
-})
+const formInputs = document.querySelectorAll('.form-control')
+formInputs.forEach((el) => el.addEventListener('change', saveOptions))
 
 /**
  * Initialize Popup
@@ -24,7 +27,10 @@ document.querySelectorAll('[data-href]').forEach((el) => {
  */
 async function initPopup() {
     console.log('initPopup')
-    const { sites } = await chrome.storage.sync.get(['sites'])
+    const { options, sites } = await chrome.storage.sync.get([
+        'options',
+        'sites',
+    ])
     console.log('sites:', sites)
     const { tab, url } = await getTabUrl()
     console.log(tab, url)
@@ -42,6 +48,7 @@ async function initPopup() {
     } else {
         document.getElementById('toggle-site').disabled = true
     }
+    updateOptions(options)
 }
 
 /**
@@ -125,6 +132,37 @@ async function enableTempClick(event) {
     console.log('enableTemp:', event, tab)
     await enableTemp(tab)
     window.close()
+}
+
+/**
+ * Save Options Callback
+ * TODO: Duplicate Function
+ * @function saveOptions
+ * @param {InputEvent} event
+ */
+async function saveOptions(event) {
+    console.log('saveOptions:', event)
+    let { options } = await chrome.storage.sync.get(['options'])
+    options[event.target.id] = event.target.checked
+    console.log(`Set: options[${event.target.id}]: ${options[event.target.id]}`)
+    await chrome.storage.sync.set({ options })
+}
+
+/**
+ * Update Options
+ * TODO: Duplicate Function
+ * @function initOptions
+ * @param {Object} options
+ */
+function updateOptions(options) {
+    for (const [key, value] of Object.entries(options)) {
+        // console.log(`${key}: ${value}`)
+        // document.getElementById(key).checked = value
+        const el = document.getElementById(key)
+        if (el) {
+            el.checked = value
+        }
+    }
 }
 
 /**

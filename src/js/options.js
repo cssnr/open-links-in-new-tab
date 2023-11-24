@@ -42,6 +42,9 @@ function onChanged(changes, namespace) {
         if (key === 'options') {
             updateOptions(newValue)
         }
+        if (key === 'sites') {
+            updateTable(newValue)
+        }
     }
 }
 
@@ -78,6 +81,7 @@ function updateOptions(options) {
 
 /**
  * Update Popup Table with Data
+ * TODO: Remove JQuery
  * @function updateTable
  * @param {Object} data
  */
@@ -85,6 +89,8 @@ function updateTable(data) {
     const tbodyRef = document
         .getElementById('hosts-table')
         .getElementsByTagName('tbody')[0]
+
+    $('#hosts-table tbody tr').remove()
 
     data.forEach(function (value) {
         const row = tbodyRef.insertRow()
@@ -133,32 +139,9 @@ async function deleteHost(event) {
         if (index !== undefined) {
             sites.splice(index, 1)
             await chrome.storage.sync.set({ sites })
-            const tr = anchor.closest('tr')
-            tr.parentNode.removeChild(tr)
-            showToast(`Deleted: ${host}`)
+            // const tr = anchor.closest('tr')
+            // console.log(tr)
+            // tr.parentNode.removeChild(tr)
         }
     }
-}
-
-/**
- * Show Bootstrap Toast
- * TODO: Remove jQuery Dependency
- * @function showToast
- * @param {String} message
- * @param {String} bsClass
- */
-function showToast(message, bsClass = 'success') {
-    const toastEl = $(
-        '<div class="toast align-items-center border-0 mt-3" role="alert" aria-live="assertive" aria-atomic="true">\n' +
-            '    <div class="d-flex">\n' +
-            '        <div class="toast-body">Options Saved</div>\n' +
-            '        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>\n' +
-            '    </div>\n' +
-            '</div>'
-    )
-    toastEl.find('.toast-body').text(message)
-    toastEl.addClass('text-bg-' + bsClass)
-    $('#toast-container').append(toastEl)
-    const toast = new bootstrap.Toast(toastEl)
-    toast.show()
 }
