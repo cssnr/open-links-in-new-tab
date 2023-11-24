@@ -60,23 +60,8 @@ async function onClicked(ctx, tab) {
             origins: ['https://*/*', 'http://*/*'],
         })
         console.log(`hasPerms: ${hasPerms}`)
-        // TODO: DUPLICATE: Make this a function
         if (hasPerms) {
-            const added = await toggleSite(new URL(tab.url))
-            console.log(`added: ${added}`)
-            if (added) {
-                await enableTemp(tab, 'green')
-            } else {
-                const { options } = await chrome.storage.sync.get(['options'])
-                if (options.autoReload) {
-                    await chrome.scripting.executeScript({
-                        target: { tabId: tab.id },
-                        func: function () {
-                            window.location.reload()
-                        },
-                    })
-                }
-            }
+            await toggleTab(tab)
         }
     } else if (ctx.menuItemId === 'temp') {
         console.log(`temp: ctx.pageUrl: ${ctx.pageUrl}`)
@@ -106,23 +91,8 @@ async function onCommand(command) {
             origins: ['https://*/*', 'http://*/*'],
         })
         console.log(`hasPerms: ${hasPerms}`)
-        // TODO: DUPLICATE: Make this a function
         if (hasPerms) {
-            const added = await toggleSite(new URL(tab.url))
-            console.log(`added: ${added}`)
-            if (added) {
-                await enableTemp(tab, 'green')
-            } else {
-                const { options } = await chrome.storage.sync.get(['options'])
-                if (options.autoReload) {
-                    await chrome.scripting.executeScript({
-                        target: { tabId: tab.id },
-                        func: function () {
-                            window.location.reload()
-                        },
-                    })
-                }
-            }
+            await toggleTab(tab)
         }
     } else if (command === 'enable-temp') {
         // const { tab } = await getTabUrl()
@@ -242,4 +212,27 @@ export function createContextMenus() {
             title: context[3],
         })
     })
+}
+
+/**
+ * Toggle Tab
+ * @function toggleTab
+ * @param {Tab} tab
+ */
+async function toggleTab(tab) {
+    const added = await toggleSite(new URL(tab.url))
+    console.log(`added: ${added}`)
+    if (added) {
+        await enableTemp(tab, 'green')
+    } else {
+        const { options } = await chrome.storage.sync.get(['options'])
+        if (options.autoReload) {
+            await chrome.scripting.executeScript({
+                target: { tabId: tab.id },
+                func: function () {
+                    window.location.reload()
+                },
+            })
+        }
+    }
 }
