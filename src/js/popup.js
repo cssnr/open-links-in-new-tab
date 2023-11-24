@@ -24,15 +24,15 @@ document.querySelectorAll('[data-href]').forEach((el) => {
  */
 async function initPopup() {
     console.log('initPopup')
-    const { options } = await chrome.storage.sync.get(['options'])
-    console.log('options:', options)
+    const { sites } = await chrome.storage.sync.get(['sites'])
+    console.log('sites:', sites)
     const { tab, url } = await getTabUrl()
     console.log(tab, url)
     console.log(`url.hostname: ${url.hostname}`)
     if (url.toString().startsWith('http')) {
         document.getElementById('site-hostname').textContent =
             url.hostname.substring(0, 36)
-        if (options.sites?.includes(url.hostname)) {
+        if (sites?.includes(url.hostname)) {
             document.getElementById('toggle-site').checked = true
             document.getElementById('enable-temp').classList.add('disabled')
             document
@@ -94,9 +94,8 @@ async function toggleSiteClick(event) {
         console.log('Requesting Permissions...')
         return window.close()
     }
-    const { options } = await chrome.storage.sync.get(['options'])
-    options.sites = options.sites || []
-    console.log('options.sites:', options.sites)
+    let { options, sites } = await chrome.storage.sync.get(['options', 'sites'])
+    console.log('options, sites:', options, sites)
     const { tab, url } = await getTabUrl()
     console.log(tab, url)
     const added = await toggleSite(url)

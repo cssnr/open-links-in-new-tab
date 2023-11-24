@@ -1,11 +1,12 @@
 // Background Service Worker JS
 
-import { createContextMenus, enableTemp, toggleSite } from './exports.js'
+import { enableTemp, toggleSite } from './exports.js'
 
 chrome.runtime.onInstalled.addListener(onInstalled)
+chrome.contextMenus.onClicked.addListener(onClicked)
 chrome.commands.onCommand.addListener(onCommand)
 chrome.runtime.onMessage.addListener(onMessage)
-chrome.contextMenus.onClicked.addListener(onClicked)
+chrome.storage.onChanged.addListener(onChanged)
 
 const ghUrl = 'https://github.com/cssnr/open-links-in-new-tab'
 
@@ -21,12 +22,8 @@ async function onInstalled(details) {
         showUpdate: false,
         autoReload: true,
         isBlacklist: false,
-        sites: [],
     }
-    let { options } = await chrome.storage.sync.get(['options'])
-    options = setDefaults(options, defaultOptions)
-    console.log('options:', options)
-    await chrome.storage.sync.set({ options })
+    const options = await setDefaultOptions(defaultOptions)
 
     if (options.contextMenu) {
         createContextMenus()
@@ -46,12 +43,59 @@ async function onInstalled(details) {
 }
 
 /**
+ * Context Menu Click Callback
+ * @function onClicked
+ * @param {OnClickData} ctx
+ * @param {Tab} tab
+ */
+async function onClicked(ctx, tab) {
+    console.log('contextMenuClick:', ctx, tab)
+    console.log(`ctx.menuItemId: ${ctx.menuItemId}`)
+    if (ctx.menuItemId === 'toggle') {
+        console.log(`toggle: ctx.pageUrl: ${ctx.pageUrl}`)
+        chrome.permissions.request({
+            origins: ['https://*/*', 'http://*/*'],
+        })
+        const hasPerms = await chrome.permissions.contains({
+            origins: ['https://*/*', 'http://*/*'],
+        })
+        console.log(`hasPerms: ${hasPerms}`)
+        // TODO: DUPLICATE: Make this a function
+        if (hasPerms) {
+            const added = await toggleSite(new URL(tab.url))
+            console.log(`added: ${added}`)
+            if (added) {
+                await enableTemp(tab, 'green')
+            } else {
+                const { options } = await chrome.storage.sync.get(['options'])
+                if (options.autoReload) {
+                    await chrome.scripting.executeScript({
+                        target: { tabId: tab.id },
+                        func: function () {
+                            window.location.reload()
+                        },
+                    })
+                }
+            }
+        }
+    } else if (ctx.menuItemId === 'temp') {
+        console.log(`temp: ctx.pageUrl: ${ctx.pageUrl}`)
+        await enableTemp(tab)
+    } else if (ctx.menuItemId === 'options') {
+        const url = chrome.runtime.getURL('/html/options.html')
+        await chrome.tabs.create({ active: true, url })
+    } else {
+        console.error(`Unknown ctx.menuItemId: ${ctx.menuItemId}`)
+    }
+}
+
+/**
  * Command Callback
  * @function onCommand
  * @param {String} command
  */
 async function onCommand(command) {
-    console.log(`onCommand: command: ${command}`)
+    console.log(`onCommand: ${command}`)
     const [tab] = await chrome.tabs.query({
         active: true,
         currentWindow: true,
@@ -114,67 +158,89 @@ async function onMessage(message, sender) {
 }
 
 /**
- * Context Menu Click Callback
- * @function onClicked
- * @param {OnClickData} ctx
- * @param {Tab} tab
+ * On Changed Callback
+ * @function onChanged
+ * @param {Object} changes
+ * @param {String} namespace
  */
-async function onClicked(ctx, tab) {
-    console.log('contextMenuClick:', ctx, tab)
-    console.log(`ctx.menuItemId: ${ctx.menuItemId}`)
-    if (ctx.menuItemId === 'toggle') {
-        console.log(`toggle: ctx.pageUrl: ${ctx.pageUrl}`)
-        chrome.permissions.request({
-            origins: ['https://*/*', 'http://*/*'],
-        })
-        const hasPerms = await chrome.permissions.contains({
-            origins: ['https://*/*', 'http://*/*'],
-        })
-        console.log(`hasPerms: ${hasPerms}`)
-        // TODO: DUPLICATE: Make this a function
-        if (hasPerms) {
-            const added = await toggleSite(new URL(tab.url))
-            console.log(`added: ${added}`)
-            if (added) {
-                await enableTemp(tab, 'green')
+function onChanged(changes, namespace) {
+    console.log('onChanged:', changes, namespace)
+    for (let [key, { oldValue, newValue }] of Object.entries(changes)) {
+        if (
+            key === 'options' &&
+            oldValue &&
+            newValue &&
+            oldValue.contextMenu !== newValue.contextMenu
+        ) {
+            if (newValue?.contextMenu) {
+                console.log('Enabled contextMenu...')
+                createContextMenus()
             } else {
-                const { options } = await chrome.storage.sync.get(['options'])
-                if (options.autoReload) {
-                    await chrome.scripting.executeScript({
-                        target: { tabId: tab.id },
-                        func: function () {
-                            window.location.reload()
-                        },
-                    })
-                }
+                console.log('Disabled contextMenu...')
+                chrome.contextMenus.removeAll()
             }
         }
-    } else if (ctx.menuItemId === 'temp') {
-        console.log(`temp: ctx.pageUrl: ${ctx.pageUrl}`)
-        await enableTemp(tab)
-    } else if (ctx.menuItemId === 'options') {
-        const url = chrome.runtime.getURL('/html/options.html')
-        await chrome.tabs.create({ active: true, url })
-    } else {
-        console.error(`Unknown ctx.menuItemId: ${ctx.menuItemId}`)
     }
 }
 
 /**
  * Set Default Options
- * @function setDefaults
- * @param {Object} options
+ * @function setDefaultOptions
  * @param {Object} defaultOptions
  * @return {Object}
  */
-function setDefaults(options, defaultOptions) {
+async function setDefaultOptions(defaultOptions) {
+    console.log('setDefaultOptions')
+    let { options, sites } = await chrome.storage.sync.get(['options', 'sites'])
     options = options || {}
+    console.log('options, sites:', options, sites)
+    let changed = false
     for (const [key, value] of Object.entries(defaultOptions)) {
         // console.log(`${key}: default: ${value} current: ${options[key]}`)
         if (options[key] === undefined) {
+            changed = true
             options[key] = value
             console.log(`Set ${key}:`, value)
         }
     }
+    if (changed) {
+        await chrome.storage.sync.set({ options })
+        console.log(options)
+    }
+    // Migrate Start - options.sites to sites
+    if (options.sites) {
+        console.warn('Migrating options.sites to sites:', options.sites)
+        const sites = options.sites
+        delete options.sites
+        chrome.storage.sync.set({ options, sites }).then()
+    }
+    // Migrate End
+    if (!sites) {
+        sites = []
+        chrome.storage.sync.set({ sites }).then()
+    }
     return options
+}
+
+/**
+ * Create Context Menus
+ * @function createContextMenus
+ */
+export function createContextMenus() {
+    console.log('createContextMenus')
+    const ctx = ['page', 'link']
+    const contexts = [
+        [ctx, 'toggle', 'normal', 'Toggle Current Domain'],
+        [ctx, 'temp', 'normal', 'Enable Temporarily'],
+        [ctx, 'separator-1', 'separator', 'separator'],
+        [ctx, 'options', 'normal', 'Open Options'],
+    ]
+    contexts.forEach((context) => {
+        chrome.contextMenus.create({
+            contexts: context[0],
+            id: context[1],
+            type: context[2],
+            title: context[3],
+        })
+    })
 }

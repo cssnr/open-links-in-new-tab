@@ -1,11 +1,11 @@
 // Content Script JS tab.js
 
-chrome.storage.sync.get(['options']).then((result) => {
-    console.log(result?.options?.sites)
-    if (result?.options?.sites?.includes(window.location.host)) {
+chrome.storage.sync.get(['sites']).then((result) => {
+    // console.log(result?.sites)
+    if (result?.sites?.includes(window.location.host)) {
         console.log(`Enabled Host: ${window.location.host}`)
-        chrome.runtime.sendMessage({ badgeText: 'On' })
         updateLinks()
+        chrome.runtime.sendMessage({ badgeText: 'On' }).then()
         const observer = new MutationObserver(function () {
             updateLinks()
         })

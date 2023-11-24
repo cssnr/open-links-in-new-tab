@@ -1,35 +1,6 @@
 // JS Exports
 
 /**
- * Create Context Menus
- * @function createContextMenus
- */
-export function createContextMenus() {
-    const ctx = ['page', 'link']
-    const contexts = [
-        [ctx, 'toggle', 'Toggle Current Domain'],
-        [ctx, 'temp', 'Enable Temporarily'],
-        [ctx, 'separator', 'separator'],
-        [ctx, 'options', 'Open Options'],
-    ]
-    for (const context of contexts) {
-        if (context[1] === 'separator') {
-            chrome.contextMenus.create({
-                type: context[1],
-                contexts: context[0],
-                id: context[2],
-            })
-        } else {
-            chrome.contextMenus.create({
-                title: context[2],
-                contexts: context[0],
-                id: context[1],
-            })
-        }
-    }
-}
-
-/**
  * Get URL for Current Tab
  * @function toggleSite
  * @param {URL} url
@@ -41,18 +12,17 @@ export async function toggleSite(url) {
     if (!url?.hostname) {
         return console.warn(`No url.hostname: ${url?.hostname}`, url)
     }
-    const { options } = await chrome.storage.sync.get(['options'])
-    options.sites = options.sites || []
-    if (!options.sites.includes(url.hostname)) {
+    const { sites } = await chrome.storage.sync.get(['sites'])
+    if (!sites.includes(url.hostname)) {
         console.log(`Enabling Site: ${url.hostname}`)
-        options.sites.push(url.hostname)
+        sites.push(url.hostname)
         added = true
     } else {
         console.log(`Disabling Site: ${url.hostname}`)
-        options.sites.splice(options.sites.indexOf(url.hostname), 1)
+        sites.splice(sites.indexOf(url.hostname), 1)
     }
-    console.log('options.sites:', options.sites)
-    await chrome.storage.sync.set({ options })
+    console.log('sites:', sites)
+    await chrome.storage.sync.set({ sites })
     return added
 }
 
