@@ -1,10 +1,19 @@
 // JS for popup.html
 
-import { enableTemp, toggleSite } from './exports.js'
+import {
+    enableTemp,
+    saveOptions,
+    toggleSite,
+    updateOptions,
+} from './exports.js'
 
 document.addEventListener('DOMContentLoaded', initPopup)
 
 // document.getElementById('grant-perms').addEventListener('click', grantPermsBtn)
+
+document.querySelectorAll('[data-href]').forEach((el) => {
+    el.addEventListener('click', popupLink)
+})
 
 document
     .getElementById('toggle-site')
@@ -14,9 +23,8 @@ document
     .getElementById('enable-temp')
     .addEventListener('click', enableTempClick)
 
-document.querySelectorAll('[data-href]').forEach((el) => {
-    el.addEventListener('click', popupLink)
-})
+const formInputs = document.querySelectorAll('.form-control')
+formInputs.forEach((el) => el.addEventListener('change', saveOptions))
 
 /**
  * Initialize Popup
@@ -24,15 +32,19 @@ document.querySelectorAll('[data-href]').forEach((el) => {
  */
 async function initPopup() {
     console.log('initPopup')
-    const { options } = await chrome.storage.sync.get(['options'])
-    console.log('options:', options)
-    const { tab, url } = await getTabUrl()
+    const { options, sites } = await chrome.storage.sync.get([
+        'options',
+        'sites',
+    ])
+    console.log('options, sites:', options, sites)
+    const [tab] = await chrome.tabs.query({ currentWindow: true, active: true })
+    const url = new URL(tab.url)
     console.log(tab, url)
     console.log(`url.hostname: ${url.hostname}`)
     if (url.toString().startsWith('http')) {
         document.getElementById('site-hostname').textContent =
             url.hostname.substring(0, 36)
-        if (options.sites?.includes(url.hostname)) {
+        if (sites?.includes(url.hostname)) {
             document.getElementById('toggle-site').checked = true
             document.getElementById('enable-temp').classList.add('disabled')
             document
@@ -42,6 +54,7 @@ async function initPopup() {
     } else {
         document.getElementById('toggle-site').disabled = true
     }
+    updateOptions(options)
 }
 
 /**
@@ -94,12 +107,11 @@ async function toggleSiteClick(event) {
         console.log('Requesting Permissions...')
         return window.close()
     }
-    const { options } = await chrome.storage.sync.get(['options'])
-    options.sites = options.sites || []
-    console.log('options.sites:', options.sites)
-    const { tab, url } = await getTabUrl()
-    console.log(tab, url)
-    const added = await toggleSite(url)
+    let { options, sites } = await chrome.storage.sync.get(['options', 'sites'])
+    console.log('options, sites:', options, sites)
+    const [tab] = await chrome.tabs.query({ currentWindow: true, active: true })
+    console.log('tab:', tab)
+    const added = await toggleSite(new URL(tab.url))
     if (added) {
         await chrome.scripting.executeScript({
             target: { tabId: tab.id },
@@ -122,25 +134,9 @@ async function toggleSiteClick(event) {
  * @param {MouseEvent} event
  */
 async function enableTempClick(event) {
-    const { tab } = await getTabUrl()
-    console.log('enableTemp:', event, tab)
+    console.log('enableTemp:', event)
+    const [tab] = await chrome.tabs.query({ currentWindow: true, active: true })
+    console.log('tab:', tab)
     await enableTemp(tab)
     window.close()
-}
-
-/**
- * Get URL for Current Tab
- * @function getTabUrl
- * @return {tab, url}
- */
-export async function getTabUrl() {
-    const [tab] = await chrome.tabs.query({
-        active: true,
-        currentWindow: true,
-    })
-    let url = ''
-    if (tab.url) {
-        url = new URL(tab.url)
-    }
-    return { tab, url }
 }

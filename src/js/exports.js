@@ -1,30 +1,28 @@
 // JS Exports
 
 /**
- * Create Context Menus
- * @function createContextMenus
+ * Save Options Callback
+ * @function saveOptions
+ * @param {InputEvent} event
  */
-export function createContextMenus() {
-    const ctx = ['page', 'link']
-    const contexts = [
-        [ctx, 'toggle', 'Toggle Current Domain'],
-        [ctx, 'temp', 'Enable Temporarily'],
-        [ctx, 'separator', 'separator'],
-        [ctx, 'options', 'Open Options'],
-    ]
-    for (const context of contexts) {
-        if (context[1] === 'separator') {
-            chrome.contextMenus.create({
-                type: context[1],
-                contexts: context[0],
-                id: context[2],
-            })
-        } else {
-            chrome.contextMenus.create({
-                title: context[2],
-                contexts: context[0],
-                id: context[1],
-            })
+export async function saveOptions(event) {
+    console.log('saveOptions:', event)
+    let { options } = await chrome.storage.sync.get(['options'])
+    options[event.target.id] = event.target.checked
+    console.log(`Set: options[${event.target.id}]: ${options[event.target.id]}`)
+    await chrome.storage.sync.set({ options })
+}
+
+/**
+ * Update Options
+ * @function initOptions
+ * @param {Object} options
+ */
+export function updateOptions(options) {
+    for (const [key, value] of Object.entries(options)) {
+        const el = document.getElementById(key)
+        if (el) {
+            el.checked = value
         }
     }
 }
@@ -33,7 +31,7 @@ export function createContextMenus() {
  * Get URL for Current Tab
  * @function toggleSite
  * @param {URL} url
- * @return {Boolean} True if Added
+ * @return {Boolean}
  */
 export async function toggleSite(url) {
     console.log(`toggleSite: url.hostname: ${url.hostname}`, url)
@@ -41,26 +39,25 @@ export async function toggleSite(url) {
     if (!url?.hostname) {
         return console.warn(`No url.hostname: ${url?.hostname}`, url)
     }
-    const { options } = await chrome.storage.sync.get(['options'])
-    options.sites = options.sites || []
-    if (!options.sites.includes(url.hostname)) {
+    const { sites } = await chrome.storage.sync.get(['sites'])
+    if (!sites.includes(url.hostname)) {
         console.log(`Enabling Site: ${url.hostname}`)
-        options.sites.push(url.hostname)
+        sites.push(url.hostname)
         added = true
     } else {
         console.log(`Disabling Site: ${url.hostname}`)
-        options.sites.splice(options.sites.indexOf(url.hostname), 1)
+        sites.splice(sites.indexOf(url.hostname), 1)
     }
-    console.log('options.sites:', options.sites)
-    await chrome.storage.sync.set({ options })
+    console.log('sites:', sites)
+    await chrome.storage.sync.set({ sites })
     return added
 }
 
 /**
  * Update Links for Tab
  * @function enableTemp
- * @param {Tab} tab
- * @param {String} color Background Color for BadgeText
+ * @param {chrome.tabs.Tab} tab
+ * @param {String} color
  */
 export async function enableTemp(tab, color = 'yellow') {
     console.log(`enableTemp: executeScript: tab.id: ${tab.id}`)
