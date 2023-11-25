@@ -31,7 +31,7 @@ export function updateOptions(options) {
  * Get URL for Current Tab
  * @function toggleSite
  * @param {URL} url
- * @return {Boolean} True if Added
+ * @return {Boolean}
  */
 export async function toggleSite(url) {
     console.log(`toggleSite: url.hostname: ${url.hostname}`, url)
@@ -56,8 +56,8 @@ export async function toggleSite(url) {
 /**
  * Update Links for Tab
  * @function enableTemp
- * @param {Tab} tab
- * @param {String} color Background Color for BadgeText
+ * @param {chrome.tabs.Tab} tab
+ * @param {String} color
  */
 export async function enableTemp(tab, color = 'yellow') {
     console.log(`enableTemp: executeScript: tab.id: ${tab.id}`)
