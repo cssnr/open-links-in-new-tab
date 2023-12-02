@@ -29,8 +29,7 @@ async function onInstalled(details) {
         createContextMenus()
     }
     if (details.reason === 'install') {
-        const url = chrome.runtime.getURL('/html/options.html')
-        await chrome.tabs.create({ active: true, url })
+        chrome.runtime.openOptionsPage()
     } else if (options.showUpdate && details.reason === 'update') {
         const manifest = chrome.runtime.getManifest()
         if (manifest.version !== details.previousVersion) {
@@ -67,8 +66,7 @@ async function onClicked(ctx, tab) {
         console.log(`temp: ctx.pageUrl: ${ctx.pageUrl}`)
         await enableTemp(tab)
     } else if (ctx.menuItemId === 'options') {
-        const url = chrome.runtime.getURL('/html/options.html')
-        await chrome.tabs.create({ active: true, url })
+        chrome.runtime.openOptionsPage()
     } else {
         console.error(`Unknown ctx.menuItemId: ${ctx.menuItemId}`)
     }

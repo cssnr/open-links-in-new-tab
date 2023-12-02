@@ -11,19 +11,13 @@ document.addEventListener('DOMContentLoaded', initPopup)
 
 // document.getElementById('grant-perms').addEventListener('click', grantPermsBtn)
 
-document.querySelectorAll('[data-href]').forEach((el) => {
-    el.addEventListener('click', popupLink)
-})
+const popupLinks = document.querySelectorAll('[data-href]')
+popupLinks.forEach((el) => el.addEventListener('click', popLinks))
 
-document
-    .getElementById('toggle-site')
-    .addEventListener('click', toggleSiteClick)
+document.getElementById('toggle-site').onclick = toggleSiteClick
+document.getElementById('enable-temp').onclick = enableTempClick
 
-document
-    .getElementById('enable-temp')
-    .addEventListener('click', enableTempClick)
-
-const formInputs = document.querySelectorAll('.form-control')
+const formInputs = document.querySelectorAll('.options')
 formInputs.forEach((el) => el.addEventListener('change', saveOptions))
 
 /**
@@ -58,23 +52,32 @@ async function initPopup() {
 }
 
 /**
- * Popup Links Callback
- * because firefox needs us to call window.close() from the popup
- * @function popupLink
+ * Popup Links Click Callback
+ * Firefox requires a call to window.close()
+ * @function popLinks
  * @param {MouseEvent} event
  */
-async function popupLink(event) {
-    console.log('popupLink: event:', event)
-    let url
+async function popLinks(event) {
+    console.log('popLinks:', event)
+    event.preventDefault()
     const anchor = event.target.closest('a')
-    if (anchor.dataset.href.startsWith('http')) {
+    let url
+    if (anchor?.dataset?.href.startsWith('http')) {
         url = anchor.dataset.href
-    } else {
+    } else if (anchor?.dataset?.href === 'homepage') {
+        url = chrome.runtime.getManifest().homepage_url
+    } else if (anchor?.dataset?.href === 'options') {
+        chrome.runtime.openOptionsPage()
+        return window.close()
+    } else if (anchor?.dataset?.href) {
         url = chrome.runtime.getURL(anchor.dataset.href)
     }
-    console.log(`url: ${url}`)
+    console.log('url:', url)
+    if (!url) {
+        return console.error('No dataset.href for anchor:', anchor)
+    }
     await chrome.tabs.create({ active: true, url })
-    window.close()
+    return window.close()
 }
 
 // /**
