@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', initOptions)
 
 chrome.storage.onChanged.addListener(onChanged)
 
-const formInputs = document.querySelectorAll('.form-control')
+const formInputs = document.querySelectorAll('.options')
 formInputs.forEach((el) => el.addEventListener('change', saveOptions))
 
 /**
