@@ -129,8 +129,9 @@ it is very useful to keep addon storage after uninstall/restart with `keepStorag
 1.  Navigate to the folder you extracted earlier, select `manifest.json` then click `Select File`.
 1.  Open `about:config` search for `extensions.webextensions.keepStorageOnUninstall` and set to `true`.
 
-If you need to test a restart, you must pack the addon. This only works in ESR, Development, or Nightly.
+If you need to test a build or browser restart, you must pack the addon.
+This only works in ESR, Development, or Nightly.
 
-1.  Run `npm run build:firefox` then use `web-ext-artifacts/name-firefox-version.zip`.
+1.  Run `npm run build:firefox` then use `web-ext-artifacts/{name}-firefox-{version}.zip`.
 1.  Open `about:config` search for `xpinstall.signatures.required` and set to `false`.
 1.  Open `about:addons` and drag the zip file to the page or choose Install from File from the Settings wheel.
