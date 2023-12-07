@@ -47,4 +47,5 @@ function grantPermsBtn(event) {
  */
 function openOptions(event) {
     chrome.runtime.openOptionsPage()
+    window.close()
 }
