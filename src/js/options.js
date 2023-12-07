@@ -6,8 +6,12 @@ document.addEventListener('DOMContentLoaded', initOptions)
 
 chrome.storage.onChanged.addListener(onChanged)
 
-const formInputs = document.querySelectorAll('.options')
-formInputs.forEach((el) => el.addEventListener('change', saveOptions))
+document
+    .querySelectorAll('#options-form input')
+    .forEach((el) => el.addEventListener('change', saveOptions))
+document
+    .getElementById('options-form')
+    .addEventListener('submit', (e) => e.preventDefault())
 
 /**
  * Options Page Init
@@ -15,19 +19,18 @@ formInputs.forEach((el) => el.addEventListener('change', saveOptions))
  */
 async function initOptions() {
     console.log('initOptions')
-    const commands = await chrome.commands.getAll()
-    document.getElementById('mainKey').textContent =
-        commands.find((x) => x.name === '_execute_action').shortcut || 'Not Set'
-    document.getElementById('toggleSite').textContent =
-        commands.find((x) => x.name === 'toggle-site').shortcut || 'Not Set'
-    document.getElementById('enableTemp').textContent =
-        commands.find((x) => x.name === 'enable-temp').shortcut || 'Not Set'
-
+    document.getElementById('version').textContent =
+        chrome.runtime.getManifest().version
+    await setShortcuts({
+        mainKey: '_execute_action',
+        toggleSite: 'toggle-site',
+        enableTemp: 'enable-temp',
+    })
     const { options, sites } = await chrome.storage.sync.get([
         'options',
         'sites',
     ])
-    console.log('options:', options)
+    console.log('options, sites:', options, sites)
     updateOptions(options)
     updateTable(sites)
 }
@@ -39,12 +42,12 @@ async function initOptions() {
  * @param {String} namespace
  */
 function onChanged(changes, namespace) {
-    console.log('onChanged:', changes, namespace)
-    for (let [key, { oldValue, newValue }] of Object.entries(changes)) {
-        if (key === 'options') {
+    // console.log('onChanged:', changes, namespace)
+    for (let [key, { newValue }] of Object.entries(changes)) {
+        if (namespace === 'sync' && key === 'options') {
             updateOptions(newValue)
         }
-        if (key === 'sites') {
+        if (namespace === 'sync' && key === 'sites') {
             updateTable(newValue)
         }
     }
@@ -103,16 +106,33 @@ async function deleteHost(event) {
     const host = anchor?.dataset?.host
     console.log(`host: ${host}`)
     const { sites } = await chrome.storage.sync.get(['sites'])
-    console.log('sites:', sites)
+    // console.log('sites:', sites)
     if (host && sites.includes(host)) {
         const index = sites.indexOf(host)
-        console.log(`index: ${index}`)
+        // console.log(`index: ${index}`)
         if (index !== undefined) {
             sites.splice(index, 1)
             await chrome.storage.sync.set({ sites })
-            // const tr = anchor.closest('tr')
-            // console.log(tr)
-            // tr.parentNode.removeChild(tr)
+        }
+    }
+}
+
+/**
+ * Set Keyboard Shortcuts
+ * @function setShortcuts
+ * @param {Object} mapping { elementID: name }
+ */
+async function setShortcuts(mapping) {
+    const commands = await chrome.commands.getAll()
+    for (const [elementID, name] of Object.entries(mapping)) {
+        // console.log(`${elementID}: ${name}`)
+        const command = commands.find((x) => x.name === name)
+        if (command?.shortcut) {
+            console.log(`${elementID}: ${command.shortcut}`)
+            const el = document.getElementById(elementID)
+            if (el) {
+                el.textContent = command.shortcut
+            }
         }
     }
 }

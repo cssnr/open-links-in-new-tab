@@ -1,4 +1,4 @@
-// Background Service Worker JS
+// JS Background Service Worker
 
 import { enableTemp, toggleSite } from './exports.js'
 
@@ -8,8 +8,6 @@ chrome.commands.onCommand.addListener(onCommand)
 chrome.runtime.onMessage.addListener(onMessage)
 chrome.storage.onChanged.addListener(onChanged)
 
-const ghUrl = 'https://github.com/cssnr/open-links-in-new-tab'
-
 /**
  * Installed Callback
  * @function onInstalled
@@ -17,28 +15,29 @@ const ghUrl = 'https://github.com/cssnr/open-links-in-new-tab'
  */
 async function onInstalled(details) {
     console.log('onInstalled:', details)
-    const defaultOptions = {
-        contextMenu: true,
-        showUpdate: false,
-        autoReload: true,
-        isBlacklist: false,
-    }
-    const options = await setDefaultOptions(defaultOptions)
-
+    const githubURL = 'https://github.com/cssnr/open-links-in-new-tab'
+    const options = await Promise.resolve(
+        setDefaultOptions({
+            contextMenu: true,
+            showUpdate: false,
+            autoReload: true,
+            isBlacklist: false,
+        })
+    )
     if (options.contextMenu) {
         createContextMenus()
     }
     if (details.reason === 'install') {
         chrome.runtime.openOptionsPage()
-    } else if (options.showUpdate && details.reason === 'update') {
+    } else if (details.reason === 'update' && options.showUpdate) {
         const manifest = chrome.runtime.getManifest()
         if (manifest.version !== details.previousVersion) {
-            const url = `${ghUrl}/releases/tag/${manifest.version}`
+            const url = `${githubURL}/releases/tag/${manifest.version}`
             console.log(`url: ${url}`)
             await chrome.tabs.create({ active: true, url })
         }
     }
-    chrome.runtime.setUninstallURL(`${ghUrl}/issues`)
+    chrome.runtime.setUninstallURL(`${githubURL}/issues`)
 }
 
 /**
@@ -58,7 +57,6 @@ async function onClicked(ctx, tab) {
         const hasPerms = await chrome.permissions.contains({
             origins: ['https://*/*', 'http://*/*'],
         })
-        console.log(`hasPerms: ${hasPerms}`)
         if (hasPerms) {
             await toggleTab(tab)
         }
@@ -85,12 +83,12 @@ async function onCommand(command) {
         const hasPerms = await chrome.permissions.contains({
             origins: ['https://*/*', 'http://*/*'],
         })
-        console.log(`hasPerms: ${hasPerms}`)
         if (hasPerms) {
             await toggleTab(tab)
+        } else {
+            console.warn('Missing Permissions. Use Popup First!')
         }
     } else if (command === 'enable-temp') {
-        // const { tab } = await getTabUrl()
         console.log('enable-temp', tab)
         await enableTemp(tab)
     } else {
@@ -105,9 +103,8 @@ async function onCommand(command) {
  * @param {MessageSender} sender
  */
 async function onMessage(message, sender) {
-    // console.log(message, sender)
-    console.log(`message.badgeText: ${message.badgeText}`)
-    if (message.badgeText) {
+    // console.log('message:', message)
+    if (message?.badgeText) {
         console.log(`tabId: ${sender.tab.id}, text: ${message.badgeText}`)
         await chrome.action.setBadgeText({
             tabId: sender.tab.id,
@@ -117,8 +114,6 @@ async function onMessage(message, sender) {
             tabId: sender.tab.id,
             color: 'green',
         })
-    } else {
-        console.error('Unknown message:', message)
     }
 }
 
@@ -129,20 +124,17 @@ async function onMessage(message, sender) {
  * @param {String} namespace
  */
 function onChanged(changes, namespace) {
-    console.log('onChanged:', changes, namespace)
-    for (let [key, { oldValue, newValue }] of Object.entries(changes)) {
-        if (
-            key === 'options' &&
-            oldValue &&
-            newValue &&
-            oldValue.contextMenu !== newValue.contextMenu
-        ) {
-            if (newValue?.contextMenu) {
-                console.log('Enabled contextMenu...')
-                createContextMenus()
-            } else {
-                console.log('Disabled contextMenu...')
-                chrome.contextMenus.removeAll()
+    // console.log('onChanged:', changes, namespace)
+    for (const [key, { oldValue, newValue }] of Object.entries(changes)) {
+        if (namespace === 'sync' && key === 'options' && oldValue && newValue) {
+            if (oldValue.contextMenu !== newValue.contextMenu) {
+                if (newValue?.contextMenu) {
+                    console.log('Enabled contextMenu...')
+                    createContextMenus()
+                } else {
+                    console.log('Disabled contextMenu...')
+                    chrome.contextMenus.removeAll()
+                }
             }
         }
     }
@@ -158,6 +150,10 @@ async function setDefaultOptions(defaultOptions) {
     console.log('setDefaultOptions')
     let { options, sites } = await chrome.storage.sync.get(['options', 'sites'])
     options = options || {}
+    if (!sites) {
+        sites = []
+        await chrome.storage.sync.set({ sites })
+    }
     console.log('options, sites:', options, sites)
     let changed = false
     for (const [key, value] of Object.entries(defaultOptions)) {
@@ -171,17 +167,6 @@ async function setDefaultOptions(defaultOptions) {
         await chrome.storage.sync.set({ options })
         console.log(options)
     }
-    // Migrate options.sites to sites
-    if (options.sites) {
-        console.warn('Migrating options.sites to sites:', options.sites)
-        sites = options.sites
-        delete options.sites
-        chrome.storage.sync.set({ options, sites }).then()
-    }
-    if (!sites) {
-        sites = []
-        chrome.storage.sync.set({ sites }).then()
-    }
     return options
 }
 
@@ -190,8 +175,7 @@ async function setDefaultOptions(defaultOptions) {
  * @function createContextMenus
  */
 export function createContextMenus() {
-    console.log('createContextMenus')
-    const ctx = ['page', 'link']
+    const ctx = ['all']
     const contexts = [
         [ctx, 'toggle', 'normal', 'Toggle Current Domain'],
         [ctx, 'temp', 'normal', 'Enable Temporarily'],

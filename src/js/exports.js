@@ -7,10 +7,18 @@
  */
 export async function saveOptions(event) {
     console.log('saveOptions:', event)
-    let { options } = await chrome.storage.sync.get(['options'])
-    options[event.target.id] = event.target.checked
-    console.log(`Set: options[${event.target.id}]: ${options[event.target.id]}`)
-    await chrome.storage.sync.set({ options })
+    const { options } = await chrome.storage.sync.get(['options'])
+    let value
+    if (event.target.type === 'checkbox') {
+        value = event.target.checked
+    } else if (event.target.type === 'text') {
+        value = event.target.value
+    }
+    if (value !== undefined) {
+        options[event.target.id] = value
+        console.log(`Set: ${event.target.id}:`, value)
+        await chrome.storage.sync.set({ options })
+    }
 }
 
 /**
@@ -20,9 +28,14 @@ export async function saveOptions(event) {
  */
 export function updateOptions(options) {
     for (const [key, value] of Object.entries(options)) {
+        // console.log(`${key}: ${value}`)
         const el = document.getElementById(key)
         if (el) {
-            el.checked = value
+            if (typeof value === 'boolean') {
+                el.checked = value
+            } else if (typeof value === 'string') {
+                el.value = value
+            }
         }
     }
 }
@@ -48,7 +61,7 @@ export async function toggleSite(url) {
         console.log(`Disabling Site: ${url.hostname}`)
         sites.splice(sites.indexOf(url.hostname), 1)
     }
-    console.log('sites:', sites)
+    // console.log('sites:', sites)
     await chrome.storage.sync.set({ sites })
     return added
 }
@@ -65,12 +78,10 @@ export async function enableTemp(tab, color = 'yellow') {
         target: { tabId: tab.id },
         func: updateLinks,
     })
-    console.log('setBadgeText')
     await chrome.action.setBadgeText({
         tabId: tab.id,
         text: 'On',
     })
-    console.log('setBadgeBackgroundColor')
     await chrome.action.setBadgeBackgroundColor({
         tabId: tab.id,
         color: color,
