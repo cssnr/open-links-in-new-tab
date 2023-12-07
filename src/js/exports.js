@@ -41,6 +41,27 @@ export function updateOptions(options) {
 }
 
 /**
+ * Check Host Permissions
+ * @function checkPerms
+ * @return {Boolean}
+ */
+export async function checkPerms() {
+    const hasPerms = await chrome.permissions.contains({
+        origins: ['https://*/*', 'http://*/*'],
+    })
+    if (hasPerms) {
+        document
+            .querySelectorAll('.grant-perms')
+            .forEach((el) => el.classList.add('visually-hidden'))
+    } else {
+        document
+            .querySelectorAll('.grant-perms')
+            .forEach((el) => el.classList.remove('visually-hidden'))
+    }
+    return hasPerms
+}
+
+/**
  * Get URL for Current Tab
  * @function toggleSite
  * @param {URL} url

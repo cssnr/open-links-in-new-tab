@@ -27,14 +27,18 @@ async function onInstalled(details) {
     if (options.contextMenu) {
         createContextMenus()
     }
-    if (details.reason === 'install') {
-        chrome.runtime.openOptionsPage()
-    } else if (details.reason === 'update' && options.showUpdate) {
-        const manifest = chrome.runtime.getManifest()
-        if (manifest.version !== details.previousVersion) {
-            const url = `${githubURL}/releases/tag/${manifest.version}`
-            console.log(`url: ${url}`)
-            await chrome.tabs.create({ active: true, url })
+    if (details.reason === chrome.runtime.OnInstalledReason.INSTALL) {
+        // chrome.runtime.openOptionsPage()
+        const url = chrome.runtime.getURL('/html/install.html')
+        await chrome.tabs.create({ active: true, url })
+    } else if (details.reason === chrome.runtime.OnInstalledReason.UPDATE) {
+        if (options.showUpdate) {
+            const manifest = chrome.runtime.getManifest()
+            if (manifest.version !== details.previousVersion) {
+                const url = `${githubURL}/releases/tag/${manifest.version}`
+                console.log(`url: ${url}`)
+                await chrome.tabs.create({ active: true, url })
+            }
         }
     }
     chrome.runtime.setUninstallURL(`${githubURL}/issues`)

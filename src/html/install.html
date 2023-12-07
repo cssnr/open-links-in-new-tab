@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en" class="h-100">
+<head>
+    <title>Open Links in New Tab</title>
+    <link rel="icon" href="../media/logo16.png" sizes="any">
+    <link rel="stylesheet" type="text/css" href="../dist/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../css/install.css">
+    <script type="text/javascript" src="../js/theme.js"></script>
+</head>
+<body class="h-100">
+
+<div class="container-fluid p-3 h-100">
+<div class="d-flex align-items-center h-100">
+<div class="col-xl-6 col-md-8 col-12 m-auto">
+<div class="card p-3 text-center">
+
+    <div class="justify-content-center align-items-center d-flex">
+        <img src="../media/logo48.png" class="img-fluid float-start me-2" alt="Open Links in New Tab" height="48" width="48">
+        <h1 class="align-middle">Welcome</h1>
+    </div>
+    <p class="lead visually-hidden grant-perms">To always open links in new tabs for sites you toggle on, permissions to run on all hosts are needed.</p>
+    <a id="grant-perms" class="btn btn-lg btn-success w-100 mb-3 visually-hidden grant-perms" role="button">Grant Host Permissions</a>
+    <p>
+        This web extension injects the
+        <a href="https://github.com/cssnr/open-links-in-new-tab/blob/master/src/js/tab.js" target="_blank" rel="noopener">tab.js</a>
+        script into every site. This script checks to see if the hostname of the site matches an enabled hostname.
+        If so, it sets all links to open in a new tab.
+    </p>
+    <a id="open-options" class="btn btn-lg btn-outline-info w-100 mb-3" role="button">Open Options</a>
+    <div class="text-center">
+        <a class="link-body-emphasis text-decoration-none" target="_blank" rel="noopener"
+           href="https://github.com/cssnr/open-links-in-new-tab">View Source</a>
+        |
+        <a class="link-body-emphasis text-decoration-none" target="_blank" rel="noopener"
+           href="https://github.com/cssnr/open-links-in-new-tab#readme">Get Support</a>
+    </div>
+
+</div> <!-- card -->
+</div> <!-- col -->
+</div> <!-- flex -->
+</div> <!-- container -->
+
+<script type="text/javascript" src="../dist/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../dist/bootstrap/bootstrap.bundle.min.js"></script>
+<script type="module" src="../js/install.js"></script>
+
+</body>
+</html>
