@@ -1,10 +1,12 @@
 // JS for options.html
 
-import { saveOptions, updateOptions } from './exports.js'
+import { checkPerms, saveOptions, updateOptions } from './exports.js'
 
 document.addEventListener('DOMContentLoaded', initOptions)
 
 chrome.storage.onChanged.addListener(onChanged)
+
+document.getElementById('grant-perms').addEventListener('click', grantPermsBtn)
 
 document
     .querySelectorAll('#options-form input')
@@ -33,6 +35,7 @@ async function initOptions() {
     console.log('options, sites:', options, sites)
     updateOptions(options)
     updateTable(sites)
+    await checkPerms()
 }
 
 /**
@@ -51,6 +54,27 @@ function onChanged(changes, namespace) {
             updateTable(newValue)
         }
     }
+}
+
+/**
+ * Grant Permissions Button Click Callback
+ * @function grantPermsBtn
+ * @param {MouseEvent} event
+ */
+function grantPermsBtn(event) {
+    console.log('grantPermsBtn:', event)
+    chrome.permissions.request(
+        {
+            origins: ['https://*/*', 'http://*/*'],
+        },
+        async (granted) => {
+            if (granted) {
+                await checkPerms()
+            } else {
+                console.warn('Permissions NOT Granted!')
+            }
+        }
+    )
 }
 
 /**

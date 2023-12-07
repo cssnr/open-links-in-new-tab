@@ -1,6 +1,7 @@
 // JS for popup.html
 
 import {
+    checkPerms,
     enableTemp,
     saveOptions,
     toggleSite,
@@ -16,7 +17,7 @@ document
     .querySelectorAll('#options-form input')
     .forEach((el) => el.addEventListener('change', saveOptions))
 
-// document.getElementById('grant-perms').addEventListener('click', grantPermsBtn)
+document.getElementById('grant-perms').addEventListener('click', grantPermsBtn)
 document.getElementById('toggle-site').onclick = toggleSiteClick
 document.getElementById('enable-temp').onclick = enableTempClick
 
@@ -27,11 +28,22 @@ document.getElementById('enable-temp').onclick = enableTempClick
  */
 async function initPopup() {
     console.log('initPopup')
+    const hasPerms = await checkPerms()
+    if (!hasPerms) {
+        document
+            .getElementById('toggle-site-label')
+            .classList.add('visually-hidden')
+    }
+
     const { options, sites } = await chrome.storage.sync.get([
         'options',
         'sites',
     ])
     console.log('options, sites:', options, sites)
+    updateOptions(options)
+    document.getElementById('version').textContent =
+        chrome.runtime.getManifest().version
+
     const [tab] = await chrome.tabs.query({ currentWindow: true, active: true })
     const url = new URL(tab.url)
     console.log(tab, url)
@@ -49,9 +61,6 @@ async function initPopup() {
     } else {
         document.getElementById('toggle-site').disabled = true
     }
-    updateOptions(options)
-    document.getElementById('version').textContent =
-        chrome.runtime.getManifest().version
 }
 
 /**
@@ -83,18 +92,18 @@ async function popupLinks(event) {
     return window.close()
 }
 
-// /**
-//  * Grant Permissions Button Click Callback
-//  * @function grantPerms
-//  * @param {MouseEvent} event
-//  */
-// function grantPermsBtn(event) {
-//     console.log('permissions click:', event)
-//     chrome.permissions.request({
-//         origins: ['https://*/*', 'http://*/*'],
-//     })
-//     window.close()
-// }
+/**
+ * Grant Permissions Button Click Callback
+ * @function grantPerms
+ * @param {MouseEvent} event
+ */
+function grantPermsBtn(event) {
+    console.log('permissions click:', event)
+    chrome.permissions.request({
+        origins: ['https://*/*', 'http://*/*'],
+    })
+    window.close()
+}
 
 /**
  * Enable/Disable Site Button Click Callback
