@@ -9,19 +9,20 @@ import {
 
 document.addEventListener('DOMContentLoaded', initPopup)
 
+document
+    .querySelectorAll('[data-href]')
+    .forEach((el) => el.addEventListener('click', popupLinks))
+document
+    .querySelectorAll('#options-form input')
+    .forEach((el) => el.addEventListener('change', saveOptions))
+
 // document.getElementById('grant-perms').addEventListener('click', grantPermsBtn)
-
-const popupLinks = document.querySelectorAll('[data-href]')
-popupLinks.forEach((el) => el.addEventListener('click', popLinks))
-
 document.getElementById('toggle-site').onclick = toggleSiteClick
 document.getElementById('enable-temp').onclick = enableTempClick
 
-const formInputs = document.querySelectorAll('.options')
-formInputs.forEach((el) => el.addEventListener('change', saveOptions))
-
 /**
  * Initialize Popup
+ * TODO: Cleanup this function
  * @function initPopup
  */
 async function initPopup() {
@@ -49,16 +50,18 @@ async function initPopup() {
         document.getElementById('toggle-site').disabled = true
     }
     updateOptions(options)
+    document.getElementById('version').textContent =
+        chrome.runtime.getManifest().version
 }
 
 /**
  * Popup Links Click Callback
  * Firefox requires a call to window.close()
- * @function popLinks
+ * @function popupLinks
  * @param {MouseEvent} event
  */
-async function popLinks(event) {
-    console.log('popLinks:', event)
+async function popupLinks(event) {
+    console.log('popupLinks:', event)
     event.preventDefault()
     const anchor = event.target.closest('a')
     let url

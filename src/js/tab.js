@@ -1,17 +1,18 @@
-// Content Script JS tab.js
+// JS Content Script tab.js
 
-chrome.storage.sync.get(['sites']).then((result) => {
-    // console.log(result?.sites)
-    if (result?.sites?.includes(window.location.host)) {
+;(async () => {
+    const { sites } = await chrome.storage.sync.get(['sites'])
+    // console.log('sites:', sites)
+    if (sites?.includes(window.location.host)) {
         console.log(`Enabled Host: ${window.location.host}`)
         updateLinks()
-        chrome.runtime.sendMessage({ badgeText: 'On' }).then()
+        await chrome.runtime.sendMessage({ badgeText: 'On' })
         const observer = new MutationObserver(function () {
             updateLinks()
         })
         observer.observe(document.body, { subTree: true, attributes: true })
     }
-})
+})()
 
 /**
  * Update Links

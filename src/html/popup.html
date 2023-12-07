@@ -30,16 +30,18 @@
         </svg>
     </a>
     <hr>
-    <div class="form-check form-switch">
-        <input class="form-check-input options" type="checkbox" role="switch" id="autoReload">
-        <label class="form-check-label" for="autoReload" aria-describedby="autoReloadHelp">Auto Reload on Disable</label>
-    </div>
-    <div class="form-check form-switch">
-        <input class="form-check-input options" type="checkbox" role="switch" id="contextMenu">
-        <label class="form-check-label" for="contextMenu" aria-describedby="contextMenuHelp">Enable Right Click Menu</label>
-    </div>
+    <form id="options-form">
+        <div class="form-check form-switch">
+            <input class="form-check-input" type="checkbox" role="switch" id="autoReload">
+            <label class="form-check-label" for="autoReload" aria-describedby="autoReloadHelp">Auto Reload on Disable</label>
+        </div>
+        <div class="form-check form-switch">
+            <input class="form-check-input" type="checkbox" role="switch" id="contextMenu">
+            <label class="form-check-label" for="contextMenu" aria-describedby="contextMenuHelp">Enable Right Click Menu</label>
+        </div>
+    </form>
     <div class="d-grid g-2 gap-2 my-2">
-        <a class="btn btn-outline-info btn-sm popup-click" role="button" data-href="options">
+        <a class="btn btn-outline-info btn-sm" role="button" data-href="options">
             Open Options
             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-gear ms-1" viewBox="0 0 16 16">
                 <path d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492zM5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0z"/>
@@ -52,18 +54,15 @@
 <!--        <label class="form-check-label" for="autoReload" aria-describedby="autoReloadHelp">Auto Reload on Disable</label>-->
 <!--    </div>-->
     <hr>
-    <div class="text-center">
+    <div class="justify-content-center align-items-center d-flex text-center small mb-0">
         <img src="../media/logo16.png" alt="Open Links in New Tab" width="16" height="16">
-        <a class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover" type="button" rel="noopener"
-           data-href="homepage">
-            Open Links in New Tab</a>
-        v<span data-locale="version"></span>
+        <a class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover mx-2" type="button" rel="noopener"
+           data-href="homepage">Open Links in New Tab</a> v<span id="version"></span>
     </div>
 </div>
 
 <script type="text/javascript" src="../dist/jquery/jquery.min.js"></script>
 <script type="text/javascript" src="../dist/bootstrap/bootstrap.bundle.min.js"></script>
-<script type="text/javascript" src="../js/main.js"></script>
 <script type="module" src="../js/popup.js"></script>
 
 </body>
