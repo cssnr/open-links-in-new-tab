@@ -98,7 +98,7 @@ function updateTable(data) {
         const svg = document.getElementById('bi-trash3').cloneNode(true)
         deleteBtn.appendChild(svg)
         deleteBtn.title = 'Delete'
-        deleteBtn.dataset.host = value
+        deleteBtn.dataset.value = value
         deleteBtn.classList.add('link-danger')
         deleteBtn.setAttribute('role', 'button')
         deleteBtn.addEventListener('click', deleteHost)
@@ -126,7 +126,7 @@ async function deleteHost(event) {
     event.preventDefault()
     console.log('deleteHost:', event)
     const anchor = event.target.closest('a')
-    const host = anchor?.dataset?.host
+    const host = anchor?.dataset?.value
     console.log(`host: ${host}`)
     const { sites } = await chrome.storage.sync.get(['sites'])
     // console.log('sites:', sites)
