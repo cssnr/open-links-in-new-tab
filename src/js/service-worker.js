@@ -21,7 +21,6 @@ async function onInstalled(details) {
             contextMenu: true,
             showUpdate: false,
             autoReload: true,
-            isBlacklist: false,
         })
     )
     if (options.contextMenu) {
