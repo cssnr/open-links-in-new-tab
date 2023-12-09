@@ -80,19 +80,15 @@ async function grantPermsBtn(event) {
 
 /**
  * Update Popup Table with Data
- * TODO: Remove JQuery
  * @function updateTable
  * @param {Object} data
  */
 function updateTable(data) {
-    const tbodyRef = document
-        .getElementById('hosts-table')
-        .getElementsByTagName('tbody')[0]
-
-    $('#hosts-table tbody tr').remove()
+    const tbody = document.querySelector('#hosts-table tbody')
+    tbody.innerHTML = ''
 
     data.forEach(function (value) {
-        const row = tbodyRef.insertRow()
+        const row = tbody.insertRow()
 
         const deleteBtn = document.createElement('a')
         const svg = document.getElementById('bi-trash3').cloneNode(true)

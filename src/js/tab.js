@@ -2,7 +2,7 @@
 
 ;(async () => {
     const { sites } = await chrome.storage.sync.get(['sites'])
-    // console.log('sites:', sites)
+    // console.log(`sites: ${window.location.host}`, sites)
     if (sites?.includes(window.location.host)) {
         console.log(`Enabled Host: ${window.location.host}`)
         updateLinks()
