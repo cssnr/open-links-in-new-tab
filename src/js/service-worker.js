@@ -1,6 +1,6 @@
 // JS Background Service Worker
 
-import { enableTemp, toggleSite } from './exports.js'
+import { enableTemp, toggleSite } from './export.js'
 
 chrome.runtime.onInstalled.addListener(onInstalled)
 chrome.contextMenus.onClicked.addListener(onClicked)
@@ -29,7 +29,7 @@ async function onInstalled(details) {
     }
     if (details.reason === chrome.runtime.OnInstalledReason.INSTALL) {
         // chrome.runtime.openOptionsPage()
-        const url = chrome.runtime.getURL('/html/install.html')
+        const url = chrome.runtime.getURL('/html/oninstall.html')
         await chrome.tabs.create({ active: true, url })
     } else if (details.reason === chrome.runtime.OnInstalledReason.UPDATE) {
         if (options.showUpdate) {
@@ -37,7 +37,7 @@ async function onInstalled(details) {
             if (manifest.version !== details.previousVersion) {
                 const url = `${githubURL}/releases/tag/${manifest.version}`
                 console.log(`url: ${url}`)
-                await chrome.tabs.create({ active: true, url })
+                await chrome.tabs.create({ active: false, url })
             }
         }
     }

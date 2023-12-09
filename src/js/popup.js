@@ -6,7 +6,7 @@ import {
     saveOptions,
     toggleSite,
     updateOptions,
-} from './exports.js'
+} from './export.js'
 
 document.addEventListener('DOMContentLoaded', initPopup)
 
@@ -98,7 +98,7 @@ async function popupLinks(event) {
  * @param {MouseEvent} event
  */
 function grantPermsBtn(event) {
-    console.log('permissions click:', event)
+    console.log('grantPermsBtn:', event)
     chrome.permissions.request({
         origins: ['https://*/*', 'http://*/*'],
     })

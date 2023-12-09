@@ -1,6 +1,6 @@
 // JS for options.html
 
-import { checkPerms, saveOptions, updateOptions } from './exports.js'
+import { checkPerms, saveOptions, updateOptions } from './export.js'
 
 document.addEventListener('DOMContentLoaded', initOptions)
 
@@ -14,6 +14,15 @@ document
 document
     .getElementById('options-form')
     .addEventListener('submit', (e) => e.preventDefault())
+
+document.querySelectorAll('[data-href]').forEach((el) =>
+    el.addEventListener('click', async (e) => {
+        console.log('clicked')
+        const url = chrome.runtime.getURL(e.target.dataset.href)
+        await chrome.tabs.create({ active: true, url })
+        window.close()
+    })
+)
 
 /**
  * Options Page Init
@@ -61,20 +70,12 @@ function onChanged(changes, namespace) {
  * @function grantPermsBtn
  * @param {MouseEvent} event
  */
-function grantPermsBtn(event) {
+async function grantPermsBtn(event) {
     console.log('grantPermsBtn:', event)
-    chrome.permissions.request(
-        {
-            origins: ['https://*/*', 'http://*/*'],
-        },
-        async (granted) => {
-            if (granted) {
-                await checkPerms()
-            } else {
-                console.warn('Permissions NOT Granted!')
-            }
-        }
-    )
+    await chrome.permissions.request({
+        origins: ['https://*/*', 'http://*/*'],
+    })
+    await checkPerms()
 }
 
 /**
