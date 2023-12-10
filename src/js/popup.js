@@ -47,20 +47,37 @@ async function initPopup() {
     const url = new URL(tab.url)
     console.log('tab, url:', tab, url)
     console.log(`url.hostname: ${url.hostname}`)
-    const protos = ['http', 'file', 'ftp']
-    const match = protos.some((item) => url.protocol.includes(item))
-    if (match) {
-        document.getElementById('site-hostname').textContent = url.hostname
+
+    if (tab.status !== 'complete') {
+        console.warn(`Tab Not Loaded: ${tab.status}`)
+    }
+
+    let response
+    try {
+        response = await chrome.tabs.sendMessage(tab.id, 'tab')
+    } catch (error) {
+        console.log(error)
+        response = false
+    }
+    console.log('response:', response)
+
+    const toggleSiteEl = document.getElementById('toggle-site')
+    const enableTempEl = document.getElementById('enable-temp')
+    const switchEl = document.getElementById('switch')
+    if (response) {
+        console.log(`Valid Site: ${url.hostname}`)
+        toggleSiteEl.disabled = false
         if (sites?.includes(url.hostname)) {
-            document.getElementById('toggle-site').checked = true
-            document.getElementById('enable-temp').classList.add('disabled')
-            document.getElementById('switch').classList.add('border-success')
+            console.log('ENABLED')
+            toggleSiteEl.checked = true
+            switchEl.classList.add('border-success')
+        } else {
+            console.log('DISABLED')
+            enableTempEl.classList.remove('disabled')
         }
     } else {
-        console.log(`url.protocol "${url.protocol}" not in protos:`, protos)
-        document.getElementById('toggle-site').disabled = true
-        document.getElementById('enable-temp').classList.add('disabled')
-        document.getElementById('switch').classList.add('border-danger-subtle')
+        console.log(`INVALID Site: ${url.hostname}`)
+        switchEl.classList.add('border-danger-subtle')
     }
 }
 

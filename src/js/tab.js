@@ -14,6 +14,8 @@
     }
 })()
 
+chrome.runtime.onMessage.addListener(onMessage)
+
 /**
  * Update Links
  * @function updateLinks
@@ -27,4 +29,16 @@ function updateLinks() {
         }
     }
     console.log('Links Updated.')
+}
+
+/**
+ * Handle Messages
+ * @function onMessage
+ * @param {Object} message
+ * @param {MessageSender} sender
+ * @param {Function} sendResponse
+ */
+function onMessage(message, sender, sendResponse) {
+    console.log('onMessage: message, sender:', message, sender)
+    sendResponse(true)
 }
