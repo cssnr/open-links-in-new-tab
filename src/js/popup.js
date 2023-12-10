@@ -17,7 +17,7 @@ document
     .querySelectorAll('#options-form input')
     .forEach((el) => el.addEventListener('change', saveOptions))
 
-document.getElementById('grant-perms').addEventListener('click', grantPermsBtn)
+document.getElementById('grant-perms').onclick = grantPermsBtn
 document.getElementById('toggle-site').onclick = toggleSiteClick
 document.getElementById('enable-temp').onclick = enableTempClick
 
@@ -49,42 +49,29 @@ async function initPopup() {
     console.log(`url.hostname: ${url.hostname}`)
 
     if (!url.hostname) {
-        // url.hostname is used to add to the sites array
-        return console.warn('No url.hostname from tab:', tab, url)
+        return console.warn('No url.hostname for tab:', tab, url)
     }
-    if (tab.status !== 'complete') {
-        // TODO: This just means we cant check content script...
-        return console.warn(`Tab Not Loaded: ${tab.status}`)
-    }
-
     document.getElementById('site-hostname').textContent = url.hostname
-
-    let response
-    try {
-        response = await chrome.tabs.sendMessage(tab.id, 'tab')
-    } catch (error) {
-        console.log(error)
-        response = false
-    }
-    console.log('response:', response)
-
-    const toggleSiteEl = document.getElementById('toggle-site')
-    const enableTempEl = document.getElementById('enable-temp')
     const switchEl = document.getElementById('switch')
-    if (response) {
-        console.log(`Valid Site: ${url.hostname}`)
-        toggleSiteEl.disabled = false
-        if (sites?.includes(url.hostname)) {
-            console.log('ENABLED')
-            toggleSiteEl.checked = true
-            switchEl.classList.add('border-success')
-        } else {
-            console.log('DISABLED')
-            enableTempEl.classList.remove('disabled')
-        }
-    } else {
-        console.log(`INVALID Site: ${url.hostname}`)
+    try {
+        await chrome.scripting.executeScript({
+            target: { tabId: tab.id },
+            func: function () {
+                return true
+            },
+        })
+    } catch (error) {
         switchEl.classList.add('border-danger-subtle')
+        return console.warn(error, url.hostname)
+    }
+    console.log(`Valid Site: ${url.hostname}`)
+    const toggleSiteEl = document.getElementById('toggle-site')
+    toggleSiteEl.disabled = false
+    if (sites?.includes(url.hostname)) {
+        toggleSiteEl.checked = true
+        switchEl.classList.add('border-success')
+    } else {
+        document.getElementById('enable-temp').classList.remove('disabled')
     }
 }
 
