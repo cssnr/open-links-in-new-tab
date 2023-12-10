@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <title>Open Links in New Tab</title>
-    <link rel="icon" href="../media/logo16.png" sizes="any">
+    <link rel="icon" href="../images/logo16.png" sizes="any">
     <link rel="stylesheet" type="text/css" href="../dist/bootstrap/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="../css/options.css">
     <script type="text/javascript" src="../js/theme.js"></script>
@@ -15,7 +15,7 @@
 <div class="card" >
 <div class="card-body">
     <div class="justify-content-center align-items-center d-flex">
-        <img src="../media/logo48.png" class="img-fluid float-start me-2" alt="Open Links in New Tab" height="48" width="48">
+        <img src="../images/logo48.png" class="img-fluid float-start me-2" alt="Open Links in New Tab" height="48" width="48">
         <h1 class="align-middle">Open Links in New Tab</h1>
     </div>
     <div class="clearfix"></div>
@@ -42,16 +42,12 @@
             <input class="form-check-input" type="checkbox" role="switch" id="showUpdate">
             <label class="form-check-label" for="showUpdate" aria-describedby="showUpdateHelp">Show Release Notes on Update</label>
         </div>
-<!--        <div class="form-check form-switch mb-3 visually-hidden">-->
-<!--            <input class="form-check-input options" type="checkbox" role="switch" id="isBlacklist">-->
-<!--            <label class="form-check-label" for="isBlacklist" aria-describedby="isBlacklistHelp">Turn Into Blacklist</label>-->
-<!--        </div>-->
     </form>
 
-    <a id="grant-perms" class="btn btn-lg btn-success w-100 mb-1 visually-hidden grant-perms" role="button">Grant Host Permissions</a>
-    <p class="text-center visually-hidden grant-perms">
-        <a role="button" href="../html/install.html" target="_blank">More Information on Permissions</a></p>
-
+    <div class="d-none grant-perms">
+        <a id="grant-perms" class="btn btn-lg btn-success w-100 mb-1" role="button">Grant Host Permissions</a>
+        <p class="text-center"><a role="button" data-href="../html/oninstall.html" class="">More Information on Permissions</a></p>
+    </div>
     <div class="table-responsive">
     <table id="hosts-table" class="table table-sm table-hover bg-transparent">
         <caption>Enabled Hosts</caption>
@@ -79,6 +75,12 @@
 </div> <!-- col -->
 </div> <!-- row -->
 </div> <!-- container -->
+
+<div class="d-none">
+    <svg id="bi-trash3" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16">
+        <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5ZM11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H2.506a.58.58 0 0 0-.01 0H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1h-.995a.59.59 0 0 0-.01 0H11Zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5h9.916Zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47ZM8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5Z"/>
+    </svg>
+</div>
 
 <script type="text/javascript" src="../dist/jquery/jquery.min.js"></script>
 <script type="text/javascript" src="../dist/bootstrap/bootstrap.bundle.min.js"></script>

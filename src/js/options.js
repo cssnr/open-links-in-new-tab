@@ -1,6 +1,6 @@
 // JS for options.html
 
-import { checkPerms, saveOptions, updateOptions } from './exports.js'
+import { checkPerms, saveOptions, updateOptions } from './export.js'
 
 document.addEventListener('DOMContentLoaded', initOptions)
 
@@ -14,6 +14,15 @@ document
 document
     .getElementById('options-form')
     .addEventListener('submit', (e) => e.preventDefault())
+
+document.querySelectorAll('[data-href]').forEach((el) =>
+    el.addEventListener('click', async (e) => {
+        console.log('clicked')
+        const url = chrome.runtime.getURL(e.target.dataset.href)
+        await chrome.tabs.create({ active: true, url })
+        window.close()
+    })
+)
 
 /**
  * Options Page Init
@@ -61,47 +70,33 @@ function onChanged(changes, namespace) {
  * @function grantPermsBtn
  * @param {MouseEvent} event
  */
-function grantPermsBtn(event) {
+async function grantPermsBtn(event) {
     console.log('grantPermsBtn:', event)
-    chrome.permissions.request(
-        {
-            origins: ['https://*/*', 'http://*/*'],
-        },
-        async (granted) => {
-            if (granted) {
-                await checkPerms()
-            } else {
-                console.warn('Permissions NOT Granted!')
-            }
-        }
-    )
+    await chrome.permissions.request({
+        origins: ['https://*/*', 'http://*/*'],
+    })
+    await checkPerms()
 }
 
 /**
  * Update Popup Table with Data
- * TODO: Remove JQuery
  * @function updateTable
  * @param {Object} data
  */
 function updateTable(data) {
-    const tbodyRef = document
-        .getElementById('hosts-table')
-        .getElementsByTagName('tbody')[0]
-
-    $('#hosts-table tbody tr').remove()
+    const tbody = document.querySelector('#hosts-table tbody')
+    tbody.innerHTML = ''
 
     data.forEach(function (value) {
-        const row = tbodyRef.insertRow()
+        const row = tbody.insertRow()
 
         const deleteBtn = document.createElement('a')
+        const svg = document.getElementById('bi-trash3').cloneNode(true)
+        deleteBtn.appendChild(svg)
         deleteBtn.title = 'Delete'
-        deleteBtn.setAttribute('role', 'button')
+        deleteBtn.dataset.value = value
         deleteBtn.classList.add('link-danger')
-        deleteBtn.innerHTML =
-            '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16">\n' +
-            '  <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5ZM11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H2.506a.58.58 0 0 0-.01 0H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1h-.995a.59.59 0 0 0-.01 0H11Zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5h9.916Zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47ZM8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5Z"/>\n' +
-            '</svg>'
-        deleteBtn.dataset.host = value
+        deleteBtn.setAttribute('role', 'button')
         deleteBtn.addEventListener('click', deleteHost)
         const cell1 = row.insertCell()
         cell1.classList.add('text-center')
@@ -127,7 +122,7 @@ async function deleteHost(event) {
     event.preventDefault()
     console.log('deleteHost:', event)
     const anchor = event.target.closest('a')
-    const host = anchor?.dataset?.host
+    const host = anchor?.dataset?.value
     console.log(`host: ${host}`)
     const { sites } = await chrome.storage.sync.get(['sites'])
     // console.log('sites:', sites)

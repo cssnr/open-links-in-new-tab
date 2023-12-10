@@ -1,6 +1,28 @@
 // JS Exports
 
 /**
+ * Check Host Permissions
+ * @function checkPerms
+ * @return {Boolean}
+ */
+export async function checkPerms() {
+    const hasPermsEl = document.querySelectorAll('.has-perms')
+    const grantPermsEl = document.querySelectorAll('.grant-perms')
+    const hasPerms = await chrome.permissions.contains({
+        origins: ['https://*/*', 'http://*/*'],
+    })
+    console.log('checkPerms:', hasPerms)
+    if (hasPerms) {
+        hasPermsEl.forEach((el) => el.classList.remove('d-none'))
+        grantPermsEl.forEach((el) => el.classList.add('d-none'))
+    } else {
+        grantPermsEl.forEach((el) => el.classList.remove('d-none'))
+        hasPermsEl.forEach((el) => el.classList.add('d-none'))
+    }
+    return hasPerms
+}
+
+/**
  * Save Options Callback
  * @function saveOptions
  * @param {InputEvent} event
@@ -38,27 +60,6 @@ export function updateOptions(options) {
             }
         }
     }
-}
-
-/**
- * Check Host Permissions
- * @function checkPerms
- * @return {Boolean}
- */
-export async function checkPerms() {
-    const hasPerms = await chrome.permissions.contains({
-        origins: ['https://*/*', 'http://*/*'],
-    })
-    if (hasPerms) {
-        document
-            .querySelectorAll('.grant-perms')
-            .forEach((el) => el.classList.add('visually-hidden'))
-    } else {
-        document
-            .querySelectorAll('.grant-perms')
-            .forEach((el) => el.classList.remove('visually-hidden'))
-    }
-    return hasPerms
 }
 
 /**

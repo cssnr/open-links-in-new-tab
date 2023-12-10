@@ -6,7 +6,7 @@ import {
     saveOptions,
     toggleSite,
     updateOptions,
-} from './exports.js'
+} from './export.js'
 
 document.addEventListener('DOMContentLoaded', initPopup)
 
@@ -34,7 +34,6 @@ async function initPopup() {
             .getElementById('toggle-site-label')
             .classList.add('visually-hidden')
     }
-
     const { options, sites } = await chrome.storage.sync.get([
         'options',
         'sites',
@@ -46,20 +45,22 @@ async function initPopup() {
 
     const [tab] = await chrome.tabs.query({ currentWindow: true, active: true })
     const url = new URL(tab.url)
-    console.log(tab, url)
+    console.log('tab, url:', tab, url)
     console.log(`url.hostname: ${url.hostname}`)
-    if (url.toString().startsWith('http')) {
-        document.getElementById('site-hostname').textContent =
-            url.hostname.substring(0, 36)
+    const protos = ['http', 'file', 'ftp']
+    const match = protos.some((item) => url.protocol.includes(item))
+    if (match) {
+        document.getElementById('site-hostname').textContent = url.hostname
         if (sites?.includes(url.hostname)) {
             document.getElementById('toggle-site').checked = true
             document.getElementById('enable-temp').classList.add('disabled')
-            document
-                .getElementById('site-switch')
-                .classList.add('border-success')
+            document.getElementById('switch').classList.add('border-success')
         }
     } else {
+        console.log(`url.protocol "${url.protocol}" not in protos:`, protos)
         document.getElementById('toggle-site').disabled = true
+        document.getElementById('enable-temp').classList.add('disabled')
+        document.getElementById('switch').classList.add('border-danger-subtle')
     }
 }
 
@@ -98,7 +99,7 @@ async function popupLinks(event) {
  * @param {MouseEvent} event
  */
 function grantPermsBtn(event) {
-    console.log('permissions click:', event)
+    console.log('grantPermsBtn:', event)
     chrome.permissions.request({
         origins: ['https://*/*', 'http://*/*'],
     })
@@ -112,16 +113,6 @@ function grantPermsBtn(event) {
  */
 async function toggleSiteClick(event) {
     console.log('toggleSiteBtn:', event)
-    chrome.permissions.request({
-        origins: ['https://*/*', 'http://*/*'],
-    })
-    const hasPerms = await chrome.permissions.contains({
-        origins: ['https://*/*', 'http://*/*'],
-    })
-    if (!hasPerms) {
-        console.log('Requesting Permissions...')
-        return window.close()
-    }
     let { options, sites } = await chrome.storage.sync.get(['options', 'sites'])
     console.log('options, sites:', options, sites)
     const [tab] = await chrome.tabs.query({ currentWindow: true, active: true })
