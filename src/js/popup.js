@@ -48,9 +48,16 @@ async function initPopup() {
     console.log('tab, url:', tab, url)
     console.log(`url.hostname: ${url.hostname}`)
 
-    if (tab.status !== 'complete') {
-        console.warn(`Tab Not Loaded: ${tab.status}`)
+    if (!url.hostname) {
+        // url.hostname is used to add to the sites array
+        return console.warn('No url.hostname from tab:', tab, url)
     }
+    if (tab.status !== 'complete') {
+        // TODO: This just means we cant check content script...
+        return console.warn(`Tab Not Loaded: ${tab.status}`)
+    }
+
+    document.getElementById('site-hostname').textContent = url.hostname
 
     let response
     try {
