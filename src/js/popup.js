@@ -17,7 +17,7 @@ document
     .querySelectorAll('#options-form input')
     .forEach((el) => el.addEventListener('change', saveOptions))
 
-document.getElementById('grant-perms').addEventListener('click', grantPermsBtn)
+document.getElementById('grant-perms').onclick = grantPermsBtn
 document.getElementById('toggle-site').onclick = toggleSiteClick
 document.getElementById('enable-temp').onclick = enableTempClick
 
@@ -47,20 +47,32 @@ async function initPopup() {
     const url = new URL(tab.url)
     console.log('tab, url:', tab, url)
     console.log(`url.hostname: ${url.hostname}`)
-    const protos = ['http', 'file', 'ftp']
-    const match = protos.some((item) => url.protocol.includes(item))
-    if (match) {
-        document.getElementById('site-hostname').textContent = url.hostname
-        if (sites?.includes(url.hostname)) {
-            document.getElementById('toggle-site').checked = true
-            document.getElementById('enable-temp').classList.add('disabled')
-            document.getElementById('switch').classList.add('border-success')
-        }
+
+    if (!url.hostname) {
+        return console.warn('No url.hostname for tab:', tab, url)
+    }
+    document.getElementById('site-hostname').textContent = url.hostname
+    const switchEl = document.getElementById('switch')
+    try {
+        await chrome.scripting.executeScript({
+            target: { tabId: tab.id },
+            injectImmediately: true,
+            func: function () {
+                return true
+            },
+        })
+    } catch (error) {
+        switchEl.classList.add('border-danger-subtle')
+        return console.warn(error, url.hostname)
+    }
+    console.log(`Valid Site: ${url.hostname}`)
+    const toggleSiteEl = document.getElementById('toggle-site')
+    toggleSiteEl.disabled = false
+    if (sites?.includes(url.hostname)) {
+        toggleSiteEl.checked = true
+        switchEl.classList.add('border-success')
     } else {
-        console.log(`url.protocol "${url.protocol}" not in protos:`, protos)
-        document.getElementById('toggle-site').disabled = true
-        document.getElementById('enable-temp').classList.add('disabled')
-        document.getElementById('switch').classList.add('border-danger-subtle')
+        document.getElementById('enable-temp').classList.remove('disabled')
     }
 }
 
@@ -113,8 +125,8 @@ function grantPermsBtn(event) {
  */
 async function toggleSiteClick(event) {
     console.log('toggleSiteBtn:', event)
-    let { options, sites } = await chrome.storage.sync.get(['options', 'sites'])
-    console.log('options, sites:', options, sites)
+    let { options } = await chrome.storage.sync.get(['options'])
+    console.log('options, sites:', options)
     const [tab] = await chrome.tabs.query({ currentWindow: true, active: true })
     console.log('tab:', tab)
     const added = await toggleSite(new URL(tab.url))
