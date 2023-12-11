@@ -10,7 +10,11 @@
         const observer = new MutationObserver(function () {
             updateLinks()
         })
-        observer.observe(document.body, { subTree: true, attributes: true })
+        observer.observe(document.body, {
+            attributes: true,
+            childList: true,
+            subTree: true,
+        })
     }
 })()
 
