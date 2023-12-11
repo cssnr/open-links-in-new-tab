@@ -56,6 +56,7 @@ async function initPopup() {
     try {
         await chrome.scripting.executeScript({
             target: { tabId: tab.id },
+            injectImmediately: true,
             func: function () {
                 return true
             },
