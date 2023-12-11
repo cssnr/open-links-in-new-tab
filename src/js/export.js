@@ -10,7 +10,7 @@ export async function toggleSite(url) {
     console.log(`toggleSite: url.hostname: ${url.hostname}`, url)
     let added = false
     if (!url?.hostname) {
-        return console.warn(`No url.hostname: ${url?.hostname}`, url)
+        return console.log(`No url.hostname: ${url?.hostname}`, url)
     }
     const { sites } = await chrome.storage.sync.get(['sites'])
     if (!sites.includes(url.hostname)) {

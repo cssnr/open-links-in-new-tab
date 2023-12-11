@@ -49,7 +49,7 @@ async function initPopup() {
     console.log(`url.hostname: ${url.hostname}`)
 
     if (!url.hostname) {
-        return console.warn('No url.hostname for tab:', tab, url)
+        return console.log('No url.hostname for tab:', tab, url)
     }
     document.getElementById('site-hostname').textContent = url.hostname
     const switchEl = document.getElementById('switch')
@@ -63,7 +63,7 @@ async function initPopup() {
         })
     } catch (error) {
         switchEl.classList.add('border-danger-subtle')
-        return console.warn(error, url.hostname)
+        return console.log(error, url.hostname)
     }
     console.log(`Valid Site: ${url.hostname}`)
     const toggleSiteEl = document.getElementById('toggle-site')
@@ -126,7 +126,7 @@ function grantPermsBtn(event) {
 async function toggleSiteClick(event) {
     console.log('toggleSiteBtn:', event)
     let { options } = await chrome.storage.sync.get(['options'])
-    console.log('options, sites:', options)
+    console.log('options:', options)
     const [tab] = await chrome.tabs.query({ currentWindow: true, active: true })
     console.log('tab:', tab)
     const added = await toggleSite(new URL(tab.url))

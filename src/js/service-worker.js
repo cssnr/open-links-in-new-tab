@@ -89,7 +89,7 @@ async function onCommand(command) {
         if (hasPerms) {
             await toggleTab(tab)
         } else {
-            console.warn('Missing Permissions. Use Popup First!')
+            console.log('Missing Permissions. Use Popup First!')
         }
     } else if (command === 'enable-temp') {
         console.log('enable-temp', tab)
