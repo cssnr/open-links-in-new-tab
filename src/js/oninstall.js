@@ -2,18 +2,16 @@
 
 import { checkPerms } from './export.js'
 
-document.addEventListener('DOMContentLoaded', initOninstall)
+document.addEventListener('DOMContentLoaded', domContentLoaded)
 document.getElementById('grant-perms').addEventListener('click', grantPermsBtn)
 document.getElementById('open-options').addEventListener('click', openOptions)
 
 /**
- * Initialize initOninstall
- * @function initOninstall
+ * DOMContentLoaded
+ * @function domContentLoaded
  */
-async function initOninstall() {
-    console.log('initOninstall')
-    // const { options } = await chrome.storage.sync.get(['options'])
-    // console.log('options:', options)
+async function domContentLoaded() {
+    console.log('DOMContentLoaded')
     await checkPerms()
 }
 
@@ -34,12 +32,7 @@ async function grantPermsBtn(event) {
     }
 }
 
-/**
- * Open Options Click Callback
- * @function openOptions
- * @param {MouseEvent} event
- */
-function openOptions(event) {
+function openOptions() {
     chrome.runtime.openOptionsPage()
     window.close()
 }

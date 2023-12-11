@@ -1,6 +1,56 @@
 // JS Exports
 
 /**
+ * Get URL for Current Tab
+ * @function toggleSite
+ * @param {URL} url
+ * @return {Boolean}
+ */
+export async function toggleSite(url) {
+    console.log(`toggleSite: url.hostname: ${url.hostname}`, url)
+    let added = false
+    if (!url?.hostname) {
+        return console.warn(`No url.hostname: ${url?.hostname}`, url)
+    }
+    const { sites } = await chrome.storage.sync.get(['sites'])
+    if (!sites.includes(url.hostname)) {
+        console.log(`Enabling Site: ${url.hostname}`)
+        sites.push(url.hostname)
+        added = true
+    } else {
+        console.log(`Disabling Site: ${url.hostname}`)
+        sites.splice(sites.indexOf(url.hostname), 1)
+    }
+    // console.log('sites:', sites)
+    await chrome.storage.sync.set({ sites })
+    return added
+}
+
+/**
+ * Update Links for Tab
+ * @function enableTemp
+ * @param {chrome.tabs.Tab} tab
+ * @param {String} color
+ */
+export async function enableTemp(tab, color = 'yellow') {
+    console.log(`enableTemp: executeScript: tab.id: ${tab.id}`)
+    await chrome.scripting.executeScript({
+        target: { tabId: tab.id },
+        func: function () {
+            updateLinks()
+        },
+    })
+    await chrome.action.setBadgeText({
+        tabId: tab.id,
+        text: 'On',
+    })
+    await chrome.action.setBadgeBackgroundColor({
+        tabId: tab.id,
+        color: color,
+    })
+}
+
+/**
  * Check Host Permissions
  * @function checkPerms
  * @return {Boolean}
@@ -60,68 +110,4 @@ export function updateOptions(options) {
             }
         }
     }
-}
-
-/**
- * Get URL for Current Tab
- * @function toggleSite
- * @param {URL} url
- * @return {Boolean}
- */
-export async function toggleSite(url) {
-    console.log(`toggleSite: url.hostname: ${url.hostname}`, url)
-    let added = false
-    if (!url?.hostname) {
-        return console.warn(`No url.hostname: ${url?.hostname}`, url)
-    }
-    const { sites } = await chrome.storage.sync.get(['sites'])
-    if (!sites.includes(url.hostname)) {
-        console.log(`Enabling Site: ${url.hostname}`)
-        sites.push(url.hostname)
-        added = true
-    } else {
-        console.log(`Disabling Site: ${url.hostname}`)
-        sites.splice(sites.indexOf(url.hostname), 1)
-    }
-    // console.log('sites:', sites)
-    await chrome.storage.sync.set({ sites })
-    return added
-}
-
-/**
- * Update Links for Tab
- * @function enableTemp
- * @param {chrome.tabs.Tab} tab
- * @param {String} color
- */
-export async function enableTemp(tab, color = 'yellow') {
-    console.log(`enableTemp: executeScript: tab.id: ${tab.id}`)
-    await chrome.scripting.executeScript({
-        target: { tabId: tab.id },
-        func: updateLinks,
-    })
-    await chrome.action.setBadgeText({
-        tabId: tab.id,
-        text: 'On',
-    })
-    await chrome.action.setBadgeBackgroundColor({
-        tabId: tab.id,
-        color: color,
-    })
-}
-
-/**
- * Update Links
- * TODO: Duplicated from tabs.js
- * @function updateLinks
- */
-function updateLinks() {
-    const elements = document.getElementsByTagName('a')
-    for (const element of elements) {
-        if (element.href !== '#') {
-            element.target = '_blank'
-            element.setAttribute('rel', 'nofollow')
-        }
-    }
-    console.log('Links Updated.')
 }

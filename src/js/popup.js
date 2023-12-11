@@ -124,8 +124,8 @@ function grantPermsBtn(event) {
  */
 async function toggleSiteClick(event) {
     console.log('toggleSiteBtn:', event)
-    let { options, sites } = await chrome.storage.sync.get(['options', 'sites'])
-    console.log('options, sites:', options, sites)
+    let { options } = await chrome.storage.sync.get(['options'])
+    console.log('options, sites:', options)
     const [tab] = await chrome.tabs.query({ currentWindow: true, active: true })
     console.log('tab:', tab)
     const added = await toggleSite(new URL(tab.url))
