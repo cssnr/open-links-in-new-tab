@@ -3,6 +3,7 @@
 import {
     checkPerms,
     enableTemp,
+    reloadTab,
     saveOptions,
     toggleSite,
     updateOptions,
@@ -30,9 +31,7 @@ async function initPopup() {
     console.log('initPopup')
     const hasPerms = await checkPerms()
     if (!hasPerms) {
-        document
-            .getElementById('toggle-site-label')
-            .classList.add('visually-hidden')
+        document.getElementById('toggle-site-label').classList.add('d-none')
     }
     const { options, sites } = await chrome.storage.sync.get([
         'options',
@@ -131,17 +130,9 @@ async function toggleSiteClick(event) {
     console.log('tab:', tab)
     const added = await toggleSite(new URL(tab.url))
     if (added) {
-        await chrome.scripting.executeScript({
-            target: { tabId: tab.id },
-            files: ['/js/tab.js'],
-        })
+        await enableTemp(tab, 'green')
     } else if (options.autoReload) {
-        await chrome.scripting.executeScript({
-            target: { tabId: tab.id },
-            func: function () {
-                window.location.reload()
-            },
-        })
+        await reloadTab(tab)
     }
     window.close()
 }

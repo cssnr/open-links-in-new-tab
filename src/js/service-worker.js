@@ -1,6 +1,6 @@
 // JS Background Service Worker
 
-import { enableTemp, toggleSite } from './export.js'
+import { enableTemp, reloadTab, toggleSite } from './export.js'
 
 chrome.runtime.onInstalled.addListener(onInstalled)
 chrome.contextMenus.onClicked.addListener(onClicked)
@@ -208,12 +208,7 @@ async function toggleTab(tab) {
     } else {
         const { options } = await chrome.storage.sync.get(['options'])
         if (options.autoReload) {
-            await chrome.scripting.executeScript({
-                target: { tabId: tab.id },
-                func: function () {
-                    window.location.reload()
-                },
-            })
+            await reloadTab(tab)
         }
     }
 }

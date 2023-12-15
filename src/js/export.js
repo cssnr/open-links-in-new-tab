@@ -51,6 +51,20 @@ export async function enableTemp(tab, color = 'yellow') {
 }
 
 /**
+ * Reload Tab
+ * @function reloadTab
+ * @param {chrome.tabs.Tab} tab
+ */
+export async function reloadTab(tab) {
+    await chrome.scripting.executeScript({
+        target: { tabId: tab.id },
+        func: function () {
+            window.location.reload()
+        },
+    })
+}
+
+/**
  * Check Host Permissions
  * @function checkPerms
  * @return {Boolean}
