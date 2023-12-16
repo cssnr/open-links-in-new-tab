@@ -185,6 +185,8 @@ async function setDefaultOptions(defaultOptions) {
  * @function createContextMenus
  */
 export function createContextMenus() {
+    console.log('createContextMenus')
+    chrome.contextMenus.removeAll()
     const ctx = ['all']
     const contexts = [
         [ctx, 'toggle', 'normal', 'Toggle Current Domain'],
