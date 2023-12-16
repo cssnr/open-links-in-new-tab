@@ -21,6 +21,10 @@ document.getElementById('grant-perms').onclick = grantPermsBtn
 document.getElementById('toggle-site').onclick = toggleSiteClick
 document.getElementById('enable-temp').onclick = enableTempClick
 
+document
+    .querySelectorAll('[data-bs-toggle="tooltip"]')
+    .forEach((el) => new bootstrap.Tooltip(el))
+
 /**
  * Initialize Popup
  * TODO: Cleanup this function

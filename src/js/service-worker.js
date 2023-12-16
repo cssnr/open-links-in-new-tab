@@ -21,7 +21,7 @@ async function onInstalled(details) {
             contextMenu: true,
             showUpdate: false,
             autoReload: true,
-            onScroll: true,
+            onScroll: false,
         })
     )
     if (options.contextMenu) {
@@ -162,8 +162,7 @@ async function setDefaultOptions(defaultOptions) {
     let { options, sites } = await chrome.storage.sync.get(['options', 'sites'])
     options = options || {}
     if (!sites) {
-        sites = []
-        await chrome.storage.sync.set({ sites })
+        await chrome.storage.sync.set({ sites: [] })
     }
     console.log('options, sites:', options, sites)
     let changed = false
