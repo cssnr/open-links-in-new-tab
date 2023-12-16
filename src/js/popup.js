@@ -2,7 +2,7 @@
 
 import {
     checkPerms,
-    enableTemp,
+    enableSite,
     saveOptions,
     toggleSite,
     updateOptions,
@@ -21,6 +21,10 @@ document.getElementById('grant-perms').onclick = grantPermsBtn
 document.getElementById('toggle-site').onclick = toggleSiteClick
 document.getElementById('enable-temp').onclick = enableTempClick
 
+document
+    .querySelectorAll('[data-bs-toggle="tooltip"]')
+    .forEach((el) => new bootstrap.Tooltip(el))
+
 /**
  * Initialize Popup
  * TODO: Cleanup this function
@@ -30,9 +34,7 @@ async function initPopup() {
     console.log('initPopup')
     const hasPerms = await checkPerms()
     if (!hasPerms) {
-        document
-            .getElementById('toggle-site-label')
-            .classList.add('visually-hidden')
+        document.getElementById('toggle-site-label').classList.add('d-none')
     }
     const { options, sites } = await chrome.storage.sync.get([
         'options',
@@ -125,24 +127,11 @@ function grantPermsBtn(event) {
  */
 async function toggleSiteClick(event) {
     console.log('toggleSiteBtn:', event)
-    let { options } = await chrome.storage.sync.get(['options'])
-    console.log('options:', options)
+    // let { options } = await chrome.storage.sync.get(['options'])
+    // console.log('options:', options)
     const [tab] = await chrome.tabs.query({ currentWindow: true, active: true })
     console.log('tab:', tab)
-    const added = await toggleSite(new URL(tab.url))
-    if (added) {
-        await chrome.scripting.executeScript({
-            target: { tabId: tab.id },
-            files: ['/js/tab.js'],
-        })
-    } else if (options.autoReload) {
-        await chrome.scripting.executeScript({
-            target: { tabId: tab.id },
-            func: function () {
-                window.location.reload()
-            },
-        })
-    }
+    await toggleSite(tab)
     window.close()
 }
 
@@ -155,6 +144,6 @@ async function enableTempClick(event) {
     console.log('enableTemp:', event)
     const [tab] = await chrome.tabs.query({ currentWindow: true, active: true })
     console.log('tab:', tab)
-    await enableTemp(tab)
+    await enableSite(tab, 'yellow')
     window.close()
 }

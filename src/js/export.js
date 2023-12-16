@@ -3,12 +3,12 @@
 /**
  * Get URL for Current Tab
  * @function toggleSite
- * @param {URL} url
- * @return {Boolean}
+ * @param {chrome.tabs.Tab} tab
  */
-export async function toggleSite(url) {
+export async function toggleSite(tab) {
+    const url = new URL(tab.url)
+
     console.log(`toggleSite: url.hostname: ${url.hostname}`, url)
-    let added = false
     if (!url?.hostname) {
         return console.log(`No url.hostname: ${url?.hostname}`, url)
     }
@@ -16,37 +16,42 @@ export async function toggleSite(url) {
     if (!sites.includes(url.hostname)) {
         console.log(`Enabling Site: ${url.hostname}`)
         sites.push(url.hostname)
-        added = true
+        await enableSite(tab, 'green')
     } else {
         console.log(`Disabling Site: ${url.hostname}`)
         sites.splice(sites.indexOf(url.hostname), 1)
+        const { options } = await chrome.storage.sync.get(['options'])
+        if (options.autoReload) {
+            await reloadTab(tab)
+        }
     }
-    // console.log('sites:', sites)
+    console.log('sites:', sites)
     await chrome.storage.sync.set({ sites })
-    return added
+}
+
+export async function enableSite(tab, color) {
+    console.log(`enableSite: ${color}`, tab)
+    await chrome.scripting.executeScript({
+        target: { tabId: tab.id },
+        args: [color],
+        func: function (color) {
+            activateTab(color)
+        },
+    })
+    console.log('enableSite end')
 }
 
 /**
- * Update Links for Tab
- * @function enableTemp
+ * Reload Tab
+ * @function reloadTab
  * @param {chrome.tabs.Tab} tab
- * @param {String} color
  */
-export async function enableTemp(tab, color = 'yellow') {
-    console.log(`enableTemp: executeScript: tab.id: ${tab.id}`)
+export async function reloadTab(tab) {
     await chrome.scripting.executeScript({
         target: { tabId: tab.id },
         func: function () {
-            updateLinks()
+            window.location.reload()
         },
-    })
-    await chrome.action.setBadgeText({
-        tabId: tab.id,
-        text: 'On',
-    })
-    await chrome.action.setBadgeBackgroundColor({
-        tabId: tab.id,
-        color: color,
     })
 }
 
