@@ -29,22 +29,16 @@ export async function toggleSite(tab) {
     await chrome.storage.sync.set({ sites })
 }
 
-export async function enableSite(tab, color = 'green') {
+export async function enableSite(tab, color) {
     console.log(`enableSite: ${color}`, tab)
-    console.log(5)
     await chrome.scripting.executeScript({
         target: { tabId: tab.id },
-        func: function () {
-            activateTab()
+        args: [color],
+        func: function (color) {
+            activateTab(color)
         },
     })
-    console.log(6)
-    await chrome.runtime.sendMessage({
-        badgeText: 'On',
-        badgeColor: color,
-        tabId: tab.id,
-    })
-    console.log(7)
+    console.log('enableSite end')
 }
 
 /**

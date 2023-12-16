@@ -5,11 +5,7 @@
     // console.log(`sites: ${window.location.host}`, sites)
     if (sites?.includes(window.location.host)) {
         console.log(`Enabled Host: ${window.location.host}`)
-        await activateTab()
-        await chrome.runtime.sendMessage({
-            badgeText: 'On',
-            badgeColor: 'green',
-        })
+        await activateTab('green')
     }
 })()
 
@@ -19,14 +15,18 @@ let tabEnabled = false
  * Activate Tab
  * @function activateTab
  */
-async function activateTab() {
+async function activateTab(color) {
     // await chrome.runtime.sendMessage({ badgeText: 'On' })
+    console.log(`activateTab: color: ${color}`)
+    await chrome.runtime.sendMessage({
+        badgeText: 'On',
+        badgeColor: color,
+    })
     if (tabEnabled) {
         return console.log('Tab Already Enabled...')
     }
     tabEnabled = true
     console.log('Activating Tab...')
-
     updateLinks()
     const observer = new MutationObserver(function () {
         updateLinks()

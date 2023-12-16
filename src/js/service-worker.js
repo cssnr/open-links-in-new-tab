@@ -112,13 +112,19 @@ async function onMessage(message, sender) {
     const text = message.badgeText
     const color = message.badgeColor
     console.log(`tabId: ${tabId}, text: ${text}, color: ${color}`)
+    const bgColor = await chrome.action.getBadgeBackgroundColor({
+        tabId: tabId,
+    })
+    const bgJson = JSON.stringify(bgColor)
+    if (bgJson !== JSON.stringify([0, 128, 0, 255])) {
+        await chrome.action.setBadgeBackgroundColor({
+            tabId: tabId,
+            color: color,
+        })
+    }
     await chrome.action.setBadgeText({
         tabId: tabId,
         text: text,
-    })
-    await chrome.action.setBadgeBackgroundColor({
-        tabId: tabId,
-        color: color,
     })
 }
 
