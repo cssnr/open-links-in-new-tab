@@ -15,6 +15,10 @@ document
     .getElementById('options-form')
     .addEventListener('submit', (e) => e.preventDefault())
 
+document
+    .querySelectorAll('[data-bs-toggle="tooltip"]')
+    .forEach((el) => new bootstrap.Tooltip(el))
+
 document.querySelectorAll('[data-href]').forEach((el) =>
     el.addEventListener('click', async (e) => {
         console.log('clicked')

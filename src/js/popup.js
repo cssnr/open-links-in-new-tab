@@ -2,8 +2,7 @@
 
 import {
     checkPerms,
-    enableTemp,
-    reloadTab,
+    enableSite,
     saveOptions,
     toggleSite,
     updateOptions,
@@ -124,16 +123,11 @@ function grantPermsBtn(event) {
  */
 async function toggleSiteClick(event) {
     console.log('toggleSiteBtn:', event)
-    let { options } = await chrome.storage.sync.get(['options'])
-    console.log('options:', options)
+    // let { options } = await chrome.storage.sync.get(['options'])
+    // console.log('options:', options)
     const [tab] = await chrome.tabs.query({ currentWindow: true, active: true })
     console.log('tab:', tab)
-    const added = await toggleSite(new URL(tab.url))
-    if (added) {
-        await enableTemp(tab, 'green')
-    } else if (options.autoReload) {
-        await reloadTab(tab)
-    }
+    await toggleSite(tab)
     window.close()
 }
 
@@ -146,6 +140,6 @@ async function enableTempClick(event) {
     console.log('enableTemp:', event)
     const [tab] = await chrome.tabs.query({ currentWindow: true, active: true })
     console.log('tab:', tab)
-    await enableTemp(tab)
+    await enableSite(tab, 'yellow')
     window.close()
 }

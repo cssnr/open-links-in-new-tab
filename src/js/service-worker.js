@@ -1,6 +1,6 @@
 // JS Background Service Worker
 
-import { enableTemp, reloadTab, toggleSite } from './export.js'
+import { enableSite, toggleSite } from './export.js'
 
 chrome.runtime.onInstalled.addListener(onInstalled)
 chrome.contextMenus.onClicked.addListener(onClicked)
@@ -21,6 +21,7 @@ async function onInstalled(details) {
             contextMenu: true,
             showUpdate: false,
             autoReload: true,
+            onScroll: true,
         })
     )
     if (options.contextMenu) {
@@ -61,11 +62,11 @@ async function onClicked(ctx, tab) {
             origins: ['https://*/*', 'http://*/*'],
         })
         if (hasPerms) {
-            await toggleTab(tab)
+            await toggleSite(tab)
         }
     } else if (ctx.menuItemId === 'temp') {
         console.log(`temp: ctx.pageUrl: ${ctx.pageUrl}`)
-        await enableTemp(tab)
+        await enableSite(tab, 'yellow')
     } else if (ctx.menuItemId === 'options') {
         chrome.runtime.openOptionsPage()
     } else {
@@ -87,13 +88,13 @@ async function onCommand(command) {
             origins: ['https://*/*', 'http://*/*'],
         })
         if (hasPerms) {
-            await toggleTab(tab)
+            await toggleSite(tab)
         } else {
             console.log('Missing Permissions. Use Popup First!')
         }
     } else if (command === 'enable-temp') {
         console.log('enable-temp', tab)
-        await enableTemp(tab)
+        await enableSite(tab, 'yellow')
     } else {
         console.error(`Unknown command: ${command}`)
     }
@@ -106,18 +107,19 @@ async function onCommand(command) {
  * @param {MessageSender} sender
  */
 async function onMessage(message, sender) {
-    // console.log('message:', message)
-    if (message?.badgeText) {
-        console.log(`tabId: ${sender.tab.id}, text: ${message.badgeText}`)
-        await chrome.action.setBadgeText({
-            tabId: sender.tab.id,
-            text: message.badgeText,
-        })
-        await chrome.action.setBadgeBackgroundColor({
-            tabId: sender.tab.id,
-            color: 'green',
-        })
-    }
+    console.log('message, sender:', message, sender)
+    const tabId = message.tabId || sender.tab.id
+    const text = message.badgeText
+    const color = message.badgeColor
+    console.log(`tabId: ${tabId}, text: ${text}, color: ${color}`)
+    await chrome.action.setBadgeText({
+        tabId: tabId,
+        text: text,
+    })
+    await chrome.action.setBadgeBackgroundColor({
+        tabId: tabId,
+        color: color,
+    })
 }
 
 /**
@@ -193,22 +195,4 @@ export function createContextMenus() {
             title: context[3],
         })
     })
-}
-
-/**
- * Toggle Tab
- * @function toggleTab
- * @param {chrome.tabs.Tab} tab
- */
-async function toggleTab(tab) {
-    const added = await toggleSite(new URL(tab.url))
-    console.log(`added: ${added}`)
-    if (added) {
-        await enableTemp(tab, 'green')
-    } else {
-        const { options } = await chrome.storage.sync.get(['options'])
-        if (options.autoReload) {
-            await reloadTab(tab)
-        }
-    }
 }
