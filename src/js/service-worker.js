@@ -28,9 +28,15 @@ async function onInstalled(details) {
         createContextMenus()
     }
     if (details.reason === chrome.runtime.OnInstalledReason.INSTALL) {
-        // chrome.runtime.openOptionsPage()
-        const url = chrome.runtime.getURL('/html/oninstall.html')
-        await chrome.tabs.create({ active: true, url })
+        const hasPerms = await chrome.permissions.contains({
+            origins: ['https://*/*', 'http://*/*'],
+        })
+        if (hasPerms) {
+            chrome.runtime.openOptionsPage()
+        } else {
+            const url = chrome.runtime.getURL('/html/oninstall.html')
+            await chrome.tabs.create({ active: true, url })
+        }
     } else if (details.reason === chrome.runtime.OnInstalledReason.UPDATE) {
         if (options.showUpdate) {
             const manifest = chrome.runtime.getManifest()
@@ -185,6 +191,8 @@ async function setDefaultOptions(defaultOptions) {
  * @function createContextMenus
  */
 export function createContextMenus() {
+    console.log('createContextMenus')
+    chrome.contextMenus.removeAll()
     const ctx = ['all']
     const contexts = [
         [ctx, 'toggle', 'normal', 'Toggle Current Domain'],
