@@ -118,6 +118,7 @@ function updateTable(data) {
         hostLink.target = '_blank'
         hostLink.setAttribute('role', 'button')
         const cell2 = row.insertCell()
+        cell2.classList.add('text-break')
         cell2.appendChild(hostLink)
     })
 }
