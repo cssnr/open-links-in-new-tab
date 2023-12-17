@@ -20,7 +20,8 @@
     </div>
     <div class="d-none grant-perms">
         <p class="lead">To always open links in new tabs for sites you toggle on, permissions to run on all hosts are needed.</p>
-        <a id="grant-perms" class="btn btn-lg btn-success w-100 mb-3" role="button">Grant Host Permissions</a>
+        <a id="grant-perms" class="btn btn-lg btn-success w-100 mb-3" role="button">
+            Grant Host Permissions  <svg class="ms-1"><use xlink:href="#bi-check2-circle" /></svg></a>
     </div>
     <p>
         This web extension injects the
@@ -28,7 +29,7 @@
         script into every site. This script checks to see if the hostname of the site matches an enabled hostname.
         If so, it sets all links to open in a new tab.
     </p>
-    <a id="open-options" class="btn btn-lg btn-outline-info w-100 mb-3" role="button">
+    <a id="open-options" class="btn btn-lg btn-outline-info w-100 mb-3" role="button" href="../html/options.html">
         Open Options <svg class="ms-1"><use xlink:href="#bi-gear" /></svg></a>
     <div class="text-center">
         <a class="link-body-emphasis text-decoration-none" target="_blank" rel="noopener"
@@ -46,6 +47,10 @@
 </div> <!-- container -->
 
 <div class="d-none">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" id="bi-check2-circle" viewBox="0 0 16 16">
+        <path d="M2.5 8a5.5 5.5 0 0 1 8.25-4.764.5.5 0 0 0 .5-.866A6.5 6.5 0 1 0 14.5 8a.5.5 0 0 0-1 0 5.5 5.5 0 1 1-11 0"/>
+        <path d="M15.354 3.354a.5.5 0 0 0-.708-.708L8 9.293 5.354 6.646a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l7-7z"/>
+    </svg>
     <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" id="bi-dot" viewBox="0 0 16 16">
         <path d="M8 9.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3"/>
     </svg>

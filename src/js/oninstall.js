@@ -3,7 +3,7 @@
 import { checkPerms } from './export.js'
 
 document.addEventListener('DOMContentLoaded', domContentLoaded)
-document.getElementById('grant-perms').addEventListener('click', grantPermsBtn)
+document.getElementById('grant-perms').addEventListener('click', grantPerms)
 document.getElementById('open-options').addEventListener('click', openOptions)
 
 /**
@@ -16,12 +16,12 @@ async function domContentLoaded() {
 }
 
 /**
- * Grant Permissions Button Click Callback
- * @function grantPermsBtn
+ * Grant Permissions Click Callback
+ * @function grantPerms
  * @param {MouseEvent} event
  */
-async function grantPermsBtn(event) {
-    console.log('grantPermsBtn:', event)
+async function grantPerms(event) {
+    console.log('grantPerms:', event)
     await chrome.permissions.request({
         origins: ['https://*/*', 'http://*/*'],
     })
@@ -32,7 +32,14 @@ async function grantPermsBtn(event) {
     }
 }
 
-function openOptions() {
+/**
+ * Open Options Click Callback
+ * @function openOptions
+ * @param {MouseEvent} event
+ */
+function openOptions(event) {
+    console.log('openOptions:', event)
+    event.preventDefault()
     chrome.runtime.openOptionsPage()
     window.close()
 }
