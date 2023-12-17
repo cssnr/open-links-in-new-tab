@@ -38,7 +38,6 @@ export async function enableSite(tab, color) {
             activateTab(color)
         },
     })
-    console.log('enableSite end')
 }
 
 /**
@@ -66,7 +65,7 @@ export async function checkPerms() {
     const hasPerms = await chrome.permissions.contains({
         origins: ['https://*/*', 'http://*/*'],
     })
-    console.log('checkPerms:', hasPerms)
+    // console.log('checkPerms:', hasPerms)
     if (hasPerms) {
         hasPermsEl.forEach((el) => el.classList.remove('d-none'))
         grantPermsEl.forEach((el) => el.classList.add('d-none'))

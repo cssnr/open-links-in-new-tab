@@ -12,21 +12,14 @@ document
     .querySelectorAll('#options-form input')
     .forEach((el) => el.addEventListener('change', saveOptions))
 document
+    .querySelectorAll('.open-oninstall')
+    .forEach((el) => el.addEventListener('click', openOnInstall))
+document
     .getElementById('options-form')
     .addEventListener('submit', (e) => e.preventDefault())
-
 document
     .querySelectorAll('[data-bs-toggle="tooltip"]')
     .forEach((el) => new bootstrap.Tooltip(el))
-
-document.querySelectorAll('[data-href]').forEach((el) =>
-    el.addEventListener('click', async (e) => {
-        console.log('clicked')
-        const url = chrome.runtime.getURL(e.target.dataset.href)
-        await chrome.tabs.create({ active: true, url })
-        window.close()
-    })
-)
 
 /**
  * Options Page Init
@@ -80,6 +73,18 @@ async function grantPermsBtn(event) {
         origins: ['https://*/*', 'http://*/*'],
     })
     await checkPerms()
+}
+
+/**
+ * Open OnInstall Page
+ * @function openOnInstall
+ * @param {MouseEvent} event
+ */
+async function openOnInstall(event) {
+    console.log('openOnInstall')
+    const url = chrome.runtime.getURL('../html/oninstall.html')
+    await chrome.tabs.create({ active: true, url })
+    window.close()
 }
 
 /**
