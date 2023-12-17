@@ -38,10 +38,7 @@ async function initPopup() {
         chrome.runtime.getManifest().homepage_url
 
     await checkPerms()
-    // const hasPerms = await checkPerms()
-    // if (!hasPerms) {
-    //     document.getElementById('toggle-site-label').classList.add('d-none')
-    // }
+
     const { options, sites } = await chrome.storage.sync.get([
         'options',
         'sites',
