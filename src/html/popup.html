@@ -13,9 +13,9 @@
 <div class="container-fluid p-3">
     <div class="d-none grant-perms">
         <a id="grant-perms" class="btn btn-lg btn-success w-100 mb-1" role="button">Grant Host Permissions</a>
-        <p class="text-center"><a role="button" data-href="html/oninstall.html" class="">More Information on Permissions</a></p>
+        <p class="text-center"><a role="button" href="../html/oninstall.html" class="">More Information on Permissions</a></p>
     </div>
-    <label id="toggle-site-label" for="toggle-site" class="w-100 mb-3">
+    <label for="toggle-site" class="w-100 mb-3 has-perms">
         <div id="switch" class="border border-secondary border-2 rounded p-2">
             <p class="mb-1 text-center text-break small mb-2">
                 <kbd id="site-hostname">Invalid Site</kbd>
@@ -55,15 +55,14 @@
         </div>
     </form>
     <div class="d-grid g-2 gap-2 my-2">
-        <a class="btn btn-outline-info btn-sm " role="button" data-href="options">
-            Open Options
-        </a><svg class="ms-1"><use xlink:href="#bi-gear" /></svg>
+        <a class="btn btn-outline-info btn-sm " role="button" href="../html/options.html">
+            Open Options <svg class="ms-1"><use xlink:href="#bi-gear" /></svg></a>
     </div>
     <hr>
     <div class="justify-content-center align-items-center d-flex text-center small mb-0">
         <img src="../images/logo16.png" alt="Open Links in New Tab" width="16" height="16">
         <a class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover mx-2" type="button" rel="noopener"
-           data-href="homepage">Open Links in New Tab</a> v<span id="version"></span>
+           id="homepage_url" href="">Open Links in New Tab</a> v<span id="version"></span>
     </div>
 </div>
 
