@@ -156,7 +156,7 @@ async function setShortcuts(mapping) {
         // console.log(`${elementID}: ${name}`)
         const command = commands.find((x) => x.name === name)
         if (command?.shortcut) {
-            console.log(`${elementID}: ${command.shortcut}`)
+            // console.log(`${elementID}: ${command.shortcut}`)
             const el = document.getElementById(elementID)
             if (el) {
                 el.textContent = command.shortcut
