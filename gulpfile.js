@@ -9,14 +9,18 @@ gulp.task('bootstrap', () => {
         .pipe(gulp.dest('src/dist/bootstrap'))
 })
 
-// gulp.task('bootstrap-icons', () => {
-//     gulp.src(['node_modules/bootstrap-icons/font/fonts/**']).pipe(
-//         gulp.dest('src/dist/bootstrap/fonts')
-//     )
-//     return gulp
-//         .src(['node_modules/bootstrap-icons/font/bootstrap-icons.min.css'])
-//         .pipe(gulp.dest('src/dist/bootstrap'))
-// })
+gulp.task('fontawesome', () => {
+    return gulp
+        .src(
+            [
+                'node_modules/@fortawesome/fontawesome-free/css/all.min.css',
+                'node_modules/@fortawesome/fontawesome-free/webfonts/fa-regular-*',
+                'node_modules/@fortawesome/fontawesome-free/webfonts/fa-solid-*',
+            ],
+            { base: 'node_modules/@fortawesome/fontawesome-free' }
+        )
+        .pipe(gulp.dest('src/dist/fontawesome'))
+})
 
 gulp.task('jquery', () => {
     return gulp
@@ -24,4 +28,4 @@ gulp.task('jquery', () => {
         .pipe(gulp.dest('src/dist/jquery'))
 })
 
-gulp.task('default', gulp.parallel('bootstrap', 'jquery'))
+gulp.task('default', gulp.parallel('bootstrap', 'fontawesome', 'jquery'))
