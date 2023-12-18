@@ -16,14 +16,13 @@ document
 document
     .querySelectorAll('#options-form input')
     .forEach((el) => el.addEventListener('change', saveOptions))
+document
+    .querySelectorAll('[data-bs-toggle="tooltip"]')
+    .forEach((el) => new bootstrap.Tooltip(el))
 
 document.getElementById('grant-perms').onclick = grantPerms
 document.getElementById('toggle-site').onclick = toggleSiteClick
 document.getElementById('enable-temp').onclick = enableTempClick
-
-document
-    .querySelectorAll('[data-bs-toggle="tooltip"]')
-    .forEach((el) => new bootstrap.Tooltip(el))
 
 /**
  * Initialize Popup
@@ -89,17 +88,11 @@ async function popupLinks(event) {
     event.preventDefault()
     const anchor = event.target.closest('a')
     console.log(`anchor.href: ${anchor.href}`)
-    let url
     if (anchor.href.endsWith('html/options.html')) {
         chrome.runtime.openOptionsPage()
-        return window.close()
-    } else if (anchor.href.startsWith('http')) {
-        url = anchor.href
     } else {
-        url = chrome.runtime.getURL(anchor.href)
+        await chrome.tabs.create({ active: true, url: anchor.href })
     }
-    console.log('url:', url)
-    await chrome.tabs.create({ active: true, url })
     return window.close()
 }
 
@@ -122,9 +115,7 @@ function grantPerms(event) {
  * @param {MouseEvent} event
  */
 async function toggleSiteClick(event) {
-    console.log('toggleSiteBtn:', event)
-    // let { options } = await chrome.storage.sync.get(['options'])
-    // console.log('options:', options)
+    console.log('toggleSiteClick:', event)
     const [tab] = await chrome.tabs.query({ currentWindow: true, active: true })
     console.log('tab:', tab)
     await toggleSite(tab)
@@ -137,7 +128,7 @@ async function toggleSiteClick(event) {
  * @param {MouseEvent} event
  */
 async function enableTempClick(event) {
-    console.log('enableTemp:', event)
+    console.log('enableTempClick:', event)
     const [tab] = await chrome.tabs.query({ currentWindow: true, active: true })
     console.log('tab:', tab)
     await enableSite(tab, 'yellow')
