@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', initOptions)
 
 chrome.storage.onChanged.addListener(onChanged)
 
-document.getElementById('grant-perms').addEventListener('click', grantPermsBtn)
+document.getElementById('grant-perms').addEventListener('click', grantPerms)
 
 document
     .querySelectorAll('#options-form input')
@@ -14,33 +14,28 @@ document
 document
     .getElementById('options-form')
     .addEventListener('submit', (e) => e.preventDefault())
-
+document
+    .querySelectorAll('.open-oninstall')
+    .forEach((el) => el.addEventListener('click', openOnInstall))
 document
     .querySelectorAll('[data-bs-toggle="tooltip"]')
     .forEach((el) => new bootstrap.Tooltip(el))
 
-document.querySelectorAll('[data-href]').forEach((el) =>
-    el.addEventListener('click', async (e) => {
-        console.log('clicked')
-        const url = chrome.runtime.getURL(e.target.dataset.href)
-        await chrome.tabs.create({ active: true, url })
-        window.close()
-    })
-)
-
 /**
- * Options Page Init
+ * Initialize Options
  * @function initOptions
  */
 async function initOptions() {
     console.log('initOptions')
     document.getElementById('version').textContent =
         chrome.runtime.getManifest().version
+
     await setShortcuts({
         mainKey: '_execute_action',
         toggleSite: 'toggle-site',
         enableTemp: 'enable-temp',
     })
+
     const { options, sites } = await chrome.storage.sync.get([
         'options',
         'sites',
@@ -70,16 +65,28 @@ function onChanged(changes, namespace) {
 }
 
 /**
- * Grant Permissions Button Click Callback
- * @function grantPermsBtn
+ * Grant Permissions Click Callback
+ * @function grantPerms
  * @param {MouseEvent} event
  */
-async function grantPermsBtn(event) {
+async function grantPerms(event) {
     console.log('grantPermsBtn:', event)
     await chrome.permissions.request({
         origins: ['https://*/*', 'http://*/*'],
     })
     await checkPerms()
+}
+
+/**
+ * Open OnInstall Page Click Callback
+ * @function openOnInstall
+ * @param {MouseEvent} event
+ */
+async function openOnInstall(event) {
+    console.log('openOnInstall', event)
+    const url = chrome.runtime.getURL('../html/oninstall.html')
+    await chrome.tabs.create({ active: true, url })
+    window.close()
 }
 
 /**
@@ -113,6 +120,7 @@ function updateTable(data) {
         hostLink.target = '_blank'
         hostLink.setAttribute('role', 'button')
         const cell2 = row.insertCell()
+        cell2.classList.add('text-break')
         cell2.appendChild(hostLink)
     })
 }
@@ -151,7 +159,7 @@ async function setShortcuts(mapping) {
         // console.log(`${elementID}: ${name}`)
         const command = commands.find((x) => x.name === name)
         if (command?.shortcut) {
-            console.log(`${elementID}: ${command.shortcut}`)
+            // console.log(`${elementID}: ${command.shortcut}`)
             const el = document.getElementById(elementID)
             if (el) {
                 el.textContent = command.shortcut
