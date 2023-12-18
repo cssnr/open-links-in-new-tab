@@ -50,8 +50,13 @@
             </label>
         </div>
         <div class="form-check form-switch">
-            <input class="form-check-input" type="checkbox" role="switch" id="contextMenu">
-            <label class="form-check-label" for="contextMenu" aria-describedby="contextMenuHelp">Enable Right Click Menu</label>
+            <input class="form-check-input options" type="checkbox" role="switch" id="contextMenu">
+            <label class="form-check-label" for="contextMenu" aria-describedby="contextMenuHelp">
+                Enable Right Click Menu
+                <span data-bs-toggle="tooltip" data-bs-title="Show Context Menu on Right Click.">
+                    <svg class="ms-1"><use xlink:href="#bi-info-circle-fill" /></svg>
+                </span>
+            </label>
         </div>
     </form>
     <div class="d-grid g-2 gap-2 my-2">

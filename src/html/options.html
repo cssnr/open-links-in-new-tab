@@ -27,15 +27,15 @@
         <tbody>
             <tr>
                 <td>Show Popup Action <svg class="ms-1"><use xlink:href="#bi-keyboard" /></svg></td>
-                <td title="Keyboard Shortcut" class="text-end"><kbd id="mainKey">Unknown</kbd></td>
+                <td class="text-end" title="Keyboard Shortcut"><kbd id="mainKey">Unknown</kbd></td>
             </tr>
             <tr>
                 <td>Toggle Current Site <svg class="ms-1"><use xlink:href="#bi-keyboard" /></svg></td>
-                <td title="Keyboard Shortcut" class="text-end"><kbd id="toggleSite">Unknown</kbd></td>
+                <td class="text-end" title="Keyboard Shortcut"><kbd id="toggleSite">Unknown</kbd></td>
             </tr>
             <tr>
                 <td>Temporarily Enable Site <svg class="ms-1"><use xlink:href="#bi-keyboard" /></svg></td>
-                <td title="Keyboard Shortcut" class="text-end"><kbd id="enableTemp">Unknown</kbd></td>
+                <td class="text-end" title="Keyboard Shortcut"><kbd id="enableTemp">Unknown</kbd></td>
             </tr>
         </tbody>
     </table>
@@ -59,12 +59,22 @@
             </label>
         </div>
         <div class="form-check form-switch">
-            <input class="form-check-input" type="checkbox" role="switch" id="contextMenu">
-            <label class="form-check-label" for="contextMenu" aria-describedby="contextMenuHelp">Enable Right Click Menu</label>
+            <input class="form-check-input options" type="checkbox" role="switch" id="contextMenu">
+            <label class="form-check-label" for="contextMenu" aria-describedby="contextMenuHelp">
+                Enable Right Click Menu
+                <span data-bs-toggle="tooltip" data-bs-title="Show Context Menu on Right Click.">
+                    <svg class="ms-1"><use xlink:href="#bi-info-circle-fill" /></svg>
+                </span>
+            </label>
         </div>
-        <div class="form-check form-switch mb-3">
-            <input class="form-check-input" type="checkbox" role="switch" id="showUpdate">
-            <label class="form-check-label" for="showUpdate" aria-describedby="showUpdateHelp">Show Release Notes on Update</label>
+        <div class="form-check form-switch">
+            <input class="form-check-input options" type="checkbox" role="switch" id="showUpdate">
+            <label class="form-check-label" for="showUpdate" aria-describedby="showUpdateHelp">
+                Show Release Notes on Update
+                <span data-bs-toggle="tooltip" data-bs-title="Show Release Notes on Version Update.">
+                    <svg class="ms-1"><use xlink:href="#bi-info-circle-fill" /></svg>
+                </span>
+            </label>
         </div>
     </form>
 
