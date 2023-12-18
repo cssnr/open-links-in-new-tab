@@ -64,9 +64,9 @@ async function initPopup() {
                 return true
             },
         })
-    } catch (error) {
+    } catch (e) {
         switchEl.classList.add('border-danger-subtle')
-        return console.log(error, url.hostname)
+        return console.log(`url.hostname: ${url.hostname}`, e)
     }
     console.log(`Valid Site: ${url.hostname}`)
     const toggleSiteEl = document.getElementById('toggle-site')
