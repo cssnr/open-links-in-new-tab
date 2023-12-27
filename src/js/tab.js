@@ -1,13 +1,16 @@
 // JS Content Script tab.js
 
 ;(async () => {
-    const { sites } = await chrome.storage.sync.get(['sites'])
+    const { options, sites } = await chrome.storage.sync.get([
+        'options',
+        'sites',
+    ])
     console.debug(`sites: ${window.location.host}`, sites)
     if (sites?.includes(window.location.host)) {
         console.log(`Enabled Host: ${window.location.host}`)
         await activateTab('green')
     }
-    if (!chrome.storage.onChanged.hasListener(onChanged)) {
+    if (options.updateAll && !chrome.storage.onChanged.hasListener(onChanged)) {
         console.log('Adding onChanged Listener')
         chrome.storage.onChanged.addListener(onChanged)
     }
@@ -18,6 +21,7 @@ let tabEnabled = false
 /**
  * Activate Tab
  * @function activateTab
+ * @param {String} color
  */
 async function activateTab(color) {
     // await chrome.runtime.sendMessage({ badgeText: 'On' })
@@ -64,22 +68,6 @@ function updateLinks() {
 }
 
 /**
- * DeBounce Function
- * @function debounce
- * @param {Function} func
- * @param {Number} timeout
- */
-function debounce(func, timeout = 300) {
-    let timer
-    return (...args) => {
-        clearTimeout(timer)
-        timer = setTimeout(() => {
-            func.apply(this, args)
-        }, timeout)
-    }
-}
-
-/**
  * On Changed Callback
  * @function onChanged
  * @param {Object} changes
@@ -101,10 +89,8 @@ async function onChanged(changes, namespace) {
                 console.log(`Disabling: ${window.location.host}`)
                 const { options } = await chrome.storage.sync.get(['options'])
                 if (options.autoReload) {
-                    console.debug('options.autoReload enabled')
                     window.location.reload()
                 } else {
-                    // TODO: Determine why this is not working...
                     await chrome.runtime.sendMessage({
                         badgeColor: 'red',
                     })
@@ -112,5 +98,19 @@ async function onChanged(changes, namespace) {
                 }
             }
         }
+    }
+}
+
+/**
+ * DeBounce Function
+ * @function debounce
+ * @param {Function} fn
+ * @param {Number} timeout
+ */
+function debounce(fn, timeout = 300) {
+    let timeoutID
+    return (...args) => {
+        clearTimeout(timeoutID)
+        timeoutID = setTimeout(() => fn(...args), timeout)
     }
 }

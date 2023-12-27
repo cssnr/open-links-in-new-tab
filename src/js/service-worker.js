@@ -18,10 +18,11 @@ async function onInstalled(details) {
     const githubURL = 'https://github.com/cssnr/open-links-in-new-tab'
     const options = await Promise.resolve(
         setDefaultOptions({
-            contextMenu: true,
-            showUpdate: false,
             autoReload: true,
             onScroll: false,
+            updateAll: true,
+            contextMenu: true,
+            showUpdate: false,
         })
     )
     if (options.contextMenu) {
