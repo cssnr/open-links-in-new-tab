@@ -9,7 +9,9 @@ import {
 } from './export.js'
 
 document.addEventListener('DOMContentLoaded', initPopup)
-
+document.getElementById('grant-perms').onclick = grantPerms
+document.getElementById('toggle-site').onclick = toggleSiteClick
+document.getElementById('enable-temp').onclick = enableTempClick
 document
     .querySelectorAll('a[href]')
     .forEach((el) => el.addEventListener('click', popupLinks))
@@ -19,10 +21,6 @@ document
 document
     .querySelectorAll('[data-bs-toggle="tooltip"]')
     .forEach((el) => new bootstrap.Tooltip(el))
-
-document.getElementById('grant-perms').onclick = grantPerms
-document.getElementById('toggle-site').onclick = toggleSiteClick
-document.getElementById('enable-temp').onclick = enableTempClick
 
 /**
  * Initialize Popup

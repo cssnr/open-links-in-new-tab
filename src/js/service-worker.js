@@ -18,10 +18,11 @@ async function onInstalled(details) {
     const githubURL = 'https://github.com/cssnr/open-links-in-new-tab'
     const options = await Promise.resolve(
         setDefaultOptions({
-            contextMenu: true,
-            showUpdate: false,
             autoReload: true,
             onScroll: false,
+            updateAll: true,
+            contextMenu: true,
+            showUpdate: false,
         })
     )
     if (options.contextMenu) {
@@ -57,10 +58,10 @@ async function onInstalled(details) {
  * @param {chrome.tabs.Tab} tab
  */
 async function onClicked(ctx, tab) {
-    console.log('contextMenuClick:', ctx, tab)
+    console.debug('contextMenuClick:', ctx, tab)
     console.log(`ctx.menuItemId: ${ctx.menuItemId}`)
     if (ctx.menuItemId === 'toggle') {
-        console.log(`toggle: ctx.pageUrl: ${ctx.pageUrl}`)
+        console.debug(`toggle: ctx.pageUrl: ${ctx.pageUrl}`)
         chrome.permissions.request({
             origins: ['https://*/*', 'http://*/*'],
         })
@@ -71,7 +72,7 @@ async function onClicked(ctx, tab) {
             await toggleSite(tab)
         }
     } else if (ctx.menuItemId === 'temp') {
-        console.log(`temp: ctx.pageUrl: ${ctx.pageUrl}`)
+        console.debug(`temp: ctx.pageUrl: ${ctx.pageUrl}`)
         await enableSite(tab, 'yellow')
     } else if (ctx.menuItemId === 'options') {
         chrome.runtime.openOptionsPage()
@@ -86,20 +87,20 @@ async function onClicked(ctx, tab) {
  * @param {String} command
  */
 async function onCommand(command) {
-    console.log(`onCommand: ${command}`)
+    console.debug(`onCommand: ${command}`)
     const [tab] = await chrome.tabs.query({ currentWindow: true, active: true })
     if (command === 'toggle-site') {
-        console.log('toggle-site')
+        console.debug('toggle-site')
         const hasPerms = await chrome.permissions.contains({
             origins: ['https://*/*', 'http://*/*'],
         })
         if (hasPerms) {
             await toggleSite(tab)
         } else {
-            console.log('Missing Permissions. Use Popup First!')
+            console.info('Missing Permissions. Use Popup First!')
         }
     } else if (command === 'enable-temp') {
-        console.log('enable-temp', tab)
+        console.debug('enable-temp', tab)
         await enableSite(tab, 'yellow')
     } else {
         console.error(`Unknown command: ${command}`)
@@ -113,25 +114,23 @@ async function onCommand(command) {
  * @param {MessageSender} sender
  */
 async function onMessage(message, sender) {
-    console.log('message, sender:', message, sender)
+    console.debug('message, sender:', message, sender)
     const tabId = message.tabId || sender.tab.id
     const text = message.badgeText
     const color = message.badgeColor
-    console.log(`tabId: ${tabId}, text: ${text}, color: ${color}`)
-    const bgColor = await chrome.action.getBadgeBackgroundColor({
-        tabId: tabId,
-    })
-    const bgJson = JSON.stringify(bgColor)
-    if (bgJson !== JSON.stringify([0, 128, 0, 255])) {
+    console.debug(`tabId: ${tabId}, text: ${text}, color: ${color}`)
+    if (color) {
         await chrome.action.setBadgeBackgroundColor({
             tabId: tabId,
             color: color,
         })
     }
-    await chrome.action.setBadgeText({
-        tabId: tabId,
-        text: text,
-    })
+    if (text) {
+        await chrome.action.setBadgeText({
+            tabId: tabId,
+            text: text,
+        })
+    }
 }
 
 /**
@@ -141,7 +140,7 @@ async function onMessage(message, sender) {
  * @param {String} namespace
  */
 function onChanged(changes, namespace) {
-    // console.log('onChanged:', changes, namespace)
+    // console.debug('onChanged:', changes, namespace)
     for (const [key, { oldValue, newValue }] of Object.entries(changes)) {
         if (namespace === 'sync' && key === 'options' && oldValue && newValue) {
             if (oldValue.contextMenu !== newValue.contextMenu) {
@@ -191,7 +190,7 @@ async function setDefaultOptions(defaultOptions) {
  * @function createContextMenus
  */
 export function createContextMenus() {
-    console.log('createContextMenus')
+    console.debug('createContextMenus')
     chrome.contextMenus.removeAll()
     const ctx = ['all']
     const contexts = [
