@@ -20,10 +20,6 @@ export async function toggleSite(tab) {
     } else {
         console.log(`Disabling Site: ${url.hostname}`)
         sites.splice(sites.indexOf(url.hostname), 1)
-        const { options } = await chrome.storage.sync.get(['options'])
-        if (options.autoReload) {
-            await reloadTab(tab)
-        }
     }
     console.log('sites:', sites)
     await chrome.storage.sync.set({ sites })
@@ -36,20 +32,6 @@ export async function enableSite(tab, color) {
         args: [color],
         func: function (color) {
             activateTab(color)
-        },
-    })
-}
-
-/**
- * Reload Tab
- * @function reloadTab
- * @param {chrome.tabs.Tab} tab
- */
-export async function reloadTab(tab) {
-    await chrome.scripting.executeScript({
-        target: { tabId: tab.id },
-        func: function () {
-            window.location.reload()
         },
     })
 }

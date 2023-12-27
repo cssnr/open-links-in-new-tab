@@ -2,12 +2,9 @@
 
 import { checkPerms, saveOptions, updateOptions } from './export.js'
 
-document.addEventListener('DOMContentLoaded', initOptions)
-
 chrome.storage.onChanged.addListener(onChanged)
-
+document.addEventListener('DOMContentLoaded', initOptions)
 document.getElementById('grant-perms').addEventListener('click', grantPerms)
-
 document
     .querySelectorAll('#options-form input')
     .forEach((el) => el.addEventListener('change', saveOptions))
