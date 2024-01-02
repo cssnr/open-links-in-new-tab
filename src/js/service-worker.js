@@ -43,7 +43,7 @@ async function onInstalled(details) {
             const manifest = chrome.runtime.getManifest()
             if (manifest.version !== details.previousVersion) {
                 const url = `${githubURL}/releases/tag/${manifest.version}`
-                console.log(`url: ${url}`)
+                console.log(`Update url: ${url}`)
                 await chrome.tabs.create({ active: false, url })
             }
         }
@@ -97,7 +97,7 @@ async function onCommand(command) {
         if (hasPerms) {
             await toggleSite(tab)
         } else {
-            console.info('Missing Permissions. Use Popup First!')
+            console.warn('Missing Permissions. Use Popup First!')
         }
     } else if (command === 'enable-temp') {
         console.debug('enable-temp', tab)

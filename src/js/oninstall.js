@@ -11,7 +11,6 @@ document.getElementById('open-options').addEventListener('click', openOptions)
  * @function domContentLoaded
  */
 async function domContentLoaded() {
-    console.log('DOMContentLoaded')
     await checkPerms()
 }
 
@@ -21,7 +20,7 @@ async function domContentLoaded() {
  * @param {MouseEvent} event
  */
 async function grantPerms(event) {
-    console.log('grantPerms:', event)
+    console.debug('grantPerms:', event)
     await chrome.permissions.request({
         origins: ['https://*/*', 'http://*/*'],
     })
@@ -38,7 +37,7 @@ async function grantPerms(event) {
  * @param {MouseEvent} event
  */
 function openOptions(event) {
-    console.log('openOptions:', event)
+    console.debug('openOptions:', event)
     event.preventDefault()
     chrome.runtime.openOptionsPage()
     window.close()

@@ -5,13 +5,13 @@
         'options',
         'sites',
     ])
-    console.debug(`sites: ${window.location.host}`, sites)
+    // console.debug(`sites: ${window.location.host}`, sites)
     if (sites?.includes(window.location.host)) {
         console.log(`Enabled Host: ${window.location.host}`)
         await activateTab('green')
     }
     if (options.updateAll && !chrome.storage.onChanged.hasListener(onChanged)) {
-        console.log('Adding onChanged Listener')
+        // console.debug('Adding onChanged Listener')
         chrome.storage.onChanged.addListener(onChanged)
     }
 })()
@@ -57,7 +57,7 @@ async function activateTab(color) {
  * @function updateLinks
  */
 function updateLinks() {
-    console.log('Updating Links...')
+    console.debug('Updating Links...')
     const elements = document.getElementsByTagName('a')
     for (const element of elements) {
         if (element.href !== '#') {
@@ -74,7 +74,7 @@ function updateLinks() {
  * @param {String} namespace
  */
 async function onChanged(changes, namespace) {
-    console.debug('onChanged:', changes, namespace)
+    // console.debug('onChanged:', changes, namespace)
     for (let [key, { newValue }] of Object.entries(changes)) {
         if (namespace === 'sync' && key === 'sites') {
             // console.debug('newValue:', newValue)

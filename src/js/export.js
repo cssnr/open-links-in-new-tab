@@ -7,10 +7,9 @@
  */
 export async function toggleSite(tab) {
     const url = new URL(tab.url)
-
-    console.log(`toggleSite: url.hostname: ${url.hostname}`, url)
+    console.debug(`toggleSite: url.hostname: ${url?.hostname}`, url)
     if (!url?.hostname) {
-        return console.log(`No url.hostname: ${url?.hostname}`, url)
+        return console.warn(`No url.hostname: ${url?.hostname}`, url)
     }
     const { sites } = await chrome.storage.sync.get(['sites'])
     if (!sites.includes(url.hostname)) {
@@ -21,12 +20,12 @@ export async function toggleSite(tab) {
         console.log(`Disabling Site: ${url.hostname}`)
         sites.splice(sites.indexOf(url.hostname), 1)
     }
-    console.log('sites:', sites)
+    console.debug('sites:', sites)
     await chrome.storage.sync.set({ sites })
 }
 
 export async function enableSite(tab, color) {
-    console.log(`enableSite: ${color}`, tab)
+    console.debug(`enableSite: ${color}`, tab)
     await chrome.scripting.executeScript({
         target: { tabId: tab.id },
         args: [color],
@@ -47,7 +46,7 @@ export async function checkPerms() {
     const hasPerms = await chrome.permissions.contains({
         origins: ['https://*/*', 'http://*/*'],
     })
-    // console.log('checkPerms:', hasPerms)
+    // console.debug('checkPerms:', hasPerms)
     if (hasPerms) {
         hasPermsEl.forEach((el) => el.classList.remove('d-none'))
         grantPermsEl.forEach((el) => el.classList.add('d-none'))
@@ -64,7 +63,7 @@ export async function checkPerms() {
  * @param {InputEvent} event
  */
 export async function saveOptions(event) {
-    console.log('saveOptions:', event)
+    console.debug('saveOptions:', event)
     const { options } = await chrome.storage.sync.get(['options'])
     let value
     if (event.target.type === 'checkbox') {
@@ -74,7 +73,7 @@ export async function saveOptions(event) {
     }
     if (value !== undefined) {
         options[event.target.id] = value
-        console.log(`Set: ${event.target.id}:`, value)
+        console.info(`Set: ${event.target.id}:`, value)
         await chrome.storage.sync.set({ options })
     }
 }
@@ -86,7 +85,7 @@ export async function saveOptions(event) {
  */
 export function updateOptions(options) {
     for (const [key, value] of Object.entries(options)) {
-        // console.log(`${key}: ${value}`)
+        // console.debug(`${key}: ${value}`)
         const el = document.getElementById(key)
         if (el) {
             if (typeof value === 'boolean') {
