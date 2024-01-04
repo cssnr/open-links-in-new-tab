@@ -97,6 +97,16 @@
             More Information on Permissions</a></p>
     </div>
 
+    <form id="add-host">
+        <label class="form-label" for="add-filter"><i class="fa-solid fa-globe me-2"></i> Hosts</label>
+        <div class="input-group mb-3">
+            <input type="text" class="form-control" placeholder="Add Host" aria-label="Filter" id="add-filter" aria-describedby="add-host-btn" required>
+            <button class="btn btn-outline-success" type="submit" id="add-host-btn">
+                Add <i class="fa-solid fa-plus ms-1"></i>
+            </button>
+        </div>
+    </form>
+
     <table id="hosts-table" class="table table-sm table-hover bg-transparent">
         <caption>Enabled Hosts</caption>
         <thead><tr>
@@ -123,11 +133,18 @@
 </div> <!-- row -->
 </div> <!-- container -->
 
+<div aria-live="polite" aria-atomic="true" class="">
+    <div id="toast-container" class="toast-container position-fixed bottom-0 end-0 p-3"></div>
+</div>
+
 <div class="d-none">
     <i class="fa-regular fa-trash-can"></i>
     <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" id="bi-dot" viewBox="0 0 16 16">
         <path d="M8 9.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3"/>
     </svg>
+    <div class="toast align-items-center border-0" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="5000">
+        <div class="toast-body"></div>
+    </div>
 </div>
 
 <script type="text/javascript" src="../dist/jquery/jquery.min.js"></script>

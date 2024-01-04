@@ -1,10 +1,11 @@
 // JS for options.html
 
-import { checkPerms, saveOptions, updateOptions } from './export.js'
+import { checkPerms, saveOptions, showToast, updateOptions } from './export.js'
 
 chrome.storage.onChanged.addListener(onChanged)
 document.addEventListener('DOMContentLoaded', initOptions)
 document.getElementById('grant-perms').addEventListener('click', grantPerms)
+document.getElementById('add-host').addEventListener('submit', addHost)
 document
     .querySelectorAll('#options-form input')
     .forEach((el) => el.addEventListener('change', saveOptions))
@@ -122,6 +123,44 @@ function updateTable(data) {
         cell2.classList.add('text-break')
         cell2.appendChild(hostLink)
     })
+}
+
+/**
+ * Add Host Callback
+ * @function addHost
+ * @param {SubmitEvent} event
+ */
+async function addHost(event) {
+    console.debug('addHost:', event.target)
+    event.preventDefault()
+    const input = event.target.elements['add-filter']
+    let value = input.value.toString()
+    if (!value.includes('://')) {
+        value = `http://${value}`
+    }
+    let url
+    try {
+        url = new URL(value)
+    } catch (e) {
+        showToast(e.message, 'danger')
+        input.focus()
+        input.select()
+        return console.info(e)
+    }
+    console.log('url:', url)
+    const { sites } = await chrome.storage.sync.get(['sites'])
+    if (sites.includes(url.hostname)) {
+        showToast(`Host Exists: ${url.hostname}`, 'warning')
+        input.focus()
+        input.select()
+        return console.info('Existing Host: url:', url)
+    } else {
+        sites.push(url.hostname)
+        await chrome.storage.sync.set({ sites })
+        showToast(`Added Host: ${url.hostname}`)
+        console.log(`Added Host: ${url.hostname}`, url)
+    }
+    // console.debug('sites:', sites)
 }
 
 /**
