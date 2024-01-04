@@ -1,10 +1,11 @@
 // JS for options.html
 
-import { checkPerms, saveOptions, updateOptions } from './export.js'
+import { checkPerms, saveOptions, showToast, updateOptions } from './export.js'
 
 chrome.storage.onChanged.addListener(onChanged)
 document.addEventListener('DOMContentLoaded', initOptions)
 document.getElementById('grant-perms').addEventListener('click', grantPerms)
+document.getElementById('add-host').addEventListener('submit', addHost)
 document
     .querySelectorAll('#options-form input')
     .forEach((el) => el.addEventListener('change', saveOptions))
@@ -23,7 +24,7 @@ document
  * @function initOptions
  */
 async function initOptions() {
-    console.log('initOptions')
+    console.debug('initOptions')
     document.getElementById('version').textContent =
         chrome.runtime.getManifest().version
 
@@ -37,7 +38,7 @@ async function initOptions() {
         'options',
         'sites',
     ])
-    console.log('options, sites:', options, sites)
+    console.debug('options, sites:', options, sites)
     updateOptions(options)
     updateTable(sites)
     await checkPerms()
@@ -50,7 +51,7 @@ async function initOptions() {
  * @param {String} namespace
  */
 function onChanged(changes, namespace) {
-    // console.log('onChanged:', changes, namespace)
+    // console.debug('onChanged:', changes, namespace)
     for (let [key, { newValue }] of Object.entries(changes)) {
         if (namespace === 'sync' && key === 'options') {
             updateOptions(newValue)
@@ -67,7 +68,7 @@ function onChanged(changes, namespace) {
  * @param {MouseEvent} event
  */
 async function grantPerms(event) {
-    console.log('grantPermsBtn:', event)
+    console.debug('grantPermsBtn:', event)
     await chrome.permissions.request({
         origins: ['https://*/*', 'http://*/*'],
     })
@@ -80,7 +81,7 @@ async function grantPerms(event) {
  * @param {MouseEvent} event
  */
 async function openOnInstall(event) {
-    console.log('openOnInstall', event)
+    console.debug('openOnInstall', event)
     const url = chrome.runtime.getURL('../html/oninstall.html')
     await chrome.tabs.create({ active: true, url })
     window.close()
@@ -125,21 +126,59 @@ function updateTable(data) {
 }
 
 /**
+ * Add Host Callback
+ * @function addHost
+ * @param {SubmitEvent} event
+ */
+async function addHost(event) {
+    console.debug('addHost:', event.target)
+    event.preventDefault()
+    const input = event.target.elements['add-filter']
+    let value = input.value.toString()
+    if (!value.includes('://')) {
+        value = `http://${value}`
+    }
+    let url
+    try {
+        url = new URL(value)
+    } catch (e) {
+        showToast(e.message, 'danger')
+        input.focus()
+        input.select()
+        return console.info(e)
+    }
+    console.log('url:', url)
+    const { sites } = await chrome.storage.sync.get(['sites'])
+    if (sites.includes(url.hostname)) {
+        showToast(`Host Exists: ${url.hostname}`, 'warning')
+        input.focus()
+        input.select()
+        return console.info('Existing Host: url:', url)
+    } else {
+        sites.push(url.hostname)
+        await chrome.storage.sync.set({ sites })
+        showToast(`Added Host: ${url.hostname}`)
+        console.log(`Added Host: ${url.hostname}`, url)
+    }
+    // console.debug('sites:', sites)
+}
+
+/**
  * Delete Host
  * @function deleteHost
  * @param {MouseEvent} event
  */
 async function deleteHost(event) {
+    console.debug('deleteHost:', event)
     event.preventDefault()
-    console.log('deleteHost:', event)
     const anchor = event.target.closest('a')
     const host = anchor?.dataset?.value
-    console.log(`host: ${host}`)
+    console.info(`Delete Host: ${host}`)
     const { sites } = await chrome.storage.sync.get(['sites'])
-    // console.log('sites:', sites)
+    // console.debug('sites:', sites)
     if (host && sites.includes(host)) {
         const index = sites.indexOf(host)
-        // console.log(`index: ${index}`)
+        // console.debug(`index: ${index}`)
         if (index !== undefined) {
             sites.splice(index, 1)
             await chrome.storage.sync.set({ sites })
@@ -155,10 +194,10 @@ async function deleteHost(event) {
 async function setShortcuts(mapping) {
     const commands = await chrome.commands.getAll()
     for (const [elementID, name] of Object.entries(mapping)) {
-        // console.log(`${elementID}: ${name}`)
+        // console.debug(`${elementID}: ${name}`)
         const command = commands.find((x) => x.name === name)
         if (command?.shortcut) {
-            // console.log(`${elementID}: ${command.shortcut}`)
+            // console.debug(`${elementID}: ${command.shortcut}`)
             const el = document.getElementById(elementID)
             if (el) {
                 el.textContent = command.shortcut
