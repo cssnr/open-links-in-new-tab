@@ -2,11 +2,28 @@
 
 import { checkPerms, enableSite, requestPerms, toggleSite } from './export.js'
 
+chrome.runtime.onStartup.addListener(onStartup)
 chrome.runtime.onInstalled.addListener(onInstalled)
 chrome.contextMenus.onClicked.addListener(onClicked)
 chrome.commands.onCommand.addListener(onCommand)
 chrome.runtime.onMessage.addListener(onMessage)
 chrome.storage.onChanged.addListener(onChanged)
+
+/**
+ * On Startup Callback
+ * @function onStartup
+ */
+async function onStartup() {
+    console.log('onStartup')
+    if (typeof browser !== 'undefined') {
+        console.log('Firefox CTX Menu Workaround')
+        const { options } = await chrome.storage.sync.get(['options'])
+        console.debug('options:', options)
+        if (options.contextMenu) {
+            createContextMenus()
+        }
+    }
+}
 
 /**
  * Installed Callback
