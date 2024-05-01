@@ -3,6 +3,8 @@
 import { checkPerms, saveOptions, showToast, updateOptions } from './export.js'
 
 chrome.storage.onChanged.addListener(onChanged)
+chrome.permissions.onAdded.addListener(onAdded)
+
 document.addEventListener('DOMContentLoaded', initOptions)
 document.getElementById('grant-perms').addEventListener('click', grantPerms)
 document.getElementById('add-host').addEventListener('submit', addHost)
@@ -81,6 +83,15 @@ async function grantPerms(event) {
 }
 
 /**
+ * Permissions On Added Callback
+ * @param permissions
+ */
+async function onAdded(permissions) {
+    console.debug('onAdded', permissions)
+    await checkPerms()
+}
+
+/**
  * Open OnInstall Page Click Callback
  * @function openOnInstall
  * @param {MouseEvent} event
@@ -138,8 +149,9 @@ function updateTable(data) {
 async function addHost(event) {
     console.debug('addHost:', event)
     event.preventDefault()
-    const input = event.target.elements['add-host']
-    let value = event.target.elements[0]
+    const input = event.target.elements['host-name']
+    let value = input.value
+    console.debug('value:', value)
     if (!value.includes('://')) {
         value = `https://${value}`
     }
@@ -163,8 +175,9 @@ async function addHost(event) {
         sites.push(url.hostname)
         await chrome.storage.sync.set({ sites })
         showToast(`Added Host: ${url.hostname}`)
-        input.value = ''
         console.log(`Added Host: ${url.hostname}`, url)
+        input.value = ''
+        input.focus()
     }
 }
 
