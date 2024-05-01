@@ -105,7 +105,7 @@ export function updateOptions(options) {
  */
 export function showToast(message, type = 'success') {
     console.log(`showToast: ${type}:`, message)
-    const element = document.querySelector('.d-none .toast').cloneNode(true)
+    const element = document.querySelector('.d-none > .toast').cloneNode(true)
     element.addEventListener('mousemove', () => toast.hide())
     element.classList.add(`text-bg-${type}`)
     element.querySelector('.toast-body').innerHTML = message

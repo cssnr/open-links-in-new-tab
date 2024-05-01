@@ -6,6 +6,8 @@ chrome.storage.onChanged.addListener(onChanged)
 document.addEventListener('DOMContentLoaded', initOptions)
 document.getElementById('grant-perms').addEventListener('click', grantPerms)
 document.getElementById('add-host').addEventListener('submit', addHost)
+document.getElementById('export-hosts').addEventListener('click', exportHosts)
+document.getElementById('import-hosts').addEventListener('click', importHosts)
 document
     .querySelectorAll('#options-form input')
     .forEach((el) => el.addEventListener('change', saveOptions))
@@ -18,6 +20,9 @@ document
 document
     .querySelectorAll('[data-bs-toggle="tooltip"]')
     .forEach((el) => new bootstrap.Tooltip(el))
+
+const hostsInput = document.getElementById('hosts-input')
+hostsInput.addEventListener('change', hostsInputChange)
 
 /**
  * Initialize Options
@@ -131,12 +136,12 @@ function updateTable(data) {
  * @param {SubmitEvent} event
  */
 async function addHost(event) {
-    console.debug('addHost:', event.target)
+    console.debug('addHost:', event)
     event.preventDefault()
-    const input = event.target.elements['add-filter']
-    let value = input.value.toString()
+    const input = event.target.elements['add-host']
+    let value = event.target.elements[0]
     if (!value.includes('://')) {
-        value = `http://${value}`
+        value = `https://${value}`
     }
     let url
     try {
@@ -158,9 +163,9 @@ async function addHost(event) {
         sites.push(url.hostname)
         await chrome.storage.sync.set({ sites })
         showToast(`Added Host: ${url.hostname}`)
+        input.value = ''
         console.log(`Added Host: ${url.hostname}`, url)
     }
-    // console.debug('sites:', sites)
 }
 
 /**
@@ -184,6 +189,80 @@ async function deleteHost(event) {
             await chrome.storage.sync.set({ sites })
         }
     }
+}
+
+/**
+ * Export Hosts Click Callback
+ * @function exportHosts
+ * @param {MouseEvent} event
+ */
+async function exportHosts(event) {
+    console.debug('exportHosts:', event)
+    event.preventDefault()
+    const { sites } = await chrome.storage.sync.get(['sites'])
+    console.debug('sites:', sites)
+    if (!sites) {
+        return showToast('No Hosts Found!', 'warning')
+    }
+    const json = JSON.stringify(sites)
+    textFileDownload('open-in-tab-sites.txt', json)
+}
+
+/**
+ * Import Hosts Click Callback
+ * @function importHosts
+ * @param {MouseEvent} event
+ */
+async function importHosts(event) {
+    console.debug('importHosts:', event)
+    event.preventDefault()
+    hostsInput.click()
+}
+
+/**
+ * Hosts Input Change Callback
+ * @function hostsInputChange
+ * @param {InputEvent} event
+ */
+async function hostsInputChange(event) {
+    console.debug('hostsInputChange:', event, hostsInput)
+    event.preventDefault()
+    const fileReader = new FileReader()
+    fileReader.onload = async function doBannedImport() {
+        const result = JSON.parse(fileReader.result.toString())
+        console.debug('result:', result)
+        const { sites } = await chrome.storage.sync.get(['sites'])
+        let count = 0
+        for (const pid of result) {
+            if (!sites.includes(pid)) {
+                sites.push(pid)
+                count += 1
+            }
+        }
+        showToast(`Imported ${count}/${result.length} Hosts.`, 'success')
+        await chrome.storage.sync.set({ sites })
+    }
+    fileReader.readAsText(hostsInput.files[0])
+}
+
+/**
+ * Text File Download
+ * @function textFileDownload
+ * @param {String} filename
+ * @param {String} text
+ */
+function textFileDownload(filename, text) {
+    console.debug(`textFileDownload: ${filename}`)
+    const element = document.createElement('a')
+    element.setAttribute(
+        'href',
+        'data:text/plain;charset=utf-8,' + encodeURIComponent(text)
+    )
+    element.setAttribute('download', filename)
+    element.classList.add('d-none')
+    document.body.appendChild(element)
+    element.click()
+    document.body.removeChild(element)
 }
 
 /**
