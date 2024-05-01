@@ -109,7 +109,7 @@ async function openOnInstall(event) {
  * @param {Object} data
  */
 function updateTable(data) {
-    const tbody = document.querySelector('#hosts-table tbody')
+    const tbody = document.querySelector('#hosts-table > tbody')
     tbody.innerHTML = ''
 
     data.forEach(function (value) {
@@ -117,7 +117,7 @@ function updateTable(data) {
 
         const deleteBtn = document.createElement('a')
         const svg = document
-            .querySelector('.fa-regular.fa-trash-can')
+            .querySelector('.d-none > .fa-regular.fa-trash-can')
             .cloneNode(true)
         deleteBtn.appendChild(svg)
         deleteBtn.title = 'Delete'
@@ -132,7 +132,7 @@ function updateTable(data) {
         const hostLink = document.createElement('a')
         hostLink.text = value
         hostLink.title = value
-        hostLink.href = `http://${value}`
+        hostLink.href = `https://${value}`
         hostLink.target = '_blank'
         hostLink.setAttribute('role', 'button')
         const cell2 = row.insertCell()
