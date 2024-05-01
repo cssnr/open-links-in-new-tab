@@ -36,17 +36,44 @@ export async function enableSite(tab, color) {
 }
 
 /**
+ * Grant Permissions Click Callback
+ * Shared with Options and Home
+ * @function grantPerms
+ * @param {MouseEvent} event
+ */
+export async function grantPerms(event) {
+    console.debug('grantPerms:', event)
+    await requestPerms()
+    await checkPerms()
+}
+
+/**
+ * Request Host Permissions
+ * @function requestPerms
+ * @return {chrome.permissions.request}
+ */
+export async function requestPerms() {
+    return await chrome.permissions.request({
+        origins: ['https://*/*', 'http://*/*'],
+    })
+}
+
+/**
  * Check Host Permissions
  * @function checkPerms
  * @return {Boolean}
  */
 export async function checkPerms() {
-    const hasPermsEl = document.querySelectorAll('.has-perms')
-    const grantPermsEl = document.querySelectorAll('.grant-perms')
     const hasPerms = await chrome.permissions.contains({
         origins: ['https://*/*', 'http://*/*'],
     })
-    // console.debug('checkPerms:', hasPerms)
+    console.debug('checkPerms:', hasPerms)
+    // Firefox still uses DOM Based Background Scripts
+    if (typeof document === 'undefined') {
+        return hasPerms
+    }
+    const hasPermsEl = document.querySelectorAll('.has-perms')
+    const grantPermsEl = document.querySelectorAll('.grant-perms')
     if (hasPerms) {
         hasPermsEl.forEach((el) => el.classList.remove('d-none'))
         grantPermsEl.forEach((el) => el.classList.add('d-none'))
@@ -105,7 +132,7 @@ export function updateOptions(options) {
  */
 export function showToast(message, type = 'success') {
     console.log(`showToast: ${type}:`, message)
-    const element = document.querySelector('.d-none .toast').cloneNode(true)
+    const element = document.querySelector('.d-none > .toast').cloneNode(true)
     element.addEventListener('mousemove', () => toast.hide())
     element.classList.add(`text-bg-${type}`)
     element.querySelector('.toast-body').innerHTML = message

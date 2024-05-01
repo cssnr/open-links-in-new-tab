@@ -1,6 +1,6 @@
 // JS Background Service Worker
 
-import { enableSite, toggleSite } from './export.js'
+import { checkPerms, enableSite, requestPerms, toggleSite } from './export.js'
 
 chrome.runtime.onInstalled.addListener(onInstalled)
 chrome.contextMenus.onClicked.addListener(onClicked)
@@ -29,9 +29,7 @@ async function onInstalled(details) {
         createContextMenus()
     }
     if (details.reason === chrome.runtime.OnInstalledReason.INSTALL) {
-        const hasPerms = await chrome.permissions.contains({
-            origins: ['https://*/*', 'http://*/*'],
-        })
+        const hasPerms = await checkPerms()
         if (hasPerms) {
             chrome.runtime.openOptionsPage()
         } else {
@@ -58,16 +56,11 @@ async function onInstalled(details) {
  * @param {chrome.tabs.Tab} tab
  */
 async function onClicked(ctx, tab) {
-    console.debug('contextMenuClick:', ctx, tab)
-    console.log(`ctx.menuItemId: ${ctx.menuItemId}`)
+    console.debug(`contextMenuClick: ${ctx.menuItemId}`, ctx, tab)
     if (ctx.menuItemId === 'toggle') {
         console.debug(`toggle: ctx.pageUrl: ${ctx.pageUrl}`)
-        chrome.permissions.request({
-            origins: ['https://*/*', 'http://*/*'],
-        })
-        const hasPerms = await chrome.permissions.contains({
-            origins: ['https://*/*', 'http://*/*'],
-        })
+        await requestPerms()
+        const hasPerms = await checkPerms()
         if (hasPerms) {
             await toggleSite(tab)
         }
@@ -87,13 +80,11 @@ async function onClicked(ctx, tab) {
  * @param {String} command
  */
 async function onCommand(command) {
-    console.debug(`onCommand: ${command}`)
+    console.debug('onCommand:', command)
     const [tab] = await chrome.tabs.query({ currentWindow: true, active: true })
     if (command === 'toggle-site') {
         console.debug('toggle-site')
-        const hasPerms = await chrome.permissions.contains({
-            origins: ['https://*/*', 'http://*/*'],
-        })
+        const hasPerms = await checkPerms()
         if (hasPerms) {
             await toggleSite(tab)
         } else {
@@ -103,7 +94,7 @@ async function onCommand(command) {
         console.debug('enable-temp', tab)
         await enableSite(tab, 'yellow')
     } else {
-        console.error(`Unknown command: ${command}`)
+        console.error('Unknown command:', command)
     }
 }
 

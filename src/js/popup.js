@@ -4,6 +4,7 @@ import {
     checkPerms,
     enableSite,
     saveOptions,
+    showToast,
     toggleSite,
     updateOptions,
 } from './export.js'
@@ -73,6 +74,10 @@ async function initPopup() {
     } else {
         document.getElementById('enable-temp').classList.remove('disabled')
     }
+
+    if (chrome.runtime.lastError) {
+        showToast(chrome.runtime.lastError.message, 'warning')
+    }
 }
 
 /**
@@ -85,12 +90,21 @@ async function popupLinks(event) {
     console.debug('popupLinks:', event)
     event.preventDefault()
     const anchor = event.target.closest('a')
-    console.log(`anchor.href: ${anchor.href}`)
+    console.debug(`anchor.href: ${anchor.href}`, anchor)
+    let url
     if (anchor.href.endsWith('html/options.html')) {
         chrome.runtime.openOptionsPage()
+        return window.close()
+    } else if (
+        anchor.href.startsWith('http') ||
+        anchor.href.startsWith('chrome-extension')
+    ) {
+        url = anchor.href
     } else {
-        await chrome.tabs.create({ active: true, url: anchor.href })
+        url = chrome.runtime.getURL(anchor.href)
     }
+    console.debug('url:', url)
+    await chrome.tabs.create({ active: true, url })
     return window.close()
 }
 

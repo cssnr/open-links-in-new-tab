@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Open Links in New Tab</title>
     <link rel="icon" href="../images/logo16.png" sizes="any">
     <link rel="stylesheet" type="text/css" href="../dist/bootstrap/bootstrap.min.css">
@@ -98,14 +99,23 @@
     </div>
 
     <form id="add-host">
-        <label class="form-label" for="add-filter"><i class="fa-solid fa-globe me-2"></i> Hosts</label>
+        <label class="form-label" for="host-name"><i class="fa-solid fa-globe me-2"></i> Hosts</label>
         <div class="input-group mb-3">
-            <input type="text" class="form-control" placeholder="Add Host" aria-label="Filter" id="add-filter" aria-describedby="add-host-btn" required>
+            <input type="text" class="form-control" placeholder="Add Host" aria-label="Hostname" id="host-name" aria-describedby="add-host-btn" required>
             <button class="btn btn-outline-success" type="submit" id="add-host-btn">
                 Add <i class="fa-solid fa-plus ms-1"></i>
             </button>
         </div>
     </form>
+
+    <div>
+        <input type="file" id="hosts-input" style="display: none;" />
+        <a id="import-hosts" class="link-body-emphasis text-decoration-none fst-italic small" role="button">
+            Import <i class="fa-solid fa-file-arrow-up ms-1"></i></a>
+        <span class="ms-2 me-1">/</span>
+        <a id="export-hosts" class="link-body-emphasis text-decoration-none fst-italic small" role="button">
+            Export <i class="fa-solid fa-file-arrow-down ms-1"></i></a>
+    </div>
 
     <table id="hosts-table" class="table table-sm table-hover bg-transparent">
         <caption>Enabled Hosts</caption>
@@ -138,13 +148,13 @@
 </div>
 
 <div class="d-none">
-    <i class="fa-regular fa-trash-can"></i>
-    <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" id="bi-dot" viewBox="0 0 16 16">
-        <path d="M8 9.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3"/>
-    </svg>
     <div class="toast align-items-center border-0" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="5000">
         <div class="toast-body"></div>
     </div>
+    <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" id="bi-dot" viewBox="0 0 16 16">
+        <path d="M8 9.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3"/>
+    </svg>
+    <i class="fa-regular fa-trash-can"></i>
 </div>
 
 <script type="text/javascript" src="../dist/jquery/jquery.min.js"></script>
