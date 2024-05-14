@@ -1,9 +1,10 @@
 {
   "manifest_version": 3,
-  "version": "0.1.8",
+  "version": "0.1.9",
   "name": "Open Links in New Tab",
+  "short_name": "Open in Tab",
   "description": "Modern Web Extension to Open Links in New Tabs for Specified Domains or Temporarily on Any Tab.",
-  "homepage_url": "https://github.com/cssnr/open-links-in-new-tab",
+  "homepage_url": "https://open-links-in-new-tab.cssnr.com/",
   "author": "Shane",
   "commands": {
     "_execute_action": {

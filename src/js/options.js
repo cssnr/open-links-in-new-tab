@@ -35,12 +35,6 @@ async function initOptions() {
     document.getElementById('version').textContent =
         chrome.runtime.getManifest().version
 
-    await setShortcuts({
-        mainKey: '_execute_action',
-        toggleSite: 'toggle-site',
-        enableTemp: 'enable-temp',
-    })
-
     const { options, sites } = await chrome.storage.sync.get([
         'options',
         'sites',
@@ -48,6 +42,8 @@ async function initOptions() {
     console.debug('options, sites:', options, sites)
     updateOptions(options)
     updateTable(sites)
+
+    await setShortcuts()
     await checkPerms()
 }
 
@@ -281,19 +277,23 @@ function textFileDownload(filename, text) {
 /**
  * Set Keyboard Shortcuts
  * @function setShortcuts
- * @param {Object} mapping { elementID: name }
+ * @param {String} selector
  */
-async function setShortcuts(mapping) {
+async function setShortcuts(selector = '#keyboard-shortcuts') {
+    const table = document.querySelector(selector)
+    const tbody = table.querySelector('tbody')
+    const source = table.querySelector('tfoot > tr').cloneNode(true)
     const commands = await chrome.commands.getAll()
-    for (const [elementID, name] of Object.entries(mapping)) {
-        // console.debug(`${elementID}: ${name}`)
-        const command = commands.find((x) => x.name === name)
-        if (command?.shortcut) {
-            // console.debug(`${elementID}: ${command.shortcut}`)
-            const el = document.getElementById(elementID)
-            if (el) {
-                el.textContent = command.shortcut
-            }
+    for (const command of commands) {
+        // console.debug('command:', command)
+        const row = source.cloneNode(true)
+        // TODO: Chrome does not parse the description for _execute_action in manifest.json
+        let description = command.description
+        if (!description && command.name === '_execute_action') {
+            description = 'Show Popup'
         }
+        row.querySelector('.description').textContent = description
+        row.querySelector('kbd').textContent = command.shortcut || 'Not Set'
+        tbody.appendChild(row)
     }
 }

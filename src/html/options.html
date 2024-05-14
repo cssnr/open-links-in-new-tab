@@ -25,23 +25,16 @@
     </div>
     <div class="clearfix"></div>
     <p class="text-center lead">v<span id="version"></span></p>
-    <table class="table table-sm table-borderless table-striped">
+    <table id="keyboard-shortcuts" class="table table-sm table-borderless table-hover">
         <caption class="visually-hidden">Keyboard Shortcuts</caption>
         <thead class="visually-hidden"><tr><th>Description</th><th>Shortcut</th></tr></thead>
-        <tbody>
-            <tr>
-                <td>Show Popup Action <i class="fa-regular fa-keyboard ms-1"></i></td>
-                <td class="text-end" title="Keyboard Shortcut"><kbd id="mainKey">Unknown</kbd></td>
-            </tr>
-            <tr>
-                <td>Toggle Current Site <i class="fa-regular fa-keyboard ms-1"></i></td>
-                <td class="text-end" title="Keyboard Shortcut"><kbd id="toggleSite">Unknown</kbd></td>
-            </tr>
-            <tr>
-                <td>Temporarily Enable Site <i class="fa-regular fa-keyboard ms-1"></i></td>
-                <td class="text-end" title="Keyboard Shortcut"><kbd id="enableTemp">Unknown</kbd></td>
-            </tr>
-        </tbody>
+        <tbody></tbody>
+        <tfoot class="d-none">
+        <tr>
+            <td class="bg-transparent"><i class="fa-regular fa-keyboard me-1"></i> <span class="description"></span></td>
+            <td class="bg-transparent text-end" title="Keyboard Shortcut"><kbd>Unknown</kbd></td>
+        </tr>
+        </tfoot>
     </table>
     <form id="options-form" class="mb-3">
         <div class="form-check form-switch">
@@ -145,7 +138,7 @@
 
 <div aria-live="polite" aria-atomic="true" class="">
     <div id="toast-container" class="toast-container position-fixed bottom-0 end-0 p-3"></div>
-</div>
+</div> <!-- toast-container -->
 
 <div class="d-none">
     <div class="toast align-items-center border-0" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="5000">
@@ -155,7 +148,7 @@
         <path d="M8 9.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3"/>
     </svg>
     <i class="fa-regular fa-trash-can"></i>
-</div>
+</div> <!-- d-none -->
 
 <script type="text/javascript" src="../dist/jquery/jquery.min.js"></script>
 <script type="text/javascript" src="../dist/bootstrap/bootstrap.bundle.min.js"></script>

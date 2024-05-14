@@ -33,6 +33,7 @@ async function onStartup() {
 async function onInstalled(details) {
     console.log('onInstalled:', details)
     const githubURL = 'https://github.com/cssnr/open-links-in-new-tab'
+    const uninstallURL = new URL('https://link-extractor.cssnr.com/uninstall/')
     const options = await Promise.resolve(
         setDefaultOptions({
             autoReload: true,
@@ -45,6 +46,7 @@ async function onInstalled(details) {
     if (options.contextMenu) {
         createContextMenus()
     }
+    const manifest = chrome.runtime.getManifest()
     if (details.reason === chrome.runtime.OnInstalledReason.INSTALL) {
         const hasPerms = await checkPerms()
         if (hasPerms) {
@@ -55,7 +57,6 @@ async function onInstalled(details) {
         }
     } else if (details.reason === chrome.runtime.OnInstalledReason.UPDATE) {
         if (options.showUpdate) {
-            const manifest = chrome.runtime.getManifest()
             if (manifest.version !== details.previousVersion) {
                 const url = `${githubURL}/releases/tag/${manifest.version}`
                 console.log(`Update url: ${url}`)
@@ -63,7 +64,9 @@ async function onInstalled(details) {
             }
         }
     }
-    chrome.runtime.setUninstallURL(`${githubURL}/issues`)
+    uninstallURL.searchParams.append('version', manifest.version)
+    console.log('uninstallURL:', uninstallURL.href)
+    await chrome.runtime.setUninstallURL(uninstallURL.href)
 }
 
 /**
