@@ -14,9 +14,11 @@
 
 <div class="container-fluid p-3">
     <div class="d-none grant-perms">
-        <a id="grant-perms" class="btn btn-lg btn-success w-100 mb-1" role="button">
-            <i class="fa-solid fa-check-double me-1"></i> Grant Host Permissions</a>
-        <p class="text-center"><a role="button" href="../html/oninstall.html" class="">
+        <button class="btn btn-lg btn-success w-100 mb-1 grant-permissions" type="button"
+                data-bs-toggle="tooltip" data-bs-placement="top" data-bs-trigger="hover"
+                data-bs-title="This Extension Requires Host Permissions to Function.">
+            <i class="fa-solid fa-check-double me-1"></i> Grant Host Permissions</button>
+        <p class="text-center mb-1"><a href="../html/oninstall.html" class="">
             More Information on Permissions</a></p>
     </div>
     <label for="toggle-site" class="w-100 mb-3 has-perms">
