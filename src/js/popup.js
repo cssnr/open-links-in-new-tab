@@ -7,6 +7,7 @@ import {
     saveOptions,
     showToast,
     toggleSite,
+    updateManifest,
     updateOptions,
 } from './export.js'
 
@@ -33,10 +34,7 @@ document
  */
 async function initPopup() {
     console.debug('initPopup')
-    const manifest = chrome.runtime.getManifest()
-    document.getElementById('version').textContent = manifest.version
-    document.getElementById('homepage_url').href = manifest.homepage_url
-
+    updateManifest()
     await checkPerms()
 
     const { options, sites } = await chrome.storage.sync.get([

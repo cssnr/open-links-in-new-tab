@@ -62,7 +62,7 @@ function updateLinks() {
     for (const element of elements) {
         if (element.href !== '#') {
             element.target = '_blank'
-            element.setAttribute('rel', 'nofollow')
+            element.setAttribute('rel', 'noopener')
         }
     }
 }
