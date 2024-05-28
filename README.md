@@ -1,5 +1,7 @@
 [![Chrome Web Store Users](https://img.shields.io/chrome-web-store/users/efahmjakjnnmleokcaomicgfhobabdkc?logo=google&logoColor=white&label=google%20users)](https://chromewebstore.google.com/detail/open-links-in-new-tab/efahmjakjnnmleokcaomicgfhobabdkc)
 [![Mozilla Add-on Users](https://img.shields.io/amo/users/open-links-in-new-tab?logo=mozilla&label=mozilla%20users)](https://addons.mozilla.org/addon/open-links-in-new-tab)
+[![Chrome Web Store Rating](https://img.shields.io/chrome-web-store/rating/efahmjakjnnmleokcaomicgfhobabdkc?logo=google&logoColor=white)](https://chromewebstore.google.com/detail/open-links-in-new-tab/efahmjakjnnmleokcaomicgfhobabdkc)
+[![Mozilla Add-on Rating](https://img.shields.io/amo/rating/open-links-in-new-tab?logo=mozilla&logoColor=white)](https://addons.mozilla.org/addon/open-links-in-new-tab)
 [![Chrome Web Store Version](https://img.shields.io/chrome-web-store/v/efahmjakjnnmleokcaomicgfhobabdkc?label=chrome&logo=googlechrome)](https://chromewebstore.google.com/detail/open-links-in-new-tab/efahmjakjnnmleokcaomicgfhobabdkc)
 [![Mozilla Add-on Version](https://img.shields.io/amo/v/open-links-in-new-tab?label=firefox&logo=firefox)](https://addons.mozilla.org/addon/open-links-in-new-tab)
 [![GitHub Release Version](https://img.shields.io/github/v/release/cssnr/open-links-in-new-tab?logo=github)](https://github.com/cssnr/open-links-in-new-tab/releases/latest)
