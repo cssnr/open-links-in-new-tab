@@ -33,7 +33,9 @@ async function onStartup() {
 async function onInstalled(details) {
     console.log('onInstalled:', details)
     const githubURL = 'https://github.com/cssnr/open-links-in-new-tab'
-    const uninstallURL = new URL('https://link-extractor.cssnr.com/uninstall/')
+    const uninstallURL = new URL(
+        'https://open-links-in-new-tab.cssnr.com/uninstall/'
+    )
     const options = await Promise.resolve(
         setDefaultOptions({
             autoReload: true,
