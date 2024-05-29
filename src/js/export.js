@@ -46,7 +46,7 @@ export async function enableSite(tab, color) {
  */
 export async function checkPerms() {
     const hasPerms = await chrome.permissions.contains({
-        origins: ['<all_urls>'],
+        origins: ['https://*/*', 'http://*/*'],
     })
     console.debug('checkPerms:', hasPerms)
     // Firefox still uses DOM Based Background Scripts
@@ -87,7 +87,7 @@ export async function grantPerms(event, close = false) {
  */
 export async function requestPerms() {
     return await chrome.permissions.request({
-        origins: ['<all_urls>'],
+        origins: ['https://*/*', 'http://*/*'],
     })
 }
 

@@ -27,10 +27,10 @@
     }
   },
   "permissions": ["activeTab", "contextMenus", "scripting", "storage"],
-  "host_permissions": ["<all_urls>"],
+  "host_permissions": ["https://*/*", "http://*/*"],
   "content_scripts": [
     {
-      "matches": ["<all_urls>"],
+      "matches": ["https://*/*", "http://*/*"],
       "js": ["js/tab.js"]
     }
   ],
