@@ -38,9 +38,11 @@ async function onInstalled(details) {
     )
     const options = await Promise.resolve(
         setDefaultOptions({
-            autoReload: true,
             onScroll: false,
+            onAttributes: false,
+            autoReload: true,
             updateAll: true,
+            noOpener: true,
             contextMenu: true,
             showUpdate: false,
         })

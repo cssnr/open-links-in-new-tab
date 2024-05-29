@@ -19,6 +19,10 @@ export async function toggleSite(tab) {
     } else {
         console.log(`Disabling Site: ${url.hostname}`)
         sites.splice(sites.indexOf(url.hostname), 1)
+        await chrome.action.setBadgeBackgroundColor({
+            tabId: tab.id,
+            color: 'red',
+        })
     }
     console.debug('sites:', sites)
     await chrome.storage.sync.set({ sites })
