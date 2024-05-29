@@ -1,12 +1,20 @@
 // JS for oninstall.html
 
-import { checkPerms, requestPerms } from './export.js'
+import { checkPerms, onRemoved, grantPerms } from './export.js'
 
 chrome.permissions.onAdded.addListener(onAdded)
+chrome.permissions.onRemoved.addListener(onRemoved)
 
 document.addEventListener('DOMContentLoaded', domContentLoaded)
-document.getElementById('grant-perms').addEventListener('click', grantPerms)
-document.getElementById('open-options').addEventListener('click', openOptions)
+document
+    .querySelectorAll('.open-options')
+    .forEach((el) => el.addEventListener('click', openOptions))
+document
+    .querySelectorAll('.grant-permissions')
+    .forEach((el) => el.addEventListener('click', grantPerms))
+document
+    .querySelectorAll('[data-bs-toggle="tooltip"]')
+    .forEach((el) => new bootstrap.Tooltip(el))
 
 /**
  * DOMContentLoaded
@@ -17,26 +25,11 @@ async function domContentLoaded() {
 }
 
 /**
- * Grant Permissions Click Callback
- * @function grantPerms
- * @param {MouseEvent} event
- */
-async function grantPerms(event) {
-    console.debug('grantPerms:', event)
-    await requestPerms()
-    const hasPerms = await checkPerms()
-    if (hasPerms) {
-        chrome.runtime.openOptionsPage()
-        window.close()
-    }
-}
-
-/**
  * Permissions On Added Callback
  * @param permissions
  */
 async function onAdded(permissions) {
-    console.info('onAdded', permissions)
+    console.debug('onAdded', permissions)
     const hasPerms = await checkPerms()
     if (hasPerms) {
         chrome.runtime.openOptionsPage()

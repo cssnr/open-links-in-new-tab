@@ -1,22 +1,23 @@
 // JS Content Script tab.js
 
+let tabEnabled = false
+let noOpener = false
+
 ;(async () => {
     const { options, sites } = await chrome.storage.sync.get([
         'options',
         'sites',
     ])
-    // console.debug(`sites: ${window.location.host}`, sites)
+    noOpener = options.noOpener
     if (sites?.includes(window.location.host)) {
         console.log(`Enabled Host: ${window.location.host}`)
         await activateTab('green')
     }
+    // TODO: Always enable onChanged and refactor to work with options.updateAll
     if (options.updateAll && !chrome.storage.onChanged.hasListener(onChanged)) {
-        // console.debug('Adding onChanged Listener')
         chrome.storage.onChanged.addListener(onChanged)
     }
 })()
-
-let tabEnabled = false
 
 /**
  * Activate Tab
@@ -36,18 +37,17 @@ async function activateTab(color) {
     console.info('Activating Tab...')
     tabEnabled = true
     updateLinks()
-    const observer = new MutationObserver(function () {
-        updateLinks()
-    })
-    observer.observe(document.body, {
-        attributes: true,
-        childList: true,
-        subTree: true,
-    })
+    const observer = new MutationObserver(updateLinks)
     const { options } = await chrome.storage.sync.get(['options'])
+    const mutationObserverInit = {
+        attributes: options.onAttributes,
+        childList: true,
+        subtree: true,
+    }
+    observer.observe(document.body, mutationObserverInit)
     if (options.onScroll) {
         console.debug('Enabling onScroll...')
-        const processChange = debounce(() => updateLinks())
+        const processChange = debounce(updateLinks)
         document.addEventListener('scroll', processChange)
     }
 }
@@ -61,8 +61,12 @@ function updateLinks() {
     const elements = document.getElementsByTagName('a')
     for (const element of elements) {
         if (element.href !== '#') {
-            element.target = '_blank'
-            element.setAttribute('rel', 'nofollow')
+            if (element.target !== '_blank') {
+                element.target = '_blank'
+                if (noOpener) {
+                    element.setAttribute('rel', 'noopener')
+                }
+            }
         }
     }
 }
@@ -75,7 +79,7 @@ function updateLinks() {
  */
 async function onChanged(changes, namespace) {
     // console.debug('onChanged:', changes, namespace)
-    for (let [key, { newValue }] of Object.entries(changes)) {
+    for (let [key, { oldValue, newValue }] of Object.entries(changes)) {
         if (namespace === 'sync' && key === 'sites') {
             // console.debug('newValue:', newValue)
             if (newValue?.includes(window.location.host)) {
@@ -96,6 +100,10 @@ async function onChanged(changes, namespace) {
                     })
                     tabEnabled = false
                 }
+            }
+        } else if (namespace === 'sync' && key === 'options') {
+            if (oldValue.noOpener !== newValue.noOpener) {
+                noOpener = newValue.noOpener
             }
         }
     }

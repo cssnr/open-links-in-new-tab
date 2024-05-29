@@ -19,6 +19,10 @@ export async function toggleSite(tab) {
     } else {
         console.log(`Disabling Site: ${url.hostname}`)
         sites.splice(sites.indexOf(url.hostname), 1)
+        await chrome.action.setBadgeBackgroundColor({
+            tabId: tab.id,
+            color: 'red',
+        })
     }
     console.debug('sites:', sites)
     await chrome.storage.sync.set({ sites })
@@ -36,36 +40,13 @@ export async function enableSite(tab, color) {
 }
 
 /**
- * Grant Permissions Click Callback
- * Shared with Options and Home
- * @function grantPerms
- * @param {MouseEvent} event
- */
-export async function grantPerms(event) {
-    console.debug('grantPerms:', event)
-    await requestPerms()
-    await checkPerms()
-}
-
-/**
- * Request Host Permissions
- * @function requestPerms
- * @return {chrome.permissions.request}
- */
-export async function requestPerms() {
-    return await chrome.permissions.request({
-        origins: ['https://*/*', 'http://*/*'],
-    })
-}
-
-/**
  * Check Host Permissions
  * @function checkPerms
  * @return {Boolean}
  */
 export async function checkPerms() {
     const hasPerms = await chrome.permissions.contains({
-        origins: ['https://*/*', 'http://*/*'],
+        origins: ['<all_urls>'],
     })
     console.debug('checkPerms:', hasPerms)
     // Firefox still uses DOM Based Background Scripts
@@ -82,6 +63,72 @@ export async function checkPerms() {
         hasPermsEl.forEach((el) => el.classList.add('d-none'))
     }
     return hasPerms
+}
+
+/**
+ * Grant Permissions Click Callback
+ * Promise from requestPerms is ignored so we can close the popup immediately
+ * @function grantPerms
+ * @param {MouseEvent} event
+ * @param {Boolean} [close]
+ */
+export async function grantPerms(event, close = false) {
+    console.debug('grantPerms:', event)
+    requestPerms()
+    if (close) {
+        window.close()
+    }
+}
+
+/**
+ * Request Host Permissions
+ * @function requestPerms
+ * @return {chrome.permissions.request}
+ */
+export async function requestPerms() {
+    return await chrome.permissions.request({
+        origins: ['<all_urls>'],
+    })
+}
+
+// /**
+//  * Revoke Permissions Click Callback
+//  * NOTE: For many reasons Chrome will determine host_perms are required and
+//  *       will ask for them at install time and not allow them to be revoked
+//  * @function revokePerms
+//  * @param {MouseEvent} event
+//  */
+// export async function revokePerms(event) {
+//     console.debug('revokePerms:', event)
+//     const permissions = await chrome.permissions.getAll()
+//     console.debug('permissions:', permissions)
+//     try {
+//         await chrome.permissions.remove({
+//             origins: permissions.origins,
+//         })
+//         await checkPerms()
+//     } catch (e) {
+//         console.log(e)
+//         showToast(e.toString(), 'danger')
+//     }
+// }
+
+/**
+ * Permissions On Added Callback
+ * @param {chrome.permissions} permissions
+ */
+export async function onAdded(permissions) {
+    console.debug('onAdded', permissions)
+    await checkPerms()
+}
+
+/**
+ * Permissions On Removed Callback
+ * @param {chrome.permissions} permissions
+ */
+export async function onRemoved(permissions) {
+    console.debug('onRemoved', permissions)
+    await checkPerms()
 }
 
 /**
@@ -125,18 +172,37 @@ export function updateOptions(options) {
 }
 
 /**
+ * Update DOM with Manifest Details
+ * @function updateManifest
+ */
+export function updateManifest() {
+    const manifest = chrome.runtime.getManifest()
+    document
+        .querySelectorAll('.version')
+        .forEach((el) => (el.textContent = manifest.version))
+    document
+        .querySelectorAll('[href="homepage_url"]')
+        .forEach((el) => (el.href = manifest.homepage_url))
+}
+
+/**
  * Show Bootstrap Toast
  * @function showToast
  * @param {String} message
  * @param {String} type
  */
 export function showToast(message, type = 'success') {
-    console.log(`showToast: ${type}:`, message)
-    const element = document.querySelector('.d-none > .toast').cloneNode(true)
-    element.addEventListener('mousemove', () => toast.hide())
-    element.classList.add(`text-bg-${type}`)
+    console.debug(`showToast: ${type}: ${message}`)
+    const clone = document.querySelector('.d-none > .toast')
+    const container = document.getElementById('toast-container')
+    if (!clone || !container) {
+        return console.warn('Missing clone or container:', clone, container)
+    }
+    const element = clone.cloneNode(true)
     element.querySelector('.toast-body').innerHTML = message
-    document.getElementById('toast-container').appendChild(element)
+    element.classList.add(`text-bg-${type}`)
+    container.appendChild(element)
     const toast = new bootstrap.Toast(element)
+    element.addEventListener('mousemove', () => toast.hide())
     toast.show()
 }

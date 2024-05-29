@@ -1,15 +1,27 @@
 // JS for options.html
 
-import { checkPerms, saveOptions, showToast, updateOptions } from './export.js'
+import {
+    checkPerms,
+    grantPerms,
+    onAdded,
+    onRemoved,
+    saveOptions,
+    showToast,
+    updateManifest,
+    updateOptions,
+} from './export.js'
 
 chrome.storage.onChanged.addListener(onChanged)
 chrome.permissions.onAdded.addListener(onAdded)
+chrome.permissions.onRemoved.addListener(onRemoved)
 
 document.addEventListener('DOMContentLoaded', initOptions)
-document.getElementById('grant-perms').addEventListener('click', grantPerms)
 document.getElementById('add-host').addEventListener('submit', addHost)
 document.getElementById('export-hosts').addEventListener('click', exportHosts)
 document.getElementById('import-hosts').addEventListener('click', importHosts)
+document
+    .querySelectorAll('.grant-permissions')
+    .forEach((el) => el.addEventListener('click', grantPerms))
 document
     .querySelectorAll('#options-form input')
     .forEach((el) => el.addEventListener('change', saveOptions))
@@ -32,14 +44,9 @@ hostsInput.addEventListener('change', hostsInputChange)
  */
 async function initOptions() {
     console.debug('initOptions')
-    document.getElementById('version').textContent =
-        chrome.runtime.getManifest().version
-
-    await setShortcuts({
-        mainKey: '_execute_action',
-        toggleSite: 'toggle-site',
-        enableTemp: 'enable-temp',
-    })
+    updateManifest()
+    await setShortcuts()
+    await checkPerms()
 
     const { options, sites } = await chrome.storage.sync.get([
         'options',
@@ -48,7 +55,6 @@ async function initOptions() {
     console.debug('options, sites:', options, sites)
     updateOptions(options)
     updateTable(sites)
-    await checkPerms()
 }
 
 /**
@@ -70,35 +76,13 @@ function onChanged(changes, namespace) {
 }
 
 /**
- * Grant Permissions Click Callback
- * @function grantPerms
- * @param {MouseEvent} event
- */
-async function grantPerms(event) {
-    console.debug('grantPermsBtn:', event)
-    await chrome.permissions.request({
-        origins: ['https://*/*', 'http://*/*'],
-    })
-    await checkPerms()
-}
-
-/**
- * Permissions On Added Callback
- * @param permissions
- */
-async function onAdded(permissions) {
-    console.debug('onAdded', permissions)
-    await checkPerms()
-}
-
-/**
  * Open OnInstall Page Click Callback
  * @function openOnInstall
  * @param {MouseEvent} event
  */
 async function openOnInstall(event) {
     console.debug('openOnInstall', event)
-    const url = chrome.runtime.getURL('../html/oninstall.html')
+    const url = chrome.runtime.getURL('/html/oninstall.html')
     await chrome.tabs.create({ active: true, url })
     window.close()
 }
@@ -281,19 +265,23 @@ function textFileDownload(filename, text) {
 /**
  * Set Keyboard Shortcuts
  * @function setShortcuts
- * @param {Object} mapping { elementID: name }
+ * @param {String} selector
  */
-async function setShortcuts(mapping) {
+async function setShortcuts(selector = '#keyboard-shortcuts') {
+    const table = document.querySelector(selector)
+    const tbody = table.querySelector('tbody')
+    const source = table.querySelector('tfoot > tr').cloneNode(true)
     const commands = await chrome.commands.getAll()
-    for (const [elementID, name] of Object.entries(mapping)) {
-        // console.debug(`${elementID}: ${name}`)
-        const command = commands.find((x) => x.name === name)
-        if (command?.shortcut) {
-            // console.debug(`${elementID}: ${command.shortcut}`)
-            const el = document.getElementById(elementID)
-            if (el) {
-                el.textContent = command.shortcut
-            }
+    for (const command of commands) {
+        // console.debug('command:', command)
+        const row = source.cloneNode(true)
+        // TODO: Chrome does not parse the description for _execute_action in manifest.json
+        let description = command.description
+        if (!description && command.name === '_execute_action') {
+            description = 'Show Popup'
         }
+        row.querySelector('.description').textContent = description
+        row.querySelector('kbd').textContent = command.shortcut || 'Not Set'
+        tbody.appendChild(row)
     }
 }
