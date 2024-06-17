@@ -60,9 +60,7 @@ function updateLinks() {
         if (element.href !== '#') {
             if (!options.anchorLinks && element.href.includes('#')) {
                 const url = new URL(element.href)
-                console.debug('url.origin:', url.origin)
                 if (url.origin === window.location.origin) {
-                    console.debug('skipping anchor link:', element.href)
                     continue
                 }
             }
