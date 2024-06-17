@@ -13,6 +13,7 @@ Modern Chrome Web Extension and Firefox Browser Addon to Open Links in New Tabs 
 
 *   [Install](#install)
 *   [Features](#features)
+*   [Known Issues](#known-issues)
 *   [Configuration](#configuration)
 *   [Development](#development)
     -   [Building](#building)
@@ -52,9 +53,20 @@ For any issues, bugs or concerns; please [Open an Issue](https://github.com/cssn
 *   Toggle Enable Globally
 *   Toggle Blacklist/Whitelist
 *   Export/Import URL List
+*   Options on a Per-Site Basis
 
-If you want to see any of these, or another, feature implemented faster, please open a
-[Feature Request](https://github.com/cssnr/open-links-in-new-tab/discussions/new?category=feature-requests).
+> [!TIP]
+> **Don't see your feature here?**
+> Request one on the [Feature Request Discussion](https://github.com/cssnr/open-links-in-new-tab/discussions/categories/feature-requests).
+
+# Known Issues
+
+*    Does not work on sites that use JavaScript events to handle links
+     -   `search.yahoo.com`
+
+> [!TIP]
+> **Don't see your issue here?**
+> Open one on the [Issues](https://github.com/cssnr/open-links-in-new-tab/issues).
 
 # Configuration
 
@@ -64,7 +76,7 @@ You can pin the Addon by clicking the `Puzzle Piece`, find the Web Extension ico
 
 To open the options, click on the icon (from above) then click `Open Options`.
 
-Full Documentation: https://open-links-in-new-tab.cssnr.com/docs/
+Documentation: https://open-links-in-new-tab.cssnr.com/docs/
 
 # Development
 
