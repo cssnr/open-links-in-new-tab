@@ -40,6 +40,7 @@ async function onInstalled(details) {
         setDefaultOptions({
             onScroll: false,
             onAttributes: false,
+            anchorLinks: false,
             autoReload: true,
             updateAll: true,
             noOpener: true,
