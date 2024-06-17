@@ -44,8 +44,8 @@ async function initPopup() {
     console.debug('options, sites:', options, sites)
     updateOptions(options)
 
-    const [tab, url] = await checkTab()
-    console.debug('tab, url:', tab, url)
+    const [tab, url, enabled] = await checkTab()
+    console.debug('tab, url, enabled:', tab, url, enabled)
     console.debug(`url.hostname: ${url?.hostname}`)
     if (url?.hostname) {
         document.getElementById('site-hostname').textContent = url.hostname
@@ -59,7 +59,7 @@ async function initPopup() {
     console.info(`Valid Site: ${url.hostname}`)
     const toggleSiteEl = document.getElementById('toggle-site')
     toggleSiteEl.disabled = false
-    if (sites?.includes(url.hostname)) {
+    if (enabled) {
         toggleSiteEl.checked = true
         switchEl.classList.add('border-success')
     } else {
@@ -131,6 +131,7 @@ async function enableTempClick(event) {
  */
 async function checkTab() {
     let url
+    let tabEnabled = false
     try {
         const [tab] = await chrome.tabs.query({
             currentWindow: true,
@@ -138,22 +139,24 @@ async function checkTab() {
         })
         url = new URL(tab.url)
         if (!tab?.id || !url.hostname) {
-            return [false, url]
+            return [false, url, tabEnabled]
         }
         const response = await chrome.scripting.executeScript({
             target: { tabId: tab.id },
             injectImmediately: true,
             func: function () {
-                return contentScript
+                return { contentScript, tabEnabled }
             },
         })
         console.log('response:', response)
+        tabEnabled = response[0]?.result?.tabEnabled
+        console.log('tabEnabled:', tabEnabled)
         if (!response[0]?.result) {
-            return [false, url]
+            return [false, url, tabEnabled]
         }
-        return [tab, url]
+        return [tab, url, tabEnabled]
     } catch (e) {
         console.log(e)
-        return [false, url]
+        return [false, url, tabEnabled]
     }
 }

@@ -4,10 +4,12 @@
  * Get URL for Current Tab
  * @function toggleSite
  * @param {chrome.tabs.Tab} tab
+ * @param {Boolean} [enabled]
  */
-export async function toggleSite(tab) {
+export async function toggleSite(tab, enabled) {
     const url = new URL(tab.url)
     console.debug(`toggleSite: url.hostname: ${url?.hostname}`, url)
+    console.debug('enabled:', enabled)
     if (!url?.hostname) {
         return console.warn(`No url.hostname: ${url?.hostname}`, url)
     }
