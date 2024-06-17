@@ -139,7 +139,7 @@ For more information on building, see the scripts section in the [package.json](
 1.  Unzip the archive, place the folder where it must remain and note its location for later.
 1.  Go to `about:debugging#/runtime/this-firefox` and click `Load Temporary Add-on...`
 1.  Navigate to the folder you extracted earlier, select `manifest.json` then click `Select File`.
-1.  Open `about:config` search for `extensions.webextensions.keepStorageOnUninstall` and set to `true`.
+1.  Optional: Open `about:config` search for `extensions.webextensions.keepStorageOnUninstall` and set to `true`.
 
 If you need to test a restart, you must pack the addon. This only works in ESR, Development, or Nightly.
 You may also use an Unbranded Build: [https://wiki.mozilla.org/Add-ons/Extension_Signing#Unbranded_Builds](https://wiki.mozilla.org/Add-ons/Extension_Signing#Unbranded_Builds)
