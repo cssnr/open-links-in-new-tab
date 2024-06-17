@@ -26,6 +26,7 @@ async function domContentLoaded() {
 
 /**
  * Permissions On Added Callback
+ * @function onAdded
  * @param permissions
  */
 async function onAdded(permissions) {

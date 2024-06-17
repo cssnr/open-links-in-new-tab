@@ -77,7 +77,7 @@ async function onInstalled(details) {
  * Context Menu Click Callback
  * @function onClicked
  * @param {OnClickData} ctx
- * @param {chrome.tabs.Tab} tab
+ * @param {Tab} tab
  */
 async function onClicked(ctx, tab) {
     console.debug(`contextMenuClick: ${ctx.menuItemId}`, ctx, tab)

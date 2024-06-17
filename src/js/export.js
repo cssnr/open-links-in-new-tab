@@ -3,7 +3,7 @@
 /**
  * Get URL for Current Tab
  * @function toggleSite
- * @param {chrome.tabs.Tab} tab
+ * @param {Tab} tab
  */
 export async function toggleSite(tab) {
     const url = new URL(tab.url)
@@ -28,6 +28,12 @@ export async function toggleSite(tab) {
     await chrome.storage.sync.set({ sites })
 }
 
+/**
+ * Show Enabled Site for Tab
+ * @function enableSite
+ * @param {Tab} tab
+ * @param {String} color
+ */
 export async function enableSite(tab, color) {
     console.debug(`enableSite: ${color}`, tab)
     await chrome.scripting.executeScript({
@@ -93,7 +99,8 @@ export async function requestPerms() {
 
 /**
  * Permissions On Added Callback
- * @param {chrome.permissions} permissions
+ * @function onAdded
+ * @param {Permissions} permissions
  */
 export async function onAdded(permissions) {
     console.debug('onAdded', permissions)
@@ -102,7 +109,8 @@ export async function onAdded(permissions) {
 
 /**
  * Permissions On Removed Callback
- * @param {chrome.permissions} permissions
+ * @function onRemoved
+ * @param {Permissions} permissions
  */
 export async function onRemoved(permissions) {
     console.debug('onRemoved', permissions)
@@ -120,7 +128,7 @@ export async function saveOptions(event) {
     let value
     if (event.target.type === 'checkbox') {
         value = event.target.checked
-        // Placeholder until updateAll get fixed
+        // TODO: Placeholder until updateAll get fixed
         if (event.target.id === 'updateAll') {
             console.log('nextElementSibling:', event.target.nextElementSibling)
             disableWarning(event.target.nextElementSibling, value)
@@ -151,7 +159,7 @@ export function updateOptions(options) {
             } else if (typeof value === 'string') {
                 el.value = value
             }
-            // Placeholder until updateAll get fixed
+            // TODO: Placeholder until updateAll get fixed
             if (key === 'updateAll') {
                 console.log('nextElementSibling:', el.nextElementSibling)
                 disableWarning(el.nextElementSibling, value)
@@ -160,6 +168,12 @@ export function updateOptions(options) {
     }
 }
 
+/**
+ * Disabled Item Warning
+ * @function disableWarning
+ * @param {HTMLElement} element
+ * @param {Boolean} value
+ */
 function disableWarning(element, value) {
     if (!value) {
         element.classList.add('text-danger-emphasis')

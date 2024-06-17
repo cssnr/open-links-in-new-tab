@@ -38,14 +38,13 @@ async function activateTab(color) {
     console.info('Activating Tab...')
     tabEnabled = true
     updateLinks()
-    const observer = new MutationObserver(updateLinks)
     const { options } = await chrome.storage.sync.get(['options'])
-    const mutationObserverInit = {
+    const observer = new MutationObserver(updateLinks)
+    observer.observe(document.body, {
         attributes: options.onAttributes,
         childList: true,
         subtree: true,
-    }
-    observer.observe(document.body, mutationObserverInit)
+    })
     if (options.onScroll) {
         console.debug('Enabling onScroll...')
         const processChange = debounce(updateLinks)
@@ -55,6 +54,7 @@ async function activateTab(color) {
 
 /**
  * Update Links
+ * TODO: A Real Mutation Observer is a Work in Progress
  * @function updateLinks
  */
 function updateLinks() {
