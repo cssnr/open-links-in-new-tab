@@ -91,28 +91,6 @@ export async function requestPerms() {
     })
 }
 
-// /**
-//  * Revoke Permissions Click Callback
-//  * NOTE: For many reasons Chrome will determine host_perms are required and
-//  *       will ask for them at install time and not allow them to be revoked
-//  * @function revokePerms
-//  * @param {MouseEvent} event
-//  */
-// export async function revokePerms(event) {
-//     console.debug('revokePerms:', event)
-//     const permissions = await chrome.permissions.getAll()
-//     console.debug('permissions:', permissions)
-//     try {
-//         await chrome.permissions.remove({
-//             origins: permissions.origins,
-//         })
-//         await checkPerms()
-//     } catch (e) {
-//         console.log(e)
-//         showToast(e.toString(), 'danger')
-//     }
-// }
-
 /**
  * Permissions On Added Callback
  * @param {chrome.permissions} permissions
@@ -142,6 +120,11 @@ export async function saveOptions(event) {
     let value
     if (event.target.type === 'checkbox') {
         value = event.target.checked
+        // Placeholder until updateAll get fixed
+        if (event.target.id === 'updateAll') {
+            console.log('nextElementSibling:', event.target.nextElementSibling)
+            disableWarning(event.target.nextElementSibling, value)
+        }
     } else if (event.target.type === 'text') {
         value = event.target.value
     }
@@ -158,6 +141,7 @@ export async function saveOptions(event) {
  * @param {Object} options
  */
 export function updateOptions(options) {
+    console.log('updateOptions:', options)
     for (const [key, value] of Object.entries(options)) {
         // console.debug(`${key}: ${value}`)
         const el = document.getElementById(key)
@@ -167,7 +151,20 @@ export function updateOptions(options) {
             } else if (typeof value === 'string') {
                 el.value = value
             }
+            // Placeholder until updateAll get fixed
+            if (key === 'updateAll') {
+                console.log('nextElementSibling:', el.nextElementSibling)
+                disableWarning(el.nextElementSibling, value)
+            }
         }
+    }
+}
+
+function disableWarning(element, value) {
+    if (!value) {
+        element.classList.add('text-danger-emphasis')
+    } else {
+        element.classList.remove('text-danger-emphasis')
     }
 }
 
