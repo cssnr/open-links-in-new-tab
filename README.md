@@ -5,7 +5,6 @@
 [![Chrome Web Store Version](https://img.shields.io/chrome-web-store/v/efahmjakjnnmleokcaomicgfhobabdkc?label=chrome&logo=googlechrome)](https://chromewebstore.google.com/detail/open-links-in-new-tab/efahmjakjnnmleokcaomicgfhobabdkc)
 [![Mozilla Add-on Version](https://img.shields.io/amo/v/open-links-in-new-tab?label=firefox&logo=firefox)](https://addons.mozilla.org/addon/open-links-in-new-tab)
 [![GitHub Release Version](https://img.shields.io/github/v/release/cssnr/open-links-in-new-tab?logo=github)](https://github.com/cssnr/open-links-in-new-tab/releases/latest)
-[![Manifest Version](https://img.shields.io/github/manifest-json/v/cssnr/open-links-in-new-tab?filename=manifest.json&logo=json&label=manifest)](https://github.com/cssnr/open-links-in-new-tab/blob/master/manifest.json)
 [![Build](https://github.com/cssnr/open-links-in-new-tab/actions/workflows/build.yaml/badge.svg)](https://github.com/cssnr/open-links-in-new-tab/actions/workflows/build.yaml)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=cssnr_open-links-in-new-tab&metric=alert_status&label=quality)](https://sonarcloud.io/summary/overall?id=cssnr_open-links-in-new-tab)
 # Open Links in New Tab
@@ -14,6 +13,7 @@ Modern Chrome Web Extension and Firefox Browser Addon to Open Links in New Tabs 
 
 *   [Install](#install)
 *   [Features](#features)
+*   [Known Issues](#known-issues)
 *   [Configuration](#configuration)
 *   [Development](#development)
     -   [Building](#building)
@@ -53,9 +53,20 @@ For any issues, bugs or concerns; please [Open an Issue](https://github.com/cssn
 *   Toggle Enable Globally
 *   Toggle Blacklist/Whitelist
 *   Export/Import URL List
+*   Options on a Per-Site Basis
 
-If you want to see any of these, or another, feature implemented faster, please open a
-[Feature Request](https://github.com/cssnr/open-links-in-new-tab/discussions/new?category=feature-requests).
+> [!TIP]
+> **Don't see your feature here?**
+> Request one on the [Feature Request Discussion](https://github.com/cssnr/open-links-in-new-tab/discussions/categories/feature-requests).
+
+# Known Issues
+
+*    Does not work on sites that use JavaScript events to handle links
+     -   `search.yahoo.com`
+
+> [!TIP]
+> **Don't see your issue here?**
+> Open one on the [Issues](https://github.com/cssnr/open-links-in-new-tab/issues).
 
 # Configuration
 
@@ -64,6 +75,8 @@ You can pin the Addon by clicking the `Puzzle Piece`, find the Web Extension ico
 **Firefox**, click the `Settings Wheel` and `Pin to Toolbar`.  
 
 To open the options, click on the icon (from above) then click `Open Options`.
+
+Documentation: https://open-links-in-new-tab.cssnr.com/docs/
 
 # Development
 
@@ -126,7 +139,7 @@ For more information on building, see the scripts section in the [package.json](
 1.  Unzip the archive, place the folder where it must remain and note its location for later.
 1.  Go to `about:debugging#/runtime/this-firefox` and click `Load Temporary Add-on...`
 1.  Navigate to the folder you extracted earlier, select `manifest.json` then click `Select File`.
-1.  Open `about:config` search for `extensions.webextensions.keepStorageOnUninstall` and set to `true`.
+1.  Optional: Open `about:config` search for `extensions.webextensions.keepStorageOnUninstall` and set to `true`.
 
 If you need to test a restart, you must pack the addon. This only works in ESR, Development, or Nightly.
 You may also use an Unbranded Build: [https://wiki.mozilla.org/Add-ons/Extension_Signing#Unbranded_Builds](https://wiki.mozilla.org/Add-ons/Extension_Signing#Unbranded_Builds)

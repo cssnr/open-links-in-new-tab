@@ -44,28 +44,18 @@ async function initPopup() {
     console.debug('options, sites:', options, sites)
     updateOptions(options)
 
-    const [tab] = await chrome.tabs.query({ currentWindow: true, active: true })
-    const url = new URL(tab.url)
+    const [tab, url] = await checkTab()
     console.debug('tab, url:', tab, url)
-    console.debug(`url.hostname: ${url.hostname}`)
-
-    if (!url.hostname) {
-        return console.log('No url.hostname for tab:', tab, url)
+    console.debug(`url.hostname: ${url?.hostname}`)
+    if (url?.hostname) {
+        document.getElementById('site-hostname').textContent = url.hostname
     }
-    document.getElementById('site-hostname').textContent = url.hostname
     const switchEl = document.getElementById('switch')
-    try {
-        await chrome.scripting.executeScript({
-            target: { tabId: tab.id },
-            injectImmediately: true,
-            func: function () {
-                return true
-            },
-        })
-    } catch (e) {
+    if (!tab || !url) {
         switchEl.classList.add('border-danger-subtle')
-        return console.log(`url.hostname: ${url.hostname}`, e)
+        return console.log('Missing tab or url.')
     }
+
     console.info(`Valid Site: ${url.hostname}`)
     const toggleSiteEl = document.getElementById('toggle-site')
     toggleSiteEl.disabled = false
@@ -131,4 +121,39 @@ async function enableTempClick(event) {
     console.debug('tab:', tab)
     await enableSite(tab, 'yellow')
     window.close()
+}
+
+/**
+ * Check Tab Scripting
+ * TODO: REFACTOR to work with updateAll option
+ * @function checkTab
+ * @return {Array[{Boolean}, {Boolean}]}
+ */
+async function checkTab() {
+    let url
+    try {
+        const [tab] = await chrome.tabs.query({
+            currentWindow: true,
+            active: true,
+        })
+        url = new URL(tab.url)
+        if (!tab?.id || !url.hostname) {
+            return [false, url]
+        }
+        const response = await chrome.scripting.executeScript({
+            target: { tabId: tab.id },
+            injectImmediately: true,
+            func: function () {
+                return contentScript
+            },
+        })
+        console.log('response:', response)
+        if (!response[0]?.result) {
+            return [false, url]
+        }
+        return [tab, url]
+    } catch (e) {
+        console.log(e)
+        return [false, url]
+    }
 }

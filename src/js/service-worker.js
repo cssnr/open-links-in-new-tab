@@ -77,7 +77,7 @@ async function onInstalled(details) {
  * Context Menu Click Callback
  * @function onClicked
  * @param {OnClickData} ctx
- * @param {chrome.tabs.Tab} tab
+ * @param {Tab} tab
  */
 async function onClicked(ctx, tab) {
     console.debug(`contextMenuClick: ${ctx.menuItemId}`, ctx, tab)
@@ -128,22 +128,21 @@ async function onCommand(command) {
  * @param {Object} message
  * @param {MessageSender} sender
  */
-async function onMessage(message, sender) {
+function onMessage(message, sender) {
     console.debug('message, sender:', message, sender)
-    const tabId = message.tabId || sender.tab.id
-    const text = message.badgeText
-    const color = message.badgeColor
-    console.debug(`tabId: ${tabId}, text: ${text}, color: ${color}`)
-    if (color) {
-        await chrome.action.setBadgeBackgroundColor({
+    const tabId = message.tabId || sender.tab?.id
+    if (message.badgeColor) {
+        console.debug(`tabId: ${tabId} color: ${message.badgeColor}`)
+        chrome.action.setBadgeBackgroundColor({
             tabId: tabId,
-            color: color,
+            color: message.badgeColor,
         })
     }
-    if (text) {
-        await chrome.action.setBadgeText({
+    if (message.badgeText) {
+        console.debug(`tabId: ${tabId} text: ${message.badgeText}`)
+        chrome.action.setBadgeText({
             tabId: tabId,
-            text: text,
+            text: message.badgeText,
         })
     }
 }
