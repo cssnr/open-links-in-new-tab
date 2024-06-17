@@ -2,15 +2,12 @@
 
 const contentScript = true
 let tabEnabled = false
-let noOpener = false
+let options = {}
 
 ;(async () => {
-    const { options, sites } = await chrome.storage.sync.get([
-        'options',
-        'sites',
-    ])
-    noOpener = options.noOpener
-    if (sites?.includes(window.location.host)) {
+    let data = await chrome.storage.sync.get(['options', 'sites'])
+    options = data.options
+    if (data.sites?.includes(window.location.host)) {
         console.log(`Enabled Host: ${window.location.host}`)
         await activateTab('green')
     }
@@ -38,7 +35,6 @@ async function activateTab(color) {
     console.info('Activating Tab...')
     tabEnabled = true
     updateLinks()
-    const { options } = await chrome.storage.sync.get(['options'])
     const observer = new MutationObserver(updateLinks)
     observer.observe(document.body, {
         attributes: options.onAttributes,
@@ -62,9 +58,17 @@ function updateLinks() {
     const elements = document.getElementsByTagName('a')
     for (const element of elements) {
         if (element.href !== '#') {
+            if (!options.anchorLinks && element.href.includes('#')) {
+                const url = new URL(element.href)
+                console.debug('url.origin:', url.origin)
+                if (url.origin === window.location.origin) {
+                    console.debug('skipping anchor link:', element.href)
+                    continue
+                }
+            }
             if (element.target !== '_blank') {
                 element.target = '_blank'
-                if (noOpener) {
+                if (options.noOpener) {
                     element.setAttribute('rel', 'noopener')
                 }
             }
@@ -92,7 +96,6 @@ async function onChanged(changes, namespace) {
                 }
             } else if (tabEnabled) {
                 console.log(`Disabling: ${window.location.host}`)
-                const { options } = await chrome.storage.sync.get(['options'])
                 if (options.autoReload) {
                     window.location.reload()
                 } else {
@@ -103,9 +106,7 @@ async function onChanged(changes, namespace) {
                 }
             }
         } else if (namespace === 'sync' && key === 'options') {
-            if (oldValue.noOpener !== newValue.noOpener) {
-                noOpener = newValue.noOpener
-            }
+            options = newValue
         }
     }
 }
