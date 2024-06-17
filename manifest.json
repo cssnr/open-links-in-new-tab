@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "version": "0.2.0",
+  "version": "0.0.1",
   "name": "Open Links in New Tab",
   "short_name": "Open in Tab",
   "description": "Modern Web Extension to Open Links in New Tabs for Specified Domains or Temporarily on Any Tab.",

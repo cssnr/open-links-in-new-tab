@@ -1,4 +1,5 @@
 {
+  "name": "open-links-in-new-tab",
   "scripts": {
     "postinstall": "npx gulp",
     "lint": "npx eslint src/js",
@@ -20,7 +21,7 @@
     "eslint": "^8.57.0",
     "gulp": "^4.0.2",
     "json-merger": "^1.1.10",
-    "prettier": "^3.2.5",
-    "web-ext": "^7.12.0"
+    "prettier": "^3.3.2",
+    "web-ext": "^8.1.0"
   }
 }

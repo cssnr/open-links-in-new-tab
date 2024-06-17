@@ -1,5 +1,6 @@
 // JS Content Script tab.js
 
+const contentScript = true
 let tabEnabled = false
 let noOpener = false
 
