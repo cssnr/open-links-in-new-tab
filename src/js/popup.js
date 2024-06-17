@@ -125,7 +125,7 @@ async function enableTempClick(event) {
 
 /**
  * Check Tab Scripting
- * TODO: REFACTOR to work with this extension
+ * TODO: REFACTOR to work with updateAll option
  * @function checkTab
  * @return {Array[{Boolean}, {Boolean}]}
  */
