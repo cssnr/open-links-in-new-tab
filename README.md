@@ -7,6 +7,7 @@
 [![GitHub Release Version](https://img.shields.io/github/v/release/cssnr/open-links-in-new-tab?logo=github)](https://github.com/cssnr/open-links-in-new-tab/releases/latest)
 [![Build](https://github.com/cssnr/open-links-in-new-tab/actions/workflows/build.yaml/badge.svg)](https://github.com/cssnr/open-links-in-new-tab/actions/workflows/build.yaml)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=cssnr_open-links-in-new-tab&metric=alert_status&label=quality)](https://sonarcloud.io/summary/overall?id=cssnr_open-links-in-new-tab)
+[![Discord](https://img.shields.io/discord/899171661457293343?logo=discord&logoColor=white&label=discord&color=7289da)](https://discord.gg/wXy6m2X8wY)
 # Open Links in New Tab
 
 Modern Chrome Web Extension and Firefox Browser Addon to Open Links in New Tabs for Specified Domains or Temporarily on Any Tab.

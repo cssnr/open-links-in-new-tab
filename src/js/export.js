@@ -3,7 +3,7 @@
 /**
  * Get URL for Current Tab
  * @function toggleSite
- * @param {Tab} tab
+ * @param {chrome.tabs.Tab} tab
  */
 export async function toggleSite(tab) {
     const url = new URL(tab.url)
@@ -31,7 +31,7 @@ export async function toggleSite(tab) {
 /**
  * Show Enabled Site for Tab
  * @function enableSite
- * @param {Tab} tab
+ * @param {chrome.tabs.Tab} tab
  * @param {String} color
  */
 export async function enableSite(tab, color) {

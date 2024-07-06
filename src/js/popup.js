@@ -127,7 +127,7 @@ async function enableTempClick(event) {
  * Check Tab Scripting
  * TODO: REFACTOR to work with updateAll option
  * @function checkTab
- * @return {Array[{Boolean}, {Boolean}]}
+ * @return {[chrome.tabs.Tab, URL]}
  */
 async function checkTab() {
     let url
