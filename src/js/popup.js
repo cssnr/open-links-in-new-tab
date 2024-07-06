@@ -11,6 +11,8 @@ import {
     updateOptions,
 } from './export.js'
 
+chrome.storage.onChanged.addListener(onChanged)
+
 document.addEventListener('DOMContentLoaded', initPopup)
 document.getElementById('toggle-site').onclick = toggleSiteClick
 document.getElementById('enable-temp').onclick = enableTempClick
@@ -127,7 +129,7 @@ async function enableTempClick(event) {
  * Check Tab Scripting
  * TODO: REFACTOR to work with updateAll option
  * @function checkTab
- * @return {Array[{Boolean}, {Boolean}]}
+ * @return {[chrome.tabs.Tab, URL]}
  */
 async function checkTab() {
     let url
@@ -155,5 +157,20 @@ async function checkTab() {
     } catch (e) {
         console.log(e)
         return [false, url]
+    }
+}
+
+/**
+ * On Changed Callback
+ * @function onChanged
+ * @param {Object} changes
+ * @param {String} namespace
+ */
+function onChanged(changes, namespace) {
+    // console.debug('onChanged:', changes, namespace)
+    for (let [key, { newValue }] of Object.entries(changes)) {
+        if (namespace === 'sync' && key === 'options') {
+            updateOptions(newValue)
+        }
     }
 }
