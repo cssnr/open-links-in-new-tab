@@ -89,13 +89,17 @@
             </label>
         </div>
         <div class="form-check form-switch">
-            <input class="form-check-input" type="checkbox" role="switch" id="updateAll">
+            <input class="form-check-input" type="checkbox" role="switch" id="updateAll"
+                   data-warning="text-danger-emphasis" data-related="updateAllWarning" data-reverse="yes">
             <label class="form-check-label" for="updateAll" aria-describedby="updateAllHelp">
                 Update All Tabs on Change
                 <span data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="WARNING: Disabling this can cause unexpected behaviors.">
                     <i class="fa-solid fa-circle-info ms-1"></i>
                 </span>
             </label>
+        </div>
+        <div id="updateAllWarning" class="ms-5 text-warning-emphasis small" style="display: none">
+            Disabling this option may cause unexpected behavior when enabling/disabling sites.
         </div>
         <div class="form-check form-switch">
             <input class="form-check-input" type="checkbox" role="switch" id="noOpener">

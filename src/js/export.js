@@ -76,7 +76,7 @@ export async function checkPerms() {
  * Promise from requestPerms is ignored so we can close the popup immediately
  * @function grantPerms
  * @param {MouseEvent} event
- * @param {Boolean} [close]
+ * @param {Boolean=} close
  */
 export async function grantPerms(event, close = false) {
     console.debug('grantPerms:', event)
@@ -128,11 +128,11 @@ export async function saveOptions(event) {
     let value
     if (event.target.type === 'checkbox') {
         value = event.target.checked
-        // TODO: Placeholder until updateAll get fixed
-        if (event.target.id === 'updateAll') {
-            console.log('nextElementSibling:', event.target.nextElementSibling)
-            disableWarning(event.target.nextElementSibling, value)
-        }
+        // // TODO: Placeholder until updateAll get fixed
+        // if (event.target.id === 'updateAll') {
+        //     console.log('nextElementSibling:', event.target.nextElementSibling)
+        //     disableWarning(event.target.nextElementSibling, value)
+        // }
     } else if (event.target.type === 'text') {
         value = event.target.value
     }
@@ -150,7 +150,7 @@ export async function saveOptions(event) {
  */
 export function updateOptions(options) {
     console.log('updateOptions:', options)
-    for (const [key, value] of Object.entries(options)) {
+    for (let [key, value] of Object.entries(options)) {
         // console.debug(`${key}: ${value}`)
         const el = document.getElementById(key)
         if (el) {
@@ -159,26 +159,53 @@ export function updateOptions(options) {
             } else if (typeof value === 'string') {
                 el.value = value
             }
-            // TODO: Placeholder until updateAll get fixed
-            if (key === 'updateAll') {
-                console.log('nextElementSibling:', el.nextElementSibling)
-                disableWarning(el.nextElementSibling, value)
+            if (el.dataset.reverse) {
+                value = !!(value ^ !!el.dataset.reverse)
+            }
+            if (el.dataset.related) {
+                hideShowElement(`#${el.dataset.related}`, value)
+            }
+            if (el.dataset.warning) {
+                addWarningClass(
+                    el.nextElementSibling,
+                    value,
+                    el.dataset.warning
+                )
             }
         }
     }
 }
 
 /**
- * Disabled Item Warning
- * @function disableWarning
+ * Hide or Show Element with JQuery
+ * @function hideShowElement
+ * @param {String} selector
+ * @param {Boolean=} show
+ * @param {String=} speed
+ */
+function hideShowElement(selector, show, speed = 'fast') {
+    const element = $(`${selector}`)
+    console.debug('hideShowElement:', show, element)
+    if (show) {
+        element.show(speed)
+    } else {
+        element.hide(speed)
+    }
+}
+
+/**
+ * Add Warning Class to Element
+ * @function addWarningClass
  * @param {HTMLElement} element
  * @param {Boolean} value
+ * @param {String} warning
  */
-function disableWarning(element, value) {
-    if (!value) {
-        element.classList.add('text-danger-emphasis')
+function addWarningClass(element, value, warning) {
+    console.debug('hideShowElement:', value, element)
+    if (value) {
+        element.classList.add(warning)
     } else {
-        element.classList.remove('text-danger-emphasis')
+        element.classList.remove(warning)
     }
 }
 
