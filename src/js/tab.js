@@ -1,7 +1,6 @@
 // JS Content Script tab.js
 
-// eslint-disable-next-line no-unused-vars
-const contentScript = true
+const contentScript = true // eslint-disable-line no-unused-vars
 let tabEnabled = false
 let options = {}
 
