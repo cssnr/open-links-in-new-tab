@@ -5,7 +5,8 @@
 [![Chrome Web Store Version](https://img.shields.io/chrome-web-store/v/efahmjakjnnmleokcaomicgfhobabdkc?label=chrome&logo=googlechrome)](https://chromewebstore.google.com/detail/open-links-in-new-tab/efahmjakjnnmleokcaomicgfhobabdkc)
 [![Mozilla Add-on Version](https://img.shields.io/amo/v/open-links-in-new-tab?label=firefox&logo=firefox)](https://addons.mozilla.org/addon/open-links-in-new-tab)
 [![GitHub Release Version](https://img.shields.io/github/v/release/cssnr/open-links-in-new-tab?logo=github)](https://github.com/cssnr/open-links-in-new-tab/releases/latest)
-[![Build](https://github.com/cssnr/open-links-in-new-tab/actions/workflows/build.yaml/badge.svg)](https://github.com/cssnr/open-links-in-new-tab/actions/workflows/build.yaml)
+[![Build](https://img.shields.io/github/actions/workflow/status/cssnr/open-links-in-new-tab/build.yaml?logo=github&logoColor=white&label=build)](https://github.com/cssnr/open-links-in-new-tab/actions/workflows/build.yaml)
+[![Test](https://img.shields.io/github/actions/workflow/status/cssnr/open-links-in-new-tab/test.yaml?logo=github&logoColor=white&label=test)](https://github.com/cssnr/open-links-in-new-tab/actions/workflows/test.yaml)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=cssnr_open-links-in-new-tab&metric=alert_status&label=quality)](https://sonarcloud.io/summary/overall?id=cssnr_open-links-in-new-tab)
 [![Discord](https://img.shields.io/discord/899171661457293343?logo=discord&logoColor=white&label=discord&color=7289da)](https://discord.gg/wXy6m2X8wY)
 # Open Links in New Tab
@@ -16,6 +17,7 @@ Modern Chrome Web Extension and Firefox Browser Addon to Open Links in New Tabs 
 *   [Features](#features)
 *   [Known Issues](#known-issues)
 *   [Configuration](#configuration)
+*   [Support](#support)
 *   [Development](#development)
     -   [Building](#building)
 
@@ -77,7 +79,24 @@ You can pin the Addon by clicking the `Puzzle Piece`, find the Web Extension ico
 
 To open the options, click on the icon (from above) then click `Open Options`.
 
-Documentation: https://open-links-in-new-tab.cssnr.com/docs/
+# Support
+
+For help using the web extension, utilize any these resources:
+
+- Documentation: https://open-links-in-new-tab.cssnr.com/docs/
+- Q&A Discussion: https://github.com/cssnr/open-links-in-new-tab/discussions/categories/q-a
+- Request a Feature: https://github.com/cssnr/open-links-in-new-tab/discussions/categories/feature-requests
+
+If you are experiencing an issue/bug or getting unexpected results, use:
+
+- Report an Issue: https://github.com/cssnr/open-links-in-new-tab/issues
+- Chat with us on Discord: https://discord.gg/wXy6m2X8wY
+- Provide Anonymous Feedback: https://cssnr.github.io/feedback
+
+Logs can be found inspecting the page (Ctrl+Shift+I), clicking on the Console, and;
+Firefox: toggling Debug logs, Chrome: toggling Verbose from levels dropdown.
+
+Note: When providing anonymous feedback there is no way to follow up and get more information unless you provide a contact method.
 
 # Development
 

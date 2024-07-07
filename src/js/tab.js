@@ -1,6 +1,6 @@
 // JS Content Script tab.js
 
-const contentScript = true
+const contentScript = true // eslint-disable-line no-unused-vars
 let tabEnabled = false
 let options = {}
 
@@ -82,7 +82,7 @@ function updateLinks() {
  */
 async function onChanged(changes, namespace) {
     // console.debug('onChanged:', changes, namespace)
-    for (let [key, { oldValue, newValue }] of Object.entries(changes)) {
+    for (let [key, { newValue }] of Object.entries(changes)) {
         if (namespace === 'sync' && key === 'sites') {
             // console.debug('newValue:', newValue)
             if (newValue?.includes(window.location.host)) {
