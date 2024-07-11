@@ -91,7 +91,7 @@ If you are experiencing an issue/bug or getting unexpected results, use:
 
 - Report an Issue: https://github.com/cssnr/open-links-in-new-tab/issues
 - Chat with us on Discord: https://discord.gg/wXy6m2X8wY
-- Provide Anonymous Feedback: https://cssnr.github.io/feedback
+- Provide Anonymous Feedback: [https://cssnr.github.io/feedback/](https://cssnr.github.io/feedback/?app=Open%20Links%20in%20New%20Tab)
 
 Logs can be found inspecting the page (Ctrl+Shift+I), clicking on the Console, and;
 Firefox: toggling Debug logs, Chrome: toggling Verbose from levels dropdown.
