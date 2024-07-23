@@ -175,7 +175,7 @@ function onChanged(changes, namespace) {
  * Set Default Options
  * @function setDefaultOptions
  * @param {Object} defaultOptions
- * @return {Object}
+ * @return {Promise<*|Object>}
  */
 async function setDefaultOptions(defaultOptions) {
     console.log('setDefaultOptions')
