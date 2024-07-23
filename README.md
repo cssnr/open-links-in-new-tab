@@ -1,13 +1,16 @@
-[![Chrome Web Store Users](https://img.shields.io/chrome-web-store/users/efahmjakjnnmleokcaomicgfhobabdkc?logo=google&logoColor=white&label=google%20users)](https://chromewebstore.google.com/detail/open-links-in-new-tab/efahmjakjnnmleokcaomicgfhobabdkc)
-[![Mozilla Add-on Users](https://img.shields.io/amo/users/open-links-in-new-tab?logo=mozilla&label=mozilla%20users)](https://addons.mozilla.org/addon/open-links-in-new-tab)
+[![Chrome Web Store Users](https://img.shields.io/chrome-web-store/users/efahmjakjnnmleokcaomicgfhobabdkc?logo=google&logoColor=white&label=users)](https://chromewebstore.google.com/detail/open-links-in-new-tab/efahmjakjnnmleokcaomicgfhobabdkc)
+[![Mozilla Add-on Users](https://img.shields.io/amo/users/open-links-in-new-tab?logo=mozilla&label=users)](https://addons.mozilla.org/addon/open-links-in-new-tab)
 [![Chrome Web Store Rating](https://img.shields.io/chrome-web-store/rating/efahmjakjnnmleokcaomicgfhobabdkc?logo=google&logoColor=white)](https://chromewebstore.google.com/detail/open-links-in-new-tab/efahmjakjnnmleokcaomicgfhobabdkc)
 [![Mozilla Add-on Rating](https://img.shields.io/amo/rating/open-links-in-new-tab?logo=mozilla&logoColor=white)](https://addons.mozilla.org/addon/open-links-in-new-tab)
+[![GitHub Repo Stars](https://img.shields.io/github/stars/cssnr/open-links-in-new-tab?style=flat&logo=github&logoColor=white)](https://github.com/cssnr/open-links-in-new-tab/stargazers)
 [![Chrome Web Store Version](https://img.shields.io/chrome-web-store/v/efahmjakjnnmleokcaomicgfhobabdkc?label=chrome&logo=googlechrome)](https://chromewebstore.google.com/detail/open-links-in-new-tab/efahmjakjnnmleokcaomicgfhobabdkc)
 [![Mozilla Add-on Version](https://img.shields.io/amo/v/open-links-in-new-tab?label=firefox&logo=firefox)](https://addons.mozilla.org/addon/open-links-in-new-tab)
 [![GitHub Release Version](https://img.shields.io/github/v/release/cssnr/open-links-in-new-tab?logo=github)](https://github.com/cssnr/open-links-in-new-tab/releases/latest)
 [![Build](https://img.shields.io/github/actions/workflow/status/cssnr/open-links-in-new-tab/build.yaml?logo=github&logoColor=white&label=build)](https://github.com/cssnr/open-links-in-new-tab/actions/workflows/build.yaml)
 [![Test](https://img.shields.io/github/actions/workflow/status/cssnr/open-links-in-new-tab/test.yaml?logo=github&logoColor=white&label=test)](https://github.com/cssnr/open-links-in-new-tab/actions/workflows/test.yaml)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=cssnr_open-links-in-new-tab&metric=alert_status&label=quality)](https://sonarcloud.io/summary/overall?id=cssnr_open-links-in-new-tab)
+[![GitHub Last Commit](https://img.shields.io/github/last-commit/cssnr/open-links-in-new-tab?logo=github&logoColor=white&label=updated)](https://github.com/cssnr/open-links-in-new-tab/graphs/commit-activity)
+[![GitHub Top Language](https://img.shields.io/github/languages/top/cssnr/open-links-in-new-tab?logo=htmx&logoColor=white)](https://github.com/cssnr/open-links-in-new-tab)
 [![Discord](https://img.shields.io/discord/899171661457293343?logo=discord&logoColor=white&label=discord&color=7289da)](https://discord.gg/wXy6m2X8wY)
 # Open Links in New Tab
 
@@ -20,8 +23,9 @@ Modern Chrome Web Extension and Firefox Browser Addon to Open Links in New Tabs 
 *   [Support](#support)
 *   [Development](#development)
     -   [Building](#building)
+*   [Contributing](#Contributing)
 
-# Install
+## Install
 
 *   [Google Chrome Web Store](https://chromewebstore.google.com/detail/open-links-in-new-tab/efahmjakjnnmleokcaomicgfhobabdkc)
 *   [Mozilla Firefox Add-ons](https://addons.mozilla.org/addon/open-links-in-new-tab)
@@ -37,7 +41,7 @@ Modern Chrome Web Extension and Firefox Browser Addon to Open Links in New Tabs 
 All **Chromium** Based Browsers can install the extension from the
 [Chrome Web Store](https://chromewebstore.google.com/detail/open-links-in-new-tab/efahmjakjnnmleokcaomicgfhobabdkc).
 
-# Features
+## Features
 
 Please submit a [Feature Request](https://github.com/cssnr/open-links-in-new-tab/discussions/new?category=feature-requests) for new features.   
 For any issues, bugs or concerns; please [Open an Issue](https://github.com/cssnr/open-links-in-new-tab/issues/new).
@@ -49,7 +53,7 @@ For any issues, bugs or concerns; please [Open an Issue](https://github.com/cssn
 *   Automatic Dark/Light Mode based on Browser Setting
 *   Activate from Icon, Context Menu, or Keyboard Shortcuts
 
-## Planned Upcoming Features
+### Planned Upcoming Features
 
 *   Enable for Specific URL Only
 *   Enable for Matching Regex URL Only
@@ -62,7 +66,7 @@ For any issues, bugs or concerns; please [Open an Issue](https://github.com/cssn
 > **Don't see your feature here?**
 > Request one on the [Feature Request Discussion](https://github.com/cssnr/open-links-in-new-tab/discussions/categories/feature-requests).
 
-# Known Issues
+## Known Issues
 
 *    Does not work on sites that use JavaScript events to handle links
      -   `search.yahoo.com`
@@ -71,7 +75,7 @@ For any issues, bugs or concerns; please [Open an Issue](https://github.com/cssn
 > **Don't see your issue here?**
 > Open one on the [Issues](https://github.com/cssnr/open-links-in-new-tab/issues).
 
-# Configuration
+## Configuration
 
 You can pin the Addon by clicking the `Puzzle Piece`, find the Web Extension icon, then;  
 **Chrome**, click the `Pin` icon.  
@@ -79,7 +83,7 @@ You can pin the Addon by clicking the `Puzzle Piece`, find the Web Extension ico
 
 To open the options, click on the icon (from above) then click `Open Options`.
 
-# Support
+## Support
 
 For help using the web extension, utilize any these resources:
 
@@ -95,6 +99,8 @@ If you are experiencing an issue/bug or getting unexpected results, use:
 
 Logs can be found inspecting the page (Ctrl+Shift+I), clicking on the Console, and;
 Firefox: toggling Debug logs, Chrome: toggling Verbose from levels dropdown.
+
+To support this project, see the [Contributing](#Contributing) section at the bottom.
 
 # Development
 
@@ -143,7 +149,7 @@ npm run build:firefox
 
 For more information on building, see the scripts section in the [package.json](package.json) file.
 
-## Chrome Setup
+### Chrome Setup
 
 1.  Build or Download a [Release](https://github.com/cssnr/open-links-in-new-tab/releases).
 1.  Unzip the archive, place the folder where it must remain and note its location for later.
@@ -151,7 +157,7 @@ For more information on building, see the scripts section in the [package.json](
 1.  In the top right, click `Developer Mode` then on the top left click `Load unpacked`.
 1.  Navigate to the folder you extracted in step #3 then click `Select Folder`.
 
-## Firefox Setup
+### Firefox Setup
 
 1.  Build or Download a [Release](https://github.com/cssnr/open-links-in-new-tab/releases).
 1.  Unzip the archive, place the folder where it must remain and note its location for later.
@@ -165,3 +171,22 @@ You may also use an Unbranded Build: [https://wiki.mozilla.org/Add-ons/Extension
 1.  Run `npm run build:firefox` then use `web-ext-artifacts/{name}-firefox-{version}.zip`.
 1.  Open `about:config` search for `xpinstall.signatures.required` and set to `false`.
 1.  Open `about:addons` and drag the zip file to the page or choose Install from File from the Settings wheel.
+
+# Contributing
+
+Currently, the best way to contribute to this project is to give a 5-star rating on
+[Google](https://chromewebstore.google.com/detail/open-links-in-new-tab/efahmjakjnnmleokcaomicgfhobabdkc) or
+[Mozilla](https://addons.mozilla.org/addon/open-links-in-new-tab) and to star this project on GitHub.
+
+Other Web Extensions I have created and published:
+
+- [Link Extractor](https://github.com/cssnr/link-extractor)
+- [Open Links in New Tab](https://github.com/cssnr/open-links-in-new-tab)
+- [HLS Video Downloader](https://github.com/cssnr/hls-video-downloader)
+- [SMWC Web Extension](https://github.com/cssnr/smwc-web-extension)
+- [PlayDrift Extension](https://github.com/cssnr/playdrift-extension)
+- [ASN Plus](https://github.com/cssnr/asn-plus)
+- [Aviation Tools](https://github.com/cssnr/aviation-tools)
+- [Text Formatter](https://github.com/cssnr/text-formatter)
+
+For a full list of current projects visit: [https://cssnr.github.io/](https://cssnr.github.io/)
