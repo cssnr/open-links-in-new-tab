@@ -36,18 +36,16 @@ async function onInstalled(details) {
     const uninstallURL = new URL(
         'https://open-links-in-new-tab.cssnr.com/uninstall/'
     )
-    const options = await Promise.resolve(
-        setDefaultOptions({
-            onScroll: false,
-            onAttributes: false,
-            anchorLinks: false,
-            autoReload: true,
-            updateAll: true,
-            noOpener: true,
-            contextMenu: true,
-            showUpdate: false,
-        })
-    )
+    const options = await setDefaultOptions({
+        onScroll: false,
+        onAttributes: false,
+        anchorLinks: false,
+        autoReload: true,
+        updateAll: true,
+        noOpener: true,
+        contextMenu: true,
+        showUpdate: false,
+    })
     if (options.contextMenu) {
         createContextMenus()
     }
