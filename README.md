@@ -70,8 +70,8 @@ For any issues, bugs or concerns; please [Open an Issue](https://github.com/cssn
 
 ## Known Issues
 
-*    Does not work on sites that use JavaScript events to handle links
-     -   `search.yahoo.com`
+*    Does not work on some sites that use JavaScript events to handle links.
+     -   Many of these sites should be fixed when v3 is released.
 
 > [!TIP]
 > **Don't see your issue here?**
