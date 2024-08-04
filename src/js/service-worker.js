@@ -37,6 +37,7 @@ async function onInstalled(details) {
         'https://open-links-in-new-tab.cssnr.com/uninstall/'
     )
     const options = await setDefaultOptions({
+        openBackground: false,
         onScroll: false,
         onAttributes: false,
         anchorLinks: false,

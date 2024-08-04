@@ -18,6 +18,7 @@ Modern Chrome Web Extension and Firefox Browser Addon to Open Links in New Tabs 
 
 *   [Install](#install)
 *   [Features](#features)
+    -   [Upcoming Features](#Upcoming-Features)
 *   [Known Issues](#known-issues)
 *   [Configuration](#configuration)
 *   [Support](#support)
@@ -53,7 +54,7 @@ For any issues, bugs or concerns; please [Open an Issue](https://github.com/cssn
 *   Automatic Dark/Light Mode based on Browser Setting
 *   Activate from Icon, Context Menu, or Keyboard Shortcuts
 
-### Planned Upcoming Features
+### Upcoming Features
 
 *   Enable for Specific URL Only
 *   Enable for Matching Regex URL Only

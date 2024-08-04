@@ -37,9 +37,24 @@
     <hr>
     <form id="options-form" class="mb-3">
         <div class="form-check form-switch">
+            <input class="form-check-input" type="checkbox" role="switch" id="openBackground">
+            <label class="form-check-label" for="openBackground" aria-describedby="openBackgroundHelp">
+                Open Links in Background
+                <span class="text-warning-emphasis me-1" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Experimental Feature.">
+                    <i class="fa-solid fa-flask ms-1"></i>
+                </span>
+                <span data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Open Updated Links in the Background.">
+                    <i class="fa-solid fa-circle-info ms-1"></i>
+                </span>
+            </label>
+        </div>
+        <div class="form-check form-switch">
             <input class="form-check-input" type="checkbox" role="switch" id="onScroll">
             <label class="form-check-label" for="onScroll" aria-describedby="onScrollHelp">
                 Update Links On Scroll
+                <span class="text-warning-emphasis me-1" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Experimental Feature.">
+                    <i class="fa-solid fa-flask ms-1"></i>
+                </span>
                 <span data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Update Links after Every Scroll Event.">
                     <i class="fa-solid fa-circle-info ms-1"></i>
                 </span>

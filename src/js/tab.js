@@ -58,6 +58,9 @@ function updateLinks() {
     const elements = document.getElementsByTagName('a')
     for (const element of elements) {
         if (element.href !== '#') {
+            if (options.openBackground) {
+                element.addEventListener('click', clickLink)
+            }
             if (!options.anchorLinks && element.href.includes('#')) {
                 const url = new URL(element.href)
                 if (url.origin === window.location.origin) {
@@ -72,6 +75,22 @@ function updateLinks() {
             }
         }
     }
+}
+
+function clickLink(event) {
+    console.debug('clickLink:', event)
+    if (event.handled) {
+        return console.debug('preventing recursion')
+    }
+    event.preventDefault()
+    // const link = event.target.closest('a')
+    console.log('debug:', event.currentTarget)
+    const e = new MouseEvent('click', {
+        ctrlKey: true,
+        metaKey: true,
+    })
+    e.handled = true
+    event.currentTarget.dispatchEvent(e)
 }
 
 /**
