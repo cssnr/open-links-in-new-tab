@@ -49,6 +49,7 @@ For any issues, bugs or concerns; please [Open an Issue](https://github.com/cssn
 
 *   Toggle Sites to Always Open Links in New Tabs
 *   Temporarily Open All Links in New Tabs for Current Site
+*   Option to Open Links in the Background
 *   Update on Scroll Option to Always Update Links
 *   Options Page to View and Edit Toggled Sites and More
 *   Automatic Dark/Light Mode based on Browser Setting

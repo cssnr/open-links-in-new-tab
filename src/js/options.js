@@ -202,7 +202,7 @@ async function exportHosts(event) {
     if (!sites) {
         return showToast('No Hosts Found!', 'warning')
     }
-    const json = JSON.stringify(sites)
+    const json = JSON.stringify(sites, null, 2)
     textFileDownload('open-in-tab-sites.txt', json)
 }
 
