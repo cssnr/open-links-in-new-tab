@@ -33,7 +33,8 @@ async function onStartup() {
 async function onInstalled(details) {
     console.log('onInstalled:', details)
     const githubURL = 'https://github.com/cssnr/open-links-in-new-tab'
-    const installURL = 'https://link-extractor.cssnr.com/docs/?install=new'
+    const installURL =
+        'https://open-links-in-new-tab.cssnr.com/docs/?install=new'
     const uninstallURL = new URL(
         'https://open-links-in-new-tab.cssnr.com/uninstall/'
     )
