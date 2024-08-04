@@ -33,6 +33,7 @@ async function onStartup() {
 async function onInstalled(details) {
     console.log('onInstalled:', details)
     const githubURL = 'https://github.com/cssnr/open-links-in-new-tab'
+    const installURL = 'https://link-extractor.cssnr.com/docs/?install=new'
     const uninstallURL = new URL(
         'https://open-links-in-new-tab.cssnr.com/uninstall/'
     )
@@ -59,6 +60,7 @@ async function onInstalled(details) {
             const url = chrome.runtime.getURL('/html/oninstall.html')
             await chrome.tabs.create({ active: true, url })
         }
+        await chrome.tabs.create({ active: false, url: installURL })
     } else if (details.reason === chrome.runtime.OnInstalledReason.UPDATE) {
         if (options.showUpdate) {
             if (manifest.version !== details.previousVersion) {
