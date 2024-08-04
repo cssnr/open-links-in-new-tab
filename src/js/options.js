@@ -174,7 +174,6 @@ async function addHost(event) {
 async function deleteHost(event) {
     console.debug('deleteHost:', event)
     event.preventDefault()
-    // const anchor = event.target.closest('a')
     const host = event.currentTarget?.dataset?.value
     console.info(`Delete Host: ${host}`)
     const { sites } = await chrome.storage.sync.get(['sites'])

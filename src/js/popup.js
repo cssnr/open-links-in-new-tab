@@ -82,7 +82,6 @@ async function initPopup() {
 async function popupLinks(event) {
     console.debug('popupLinks:', event)
     event.preventDefault()
-    // const anchor = event.target.closest('a')
     const href = event.currentTarget.getAttribute('href').replace(/^\.+/g, '')
     console.debug('href:', href)
     let url
