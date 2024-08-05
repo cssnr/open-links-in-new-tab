@@ -174,8 +174,7 @@ async function addHost(event) {
 async function deleteHost(event) {
     console.debug('deleteHost:', event)
     event.preventDefault()
-    const anchor = event.target.closest('a')
-    const host = anchor?.dataset?.value
+    const host = event.currentTarget?.dataset?.value
     console.info(`Delete Host: ${host}`)
     const { sites } = await chrome.storage.sync.get(['sites'])
     // console.debug('sites:', sites)
@@ -202,7 +201,7 @@ async function exportHosts(event) {
     if (!sites) {
         return showToast('No Hosts Found!', 'warning')
     }
-    const json = JSON.stringify(sites)
+    const json = JSON.stringify(sites, null, 2)
     textFileDownload('open-in-tab-sites.txt', json)
 }
 

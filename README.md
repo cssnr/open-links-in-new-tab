@@ -18,6 +18,7 @@ Modern Chrome Web Extension and Firefox Browser Addon to Open Links in New Tabs 
 
 *   [Install](#install)
 *   [Features](#features)
+    -   [Upcoming Features](#Upcoming-Features)
 *   [Known Issues](#known-issues)
 *   [Configuration](#configuration)
 *   [Support](#support)
@@ -35,7 +36,6 @@ Modern Chrome Web Extension and Firefox Browser Addon to Open Links in New Tabs 
 [![Edge](https://raw.githubusercontent.com/alrra/browser-logos/main/src/edge/edge_48x48.png)](https://chromewebstore.google.com/detail/open-links-in-new-tab/efahmjakjnnmleokcaomicgfhobabdkc)
 [![Chromium](https://raw.githubusercontent.com/alrra/browser-logos/main/src/chromium/chromium_48x48.png)](https://chromewebstore.google.com/detail/open-links-in-new-tab/efahmjakjnnmleokcaomicgfhobabdkc)
 [![Brave](https://raw.githubusercontent.com/alrra/browser-logos/main/src/brave/brave_48x48.png)](https://chromewebstore.google.com/detail/open-links-in-new-tab/efahmjakjnnmleokcaomicgfhobabdkc)
-[![Vivaldi](https://raw.githubusercontent.com/alrra/browser-logos/main/src/vivaldi/vivaldi_48x48.png)](https://chromewebstore.google.com/detail/open-links-in-new-tab/efahmjakjnnmleokcaomicgfhobabdkc)
 [![Opera](https://raw.githubusercontent.com/alrra/browser-logos/main/src/opera/opera_48x48.png)](https://chromewebstore.google.com/detail/open-links-in-new-tab/efahmjakjnnmleokcaomicgfhobabdkc)
 
 All **Chromium** Based Browsers can install the extension from the
@@ -48,12 +48,14 @@ For any issues, bugs or concerns; please [Open an Issue](https://github.com/cssn
 
 *   Toggle Sites to Always Open Links in New Tabs
 *   Temporarily Open All Links in New Tabs for Current Site
+*   Option to Open Links in the Background
 *   Update on Scroll Option to Always Update Links
+*   Update on Any Attributes Changes and New Links
 *   Options Page to View and Edit Toggled Sites and More
 *   Automatic Dark/Light Mode based on Browser Setting
 *   Activate from Icon, Context Menu, or Keyboard Shortcuts
 
-### Planned Upcoming Features
+### Upcoming Features
 
 *   Enable for Specific URL Only
 *   Enable for Matching Regex URL Only
@@ -68,8 +70,8 @@ For any issues, bugs or concerns; please [Open an Issue](https://github.com/cssn
 
 ## Known Issues
 
-*    Does not work on sites that use JavaScript events to handle links
-     -   `search.yahoo.com`
+*    Does not work on some sites that use JavaScript events to handle links.
+     -   Many of these sites should be fixed when v3 is released.
 
 > [!TIP]
 > **Don't see your issue here?**

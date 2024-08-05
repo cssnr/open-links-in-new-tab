@@ -4,6 +4,11 @@ const contentScript = true // eslint-disable-line no-unused-vars
 let tabEnabled = false
 let options = {}
 
+if (!chrome.storage.onChanged.hasListener(onChanged)) {
+    // console.debug('Adding storage.onChanged Listener')
+    chrome.storage.onChanged.addListener(onChanged)
+}
+
 ;(async () => {
     let data = await chrome.storage.sync.get(['options', 'sites'])
     options = data.options
@@ -11,10 +16,9 @@ let options = {}
         console.log(`Enabled Host: ${window.location.host}`)
         await activateTab('green')
     }
-    // TODO: Always enable onChanged and refactor to work with options.updateAll
-    if (options.updateAll && !chrome.storage.onChanged.hasListener(onChanged)) {
-        chrome.storage.onChanged.addListener(onChanged)
-    }
+    // if (options.updateAll && !chrome.storage.onChanged.hasListener(onChanged)) {
+    //     chrome.storage.onChanged.addListener(onChanged)
+    // }
 })()
 
 /**
@@ -58,6 +62,7 @@ function updateLinks() {
     const elements = document.getElementsByTagName('a')
     for (const element of elements) {
         if (element.href !== '#') {
+            element.addEventListener('click', clickLink)
             if (!options.anchorLinks && element.href.includes('#')) {
                 const url = new URL(element.href)
                 if (url.origin === window.location.origin) {
@@ -75,6 +80,29 @@ function updateLinks() {
 }
 
 /**
+ * New Click Handler for Updated Links
+ * TODO: Move All Options Here
+ * @function clickLink
+ * @param event
+ */
+function clickLink(event) {
+    console.debug('clickLink:', event)
+    if (event.handled) {
+        return console.debug('preventing recursion')
+    }
+    if (options.openBackground) {
+        event.preventDefault()
+        console.log('debug:', event.currentTarget)
+        const e = new MouseEvent('click', {
+            ctrlKey: true,
+            metaKey: true,
+        })
+        e.handled = true
+        event.currentTarget.dispatchEvent(e)
+    }
+}
+
+/**
  * On Changed Callback
  * @function onChanged
  * @param {Object} changes
@@ -85,26 +113,40 @@ async function onChanged(changes, namespace) {
     for (let [key, { newValue }] of Object.entries(changes)) {
         if (namespace === 'sync' && key === 'sites') {
             // console.debug('newValue:', newValue)
-            if (newValue?.includes(window.location.host)) {
-                if (!tabEnabled) {
-                    console.log(`Enabling: ${window.location.host}`)
-                    await activateTab('green')
-                } else {
-                    await chrome.runtime.sendMessage({ badgeColor: 'green' })
-                }
-            } else if (tabEnabled) {
-                console.log(`Disabling: ${window.location.host}`)
-                if (options.autoReload) {
-                    window.location.reload()
-                } else {
-                    await chrome.runtime.sendMessage({
-                        badgeColor: 'red',
-                    })
-                    tabEnabled = false
-                }
+            if (options.updateAll) {
+                await processSitesUpdate(newValue)
             }
         } else if (namespace === 'sync' && key === 'options') {
             options = newValue
+        }
+    }
+}
+
+/**
+ * Process Sites Changes if Update ALl is Enabled
+ * @function processSitesUpdate
+ * @param sites
+ * @return {Promise<void>}
+ */
+async function processSitesUpdate(sites) {
+    if (sites?.includes(window.location.host)) {
+        if (!tabEnabled) {
+            console.log(`Enabling: ${window.location.host}`)
+            await activateTab('green')
+        } else {
+            await chrome.runtime.sendMessage({
+                badgeColor: 'green',
+            })
+        }
+    } else if (tabEnabled) {
+        console.log(`Disabling: ${window.location.host}`)
+        if (options.autoReload) {
+            window.location.reload()
+        } else {
+            await chrome.runtime.sendMessage({
+                badgeColor: 'red',
+            })
+            tabEnabled = false
         }
     }
 }
