@@ -128,11 +128,6 @@ export async function saveOptions(event) {
     let value
     if (event.target.type === 'checkbox') {
         value = event.target.checked
-        // // TODO: Placeholder until updateAll get fixed
-        // if (event.target.id === 'updateAll') {
-        //     console.log('nextElementSibling:', event.target.nextElementSibling)
-        //     disableWarning(event.target.nextElementSibling, value)
-        // }
     } else if (event.target.type === 'text') {
         value = event.target.value
     }

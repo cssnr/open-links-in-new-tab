@@ -46,24 +46,27 @@ async function initPopup() {
     console.debug('options, sites:', options, sites)
     updateOptions(options)
 
-    const [tab, url] = await checkTab()
-    console.debug('tab, url:', tab, url)
-    console.debug(`url.hostname: ${url?.hostname}`)
-    if (url?.hostname) {
+    const tabInfo = await checkTab()
+    console.debug('tabInfo:', tabInfo)
+    const url = new URL(tabInfo.tab?.url)
+    console.debug('url:', url)
+    if (url.hostname) {
         document.getElementById('site-hostname').textContent = url.hostname
     }
     const switchEl = document.getElementById('switch')
-    if (!tab || !url) {
+    if (!url.hostname) {
         switchEl.classList.add('border-danger-subtle')
-        return console.log('Missing tab or url.')
+        return console.log('%c Missing: url.hostname', 'color: Yellow')
     }
 
-    console.info(`Valid Site: ${url.hostname}`)
+    console.info(`%c Valid Site: ${url.hostname}`, 'color: Lime')
     const toggleSiteEl = document.getElementById('toggle-site')
     toggleSiteEl.disabled = false
     if (sites?.includes(url.hostname)) {
         toggleSiteEl.checked = true
         switchEl.classList.add('border-success')
+    } else if (tabInfo.tabEnabled) {
+        switchEl.classList.add('border-warning-subtle')
     } else {
         document.getElementById('enable-temp').classList.remove('disabled')
     }
@@ -128,34 +131,32 @@ async function enableTempClick(event) {
  * Check Tab Scripting
  * TODO: REFACTOR to work with updateAll option
  * @function checkTab
- * @return {Promise<*|[chrome.tabs.Tab, URL]>}
+ * @return {Promise<Object>}
  */
 async function checkTab() {
-    let url
     try {
         const [tab] = await chrome.tabs.query({
             currentWindow: true,
             active: true,
         })
-        url = new URL(tab.url)
-        if (!tab?.id || !url.hostname) {
-            return [false, url]
+        console.log('%c tab:', 'color: Aqua', tab)
+        if (!tab?.id) {
+            return console.log('%c NO tab.id', 'color: OrangeRed', tab)
         }
+        console.log('%c tab.id:', 'color: Lime', tab.id)
         const response = await chrome.scripting.executeScript({
             target: { tabId: tab.id },
             injectImmediately: true,
             func: function () {
-                return contentScript
+                // This returns as response[0]?.result
+                console.log('inject: contentScript:', contentScript)
+                return { contentScript, tabEnabled }
             },
         })
         console.log('response:', response)
-        if (!response[0]?.result) {
-            return [false, url]
-        }
-        return [tab, url]
+        return { ...response[0]?.result, tab }
     } catch (e) {
         console.log(e)
-        return [false, url]
     }
 }
 

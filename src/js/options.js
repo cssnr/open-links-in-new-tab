@@ -224,22 +224,23 @@ async function importHosts(event) {
 async function hostsInputChange(event) {
     console.debug('hostsInputChange:', event, hostsInput)
     event.preventDefault()
-    const fileReader = new FileReader()
-    fileReader.onload = async function doBannedImport() {
-        const result = JSON.parse(fileReader.result.toString())
-        console.debug('result:', result)
-        const { sites } = await chrome.storage.sync.get(['sites'])
-        let count = 0
-        for (const pid of result) {
-            if (!sites.includes(pid)) {
-                sites.push(pid)
-                count += 1
-            }
+    const file = event.target.files.item(0)
+    const text = await file.text()
+    const data = JSON.parse(text)
+    console.debug('data:', data)
+    const { sites } = await chrome.storage.sync.get(['sites'])
+    let count = 0
+    for (const pid of data) {
+        if (!sites.includes(pid)) {
+            sites.push(pid)
+            count++
         }
-        showToast(`Imported ${count}/${result.length} Hosts.`, 'success')
+    }
+    if (count) {
         await chrome.storage.sync.set({ sites })
     }
-    fileReader.readAsText(hostsInput.files[0])
+    const type = count ? 'success' : 'warning'
+    showToast(`Imported ${count}/${data.length} Hosts.`, type)
 }
 
 /**

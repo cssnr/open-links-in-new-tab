@@ -1,8 +1,9 @@
 // JS Content Script tab.js
 
 const contentScript = true // eslint-disable-line no-unused-vars
-let tabEnabled = false
 let options = {}
+let tabEnabled = false
+let init = false
 
 if (!chrome.storage.onChanged.hasListener(onChanged)) {
     // console.debug('Adding storage.onChanged Listener')
@@ -10,15 +11,13 @@ if (!chrome.storage.onChanged.hasListener(onChanged)) {
 }
 
 ;(async () => {
-    let data = await chrome.storage.sync.get(['options', 'sites'])
-    options = data.options
-    if (data.sites?.includes(window.location.host)) {
+    const storage = await chrome.storage.sync.get(['options', 'sites'])
+    console.debug('options, sites:', storage.options, storage.sites)
+    options = storage.options
+    if (storage.sites?.includes(window.location.host)) {
         console.log(`Enabled Host: ${window.location.host}`)
         await activateTab('green')
     }
-    // if (options.updateAll && !chrome.storage.onChanged.hasListener(onChanged)) {
-    //     chrome.storage.onChanged.addListener(onChanged)
-    // }
 })()
 
 /**
@@ -33,12 +32,30 @@ async function activateTab(color) {
         badgeText: 'On',
         badgeColor: color,
     })
-    if (tabEnabled) {
-        return console.info('Tab Already Enabled!')
+    if (!init) {
+        await tabInit()
     }
     console.info('Activating Tab...')
     tabEnabled = true
+    // updateLinks()
+    // const observer = new MutationObserver(updateLinks)
+    // observer.observe(document.body, {
+    //     attributes: options.onAttributes,
+    //     childList: true,
+    //     subtree: true,
+    // })
+    // if (options.onScroll) {
+    //     console.debug('Enabling onScroll...')
+    //     const processChange = debounce(updateLinks)
+    //     document.addEventListener('scroll', processChange)
+    // }
+}
+
+async function tabInit() {
+    console.debug('tabInit')
+    init = true
     updateLinks()
+    // const { options } = await chrome.storage.sync.get(['options'])
     const observer = new MutationObserver(updateLinks)
     observer.observe(document.body, {
         attributes: options.onAttributes,
@@ -63,18 +80,20 @@ function updateLinks() {
     for (const element of elements) {
         if (element.href !== '#') {
             element.addEventListener('click', clickLink)
-            if (!options.anchorLinks && element.href.includes('#')) {
-                const url = new URL(element.href)
-                if (url.origin === window.location.origin) {
-                    continue
-                }
-            }
-            if (element.target !== '_blank') {
-                element.target = '_blank'
-                if (options.noOpener) {
-                    element.setAttribute('rel', 'noopener')
-                }
-            }
+            // // This is moved to clickLinks
+            // if (!items.options.anchorLinks && element.href.includes('#')) {
+            //     const url = new URL(element.href)
+            //     if (url.origin === window.location.origin) {
+            //         continue
+            //     }
+            // }
+            // // This is going to be removed
+            // if (element.target !== '_blank') {
+            //     element.target = '_blank'
+            //     if (items.options.noOpener) {
+            //         element.setAttribute('rel', 'noopener')
+            //     }
+            // }
         }
     }
 }
@@ -87,19 +106,44 @@ function updateLinks() {
  */
 function clickLink(event) {
     console.debug('clickLink:', event)
-    if (event.handled) {
-        return console.debug('preventing recursion')
+    const target = event.currentTarget
+    // console.log('debug:', target)
+    if (!tabEnabled) {
+        return console.debug('%c Tab NOT Enabled!', 'color: Yellow')
     }
+    if (event.handled) {
+        return console.debug('return on event.handled')
+    }
+
+    if (!options.anchorLinks && target.href.includes('#')) {
+        const url = new URL(target.href)
+        console.debug('url:', url)
+        if (url.origin === window.location.origin) {
+            return console.debug('return on options.anchorLinks')
+        }
+    }
+
+    event.preventDefault()
     if (options.openBackground) {
-        event.preventDefault()
-        console.log('debug:', event.currentTarget)
+        console.log('options.openBackground:', options.openBackground)
         const e = new MouseEvent('click', {
             ctrlKey: true,
             metaKey: true,
         })
         e.handled = true
-        event.currentTarget.dispatchEvent(e)
+        target.dispatchEvent(e)
+        return
     }
+    console.log('target.href:', target.href)
+    const features = []
+    if (options.noOpener) {
+        features.push(`noopener=true`)
+    }
+    if (options.noReferrer) {
+        features.push(`noreferrer=true`)
+    }
+    console.log('features:', features.join(','))
+    window.open(target.href, '_blank', features.join(','))
 }
 
 /**
@@ -113,10 +157,9 @@ async function onChanged(changes, namespace) {
     for (let [key, { newValue }] of Object.entries(changes)) {
         if (namespace === 'sync' && key === 'sites') {
             // console.debug('newValue:', newValue)
-            if (options.updateAll) {
-                await processSitesUpdate(newValue)
-            }
-        } else if (namespace === 'sync' && key === 'options') {
+            await processSitesUpdate(newValue)
+        }
+        if (namespace === 'sync' && key === 'options') {
             options = newValue
         }
     }
@@ -130,24 +173,12 @@ async function onChanged(changes, namespace) {
  */
 async function processSitesUpdate(sites) {
     if (sites?.includes(window.location.host)) {
-        if (!tabEnabled) {
-            console.log(`Enabling: ${window.location.host}`)
-            await activateTab('green')
-        } else {
-            await chrome.runtime.sendMessage({
-                badgeColor: 'green',
-            })
-        }
-    } else if (tabEnabled) {
+        await activateTab('green')
+        tabEnabled = true
+    } else {
         console.log(`Disabling: ${window.location.host}`)
-        if (options.autoReload) {
-            window.location.reload()
-        } else {
-            await chrome.runtime.sendMessage({
-                badgeColor: 'red',
-            })
-            tabEnabled = false
-        }
+        await chrome.runtime.sendMessage({ badgeText: '' })
+        tabEnabled = false
     }
 }
 

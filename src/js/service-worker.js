@@ -43,9 +43,8 @@ async function onInstalled(details) {
         onScroll: false,
         onAttributes: false,
         anchorLinks: false,
-        autoReload: true,
-        updateAll: true,
         noOpener: true,
+        noReferrer: false,
         contextMenu: true,
         showUpdate: false,
     })
@@ -136,13 +135,15 @@ function onMessage(message, sender) {
     const tabId = message.tabId || sender.tab?.id
     if (message.badgeColor) {
         console.debug(`tabId: ${tabId} color: ${message.badgeColor}`)
+        // noinspection JSIgnoredPromiseFromCall
         chrome.action.setBadgeBackgroundColor({
             tabId: tabId,
             color: message.badgeColor,
         })
     }
-    if (message.badgeText) {
+    if (typeof message.badgeText !== 'undefined') {
         console.debug(`tabId: ${tabId} text: ${message.badgeText}`)
+        // noinspection JSIgnoredPromiseFromCall
         chrome.action.setBadgeText({
             tabId: tabId,
             text: message.badgeText,
