@@ -5,7 +5,6 @@ import {
     enableSite,
     grantPerms,
     saveOptions,
-    showToast,
     toggleSite,
     updateManifest,
     updateOptions,
@@ -16,6 +15,7 @@ chrome.storage.onChanged.addListener(onChanged)
 document.addEventListener('DOMContentLoaded', initPopup)
 document.getElementById('toggle-site').onclick = toggleSiteClick
 document.getElementById('enable-temp').onclick = enableTempClick
+// noinspection JSCheckFunctionSignatures
 document
     .querySelectorAll('.grant-permissions')
     .forEach((el) => el.addEventListener('click', (e) => grantPerms(e, true)))
