@@ -36,15 +36,15 @@ document
  */
 async function initPopup() {
     console.debug('initPopup')
+    // noinspection ES6MissingAwait
     updateManifest()
-    await checkPerms()
+    // noinspection ES6MissingAwait
+    checkPerms()
 
-    const { options, sites } = await chrome.storage.sync.get([
-        'options',
-        'sites',
-    ])
-    console.debug('options, sites:', options, sites)
-    updateOptions(options)
+    chrome.storage.sync.get(['options']).then((items) => {
+        console.debug('options:', items.options)
+        updateOptions(items.options)
+    })
 
     const tabInfo = await checkTab()
     console.debug('tabInfo:', tabInfo)
@@ -62,6 +62,8 @@ async function initPopup() {
     console.info(`%c Valid Site: ${url.hostname}`, 'color: Lime')
     const toggleSiteEl = document.getElementById('toggle-site')
     toggleSiteEl.disabled = false
+    const { sites } = await chrome.storage.sync.get(['sites'])
+    console.debug('sites:', sites)
     if (sites?.includes(url.hostname)) {
         toggleSiteEl.checked = true
         switchEl.classList.add('border-success')
@@ -69,10 +71,6 @@ async function initPopup() {
         switchEl.classList.add('border-warning-subtle')
     } else {
         document.getElementById('enable-temp').classList.remove('disabled')
-    }
-
-    if (chrome.runtime.lastError) {
-        showToast(chrome.runtime.lastError.message, 'warning')
     }
 }
 

@@ -11,77 +11,77 @@
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=cssnr_open-links-in-new-tab&metric=alert_status&label=quality)](https://sonarcloud.io/summary/overall?id=cssnr_open-links-in-new-tab)
 [![GitHub Last Commit](https://img.shields.io/github/last-commit/cssnr/open-links-in-new-tab?logo=github&logoColor=white&label=updated)](https://github.com/cssnr/open-links-in-new-tab/graphs/commit-activity)
 [![GitHub Top Language](https://img.shields.io/github/languages/top/cssnr/open-links-in-new-tab?logo=htmx&logoColor=white)](https://github.com/cssnr/open-links-in-new-tab)
+[![GitHub Org Stars](https://img.shields.io/github/stars/cssnr?style=flat&logo=github&logoColor=white&label=org%20stars)](https://cssnr.github.io/)
 [![Discord](https://img.shields.io/discord/899171661457293343?logo=discord&logoColor=white&label=discord&color=7289da)](https://discord.gg/wXy6m2X8wY)
+
 # Open Links in New Tab
 
 Modern Chrome Web Extension and Firefox Browser Addon to Open Links in New Tabs for Specified Domains or Temporarily on Any Tab.
 
-*   [Install](#install)
-*   [Features](#features)
+-   [Install](#install)
+-   [Features](#features)
     -   [Upcoming Features](#Upcoming-Features)
-*   [Known Issues](#known-issues)
-*   [Configuration](#configuration)
-*   [Support](#support)
-*   [Development](#development)
+-   [Known Issues](#known-issues)
+-   [Configuration](#configuration)
+-   [Support](#support)
+-   [Development](#development)
     -   [Building](#building)
-*   [Contributing](#Contributing)
+-   [Contributing](#Contributing)
 
 ## Install
 
-*   [Google Chrome Web Store](https://chromewebstore.google.com/detail/open-links-in-new-tab/efahmjakjnnmleokcaomicgfhobabdkc)
-*   [Mozilla Firefox Add-ons](https://addons.mozilla.org/addon/open-links-in-new-tab)
+-   [Google Chrome Web Store](https://chromewebstore.google.com/detail/open-links-in-new-tab/efahmjakjnnmleokcaomicgfhobabdkc)
+-   [Mozilla Firefox Add-ons](https://addons.mozilla.org/addon/open-links-in-new-tab)
 
-[![Chrome](https://raw.githubusercontent.com/alrra/browser-logos/main/src/chrome/chrome_48x48.png)](https://chromewebstore.google.com/detail/open-links-in-new-tab/efahmjakjnnmleokcaomicgfhobabdkc)
-[![Firefox](https://raw.githubusercontent.com/alrra/browser-logos/main/src/firefox/firefox_48x48.png)](https://addons.mozilla.org/addon/open-links-in-new-tab)
-[![Edge](https://raw.githubusercontent.com/alrra/browser-logos/main/src/edge/edge_48x48.png)](https://chromewebstore.google.com/detail/open-links-in-new-tab/efahmjakjnnmleokcaomicgfhobabdkc)
-[![Chromium](https://raw.githubusercontent.com/alrra/browser-logos/main/src/chromium/chromium_48x48.png)](https://chromewebstore.google.com/detail/open-links-in-new-tab/efahmjakjnnmleokcaomicgfhobabdkc)
-[![Brave](https://raw.githubusercontent.com/alrra/browser-logos/main/src/brave/brave_48x48.png)](https://chromewebstore.google.com/detail/open-links-in-new-tab/efahmjakjnnmleokcaomicgfhobabdkc)
-[![Opera](https://raw.githubusercontent.com/alrra/browser-logos/main/src/opera/opera_48x48.png)](https://chromewebstore.google.com/detail/open-links-in-new-tab/efahmjakjnnmleokcaomicgfhobabdkc)
+[![Chrome](https://raw.githubusercontent.com/smashedr/logo-icons/master/browsers/chrome_48.png)](https://chromewebstore.google.com/detail/open-links-in-new-tab/efahmjakjnnmleokcaomicgfhobabdkc)
+[![Firefox](https://raw.githubusercontent.com/smashedr/logo-icons/master/browsers/firefox_48.png)](https://addons.mozilla.org/addon/open-links-in-new-tab)
+[![Edge](https://raw.githubusercontent.com/smashedr/logo-icons/master/browsers/edge_48.png)](https://chromewebstore.google.com/detail/open-links-in-new-tab/efahmjakjnnmleokcaomicgfhobabdkc)
+[![Opera](https://raw.githubusercontent.com/smashedr/logo-icons/master/browsers/opera_48.png)](https://chromewebstore.google.com/detail/open-links-in-new-tab/efahmjakjnnmleokcaomicgfhobabdkc)
+[![Brave](https://raw.githubusercontent.com/smashedr/logo-icons/master/browsers/brave_48.png)](https://chromewebstore.google.com/detail/open-links-in-new-tab/efahmjakjnnmleokcaomicgfhobabdkc)
+[![Chromium](https://raw.githubusercontent.com/smashedr/logo-icons/master/browsers/chromium_48.png)](https://chromewebstore.google.com/detail/open-links-in-new-tab/efahmjakjnnmleokcaomicgfhobabdkc)
 
 All **Chromium** Based Browsers can install the extension from the
 [Chrome Web Store](https://chromewebstore.google.com/detail/open-links-in-new-tab/efahmjakjnnmleokcaomicgfhobabdkc).
 
 ## Features
 
-Please submit a [Feature Request](https://github.com/cssnr/open-links-in-new-tab/discussions/new?category=feature-requests) for new features.   
+Please submit a [Feature Request](https://github.com/cssnr/open-links-in-new-tab/discussions/new?category=feature-requests) for new features.  
 For any issues, bugs or concerns; please [Open an Issue](https://github.com/cssnr/open-links-in-new-tab/issues/new).
 
-*   Toggle Sites to Always Open Links in New Tabs
-*   Temporarily Open All Links in New Tabs for Current Site
-*   Option to Open Links in the Background
-*   Update on Scroll Option to Always Update Links
-*   Update on Any Attributes Changes and New Links
-*   Options Page to View and Edit Toggled Sites and More
-*   Automatic Dark/Light Mode based on Browser Setting
-*   Activate from Icon, Context Menu, or Keyboard Shortcuts
+-   Toggle Sites to Always Open Links in New Tabs
+-   Temporarily Open All Links in New Tabs for Current Site
+-   Option to Open Links in the Background
+-   Update on Scroll Option to Always Update Links
+-   Update on Any Attributes Changes and New Links
+-   Options Page to View and Edit Toggled Sites and More
+-   Automatic Dark/Light Mode based on Browser Setting
+-   Activate from Icon, Context Menu, or Keyboard Shortcuts
 
 ### Upcoming Features
 
-*   Enable for Specific URL Only
-*   Enable for Matching Regex URL Only
-*   Toggle Enable Globally
-*   Toggle Blacklist/Whitelist
-*   Export/Import URL List
-*   Options on a Per-Site Basis
+-   Enable for Specific URL Only
+-   Enable for Matching Regex URL Only
+-   Toggle Enable Globally
+-   Toggle Blacklist/Whitelist
+-   Export/Import URL List
+-   Options on a Per-Site Basis
 
-> [!TIP]
-> **Don't see your feature here?**
+> [!TIP] > **Don't see your feature here?**
 > Request one on the [Feature Request Discussion](https://github.com/cssnr/open-links-in-new-tab/discussions/categories/feature-requests).
 
 ## Known Issues
 
-*    Does not work on some sites that use JavaScript events to handle links.
-     -   Many of these sites should be fixed when v3 is released.
+-   Does not work on some sites that use JavaScript events to handle links.
+    -   Many of these sites should be fixed when v3 is released.
 
-> [!TIP]
-> **Don't see your issue here?**
+> [!TIP] > **Don't see your issue here?**
 > Open one on the [Issues](https://github.com/cssnr/open-links-in-new-tab/issues).
 
 ## Configuration
 
 You can pin the Addon by clicking the `Puzzle Piece`, find the Web Extension icon, then;  
 **Chrome**, click the `Pin` icon.  
-**Firefox**, click the `Settings Wheel` and `Pin to Toolbar`.  
+**Firefox**, click the `Settings Wheel` and `Pin to Toolbar`.
 
 To open the options, click on the icon (from above) then click `Open Options`.
 
@@ -89,15 +89,15 @@ To open the options, click on the icon (from above) then click `Open Options`.
 
 For help using the web extension, utilize any these resources:
 
-- Documentation: https://open-links-in-new-tab.cssnr.com/docs/
-- Q&A Discussion: https://github.com/cssnr/open-links-in-new-tab/discussions/categories/q-a
-- Request a Feature: https://github.com/cssnr/open-links-in-new-tab/discussions/categories/feature-requests
+-   Documentation: https://open-links-in-new-tab.cssnr.com/docs/
+-   Q&A Discussion: https://github.com/cssnr/open-links-in-new-tab/discussions/categories/q-a
+-   Request a Feature: https://github.com/cssnr/open-links-in-new-tab/discussions/categories/feature-requests
 
 If you are experiencing an issue/bug or getting unexpected results, use:
 
-- Report an Issue: https://github.com/cssnr/open-links-in-new-tab/issues
-- Chat with us on Discord: https://discord.gg/wXy6m2X8wY
-- Provide General Feedback: [https://cssnr.github.io/feedback/](https://cssnr.github.io/feedback/?app=Open%20Links%20in%20New%20Tab)
+-   Report an Issue: https://github.com/cssnr/open-links-in-new-tab/issues
+-   Chat with us on Discord: https://discord.gg/wXy6m2X8wY
+-   Provide General Feedback: [https://cssnr.github.io/feedback/](https://cssnr.github.io/feedback/?app=Open%20Links%20in%20New%20Tab)
 
 Logs can be found inspecting the page (Ctrl+Shift+I), clicking on the Console, and;
 Firefox: toggling Debug logs, Chrome: toggling Verbose from levels dropdown.
@@ -111,17 +111,20 @@ To support this project, see the [Contributing](#Contributing) section at the bo
 First, clone (or download) this repository and change into the directory.
 
 Second, install the dependencies:
+
 ```shell
 npm install
 ```
 
 Finally, to run Chrome or Firefox with web-ext, run one of the following:
+
 ```shell
 npm run chrome
 npm run firefox
 ```
 
 Additionally, to Load Unpacked/Temporary Add-on make a `manifest.json` and run from the [src](src) folder, run one of the following:
+
 ```shell
 npm run manifest:chrome
 npm run manifest:firefox
@@ -138,11 +141,13 @@ Example: `npm run chrome -- --chromium-binary=...`
 
 Install the requirements and copy libraries into the `src/dist` directory by running `npm install`.
 See [gulpfile.js](gulpfile.js) for more information on `postinstall`.
+
 ```shell
 npm install
 ```
 
 To create a `.zip` archive of the [src](src) directory for the desired browser run one of the following:
+
 ```shell
 npm run build
 npm run build:chrome
@@ -182,13 +187,15 @@ Currently, the best way to contribute to this project is to give a 5-star rating
 
 Other Web Extensions I have created and published:
 
-- [Link Extractor](https://github.com/cssnr/link-extractor)
-- [Open Links in New Tab](https://github.com/cssnr/open-links-in-new-tab)
-- [HLS Video Downloader](https://github.com/cssnr/hls-video-downloader)
-- [SMWC Web Extension](https://github.com/cssnr/smwc-web-extension)
-- [PlayDrift Extension](https://github.com/cssnr/playdrift-extension)
-- [ASN Plus](https://github.com/cssnr/asn-plus)
-- [Aviation Tools](https://github.com/cssnr/aviation-tools)
-- [Text Formatter](https://github.com/cssnr/text-formatter)
+-   [Link Extractor](https://github.com/cssnr/link-extractor)
+-   [Open Links in New Tab](https://github.com/cssnr/open-links-in-new-tab)
+-   [Auto Auth](https://github.com/cssnr/auto-auth)
+-   [Cache Cleaner](https://github.com/cssnr/cache-cleaner)
+-   [HLS Video Downloader](https://github.com/cssnr/hls-video-downloader)
+-   [SMWC Web Extension](https://github.com/cssnr/smwc-web-extension)
+-   [PlayDrift Extension](https://github.com/cssnr/playdrift-extension)
+-   [ASN Plus](https://github.com/cssnr/asn-plus)
+-   [Aviation Tools](https://github.com/cssnr/aviation-tools)
+-   [Text Formatter](https://github.com/cssnr/text-formatter)
 
 For a full list of current projects visit: [https://cssnr.github.io/](https://cssnr.github.io/)

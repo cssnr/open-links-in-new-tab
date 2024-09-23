@@ -1,5 +1,7 @@
 // JS Exports
 
+export const githubURL = 'https://github.com/cssnr/open-links-in-new-tab'
+
 /**
  * Get URL for Current Tab
  * @function toggleSite
@@ -19,10 +21,10 @@ export async function toggleSite(tab) {
     } else {
         console.log(`Disabling Site: ${url.hostname}`)
         sites.splice(sites.indexOf(url.hostname), 1)
-        await chrome.action.setBadgeBackgroundColor({
-            tabId: tab.id,
-            color: 'red',
-        })
+        // await chrome.action.setBadgeBackgroundColor({
+        //     tabId: tab.id,
+        //     color: 'red',
+        // })
     }
     console.debug('sites:', sites)
     await chrome.storage.sync.set({ sites })
@@ -208,14 +210,17 @@ function addWarningClass(element, value, warning) {
  * Update DOM with Manifest Details
  * @function updateManifest
  */
-export function updateManifest() {
+export async function updateManifest() {
     const manifest = chrome.runtime.getManifest()
-    document
-        .querySelectorAll('.version')
-        .forEach((el) => (el.textContent = manifest.version))
-    document
-        .querySelectorAll('[href="homepage_url"]')
-        .forEach((el) => (el.href = manifest.homepage_url))
+    document.querySelectorAll('.version').forEach((el) => {
+        el.textContent = manifest.version
+    })
+    document.querySelectorAll('[href="homepage_url"]').forEach((el) => {
+        el.href = manifest.homepage_url
+    })
+    document.querySelectorAll('[href="version_url"]').forEach((el) => {
+        el.href = `${githubURL}/releases/tag/${manifest.version}`
+    })
 }
 
 /**
