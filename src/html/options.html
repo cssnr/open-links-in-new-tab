@@ -70,6 +70,7 @@
         <div class="form-check form-switch">
             <input class="form-check-input" type="checkbox" role="switch" id="onAttributes">
             <label class="form-check-label" for="onAttributes">Update Links On Attributes</label>
+            <i class="fa-solid fa-rotate text-warning-emphasis ms-1" data-bs-toggle="tooltip" data-bs-title="Requires Page Reload."></i>
             <i class="fa-solid fa-circle-info ms-1" data-bs-toggle="tooltip" data-bs-title="Update Links on All Attribute Changes."></i>
         </div>
         <div class="form-check form-switch">
@@ -86,6 +87,12 @@
             <input class="form-check-input" type="checkbox" role="switch" id="noReferrer">
             <label class="form-check-label" for="noReferrer">Add noreferrer to Links</label>
             <i class="fa-solid fa-circle-info ms-1" data-bs-toggle="tooltip" data-bs-title="Include the noreferrer flag on Opened Links."></i>
+        </div>
+        <div class="form-check form-switch">
+            <input class="form-check-input" type="checkbox" role="switch" id="oldObserver">
+            <label class="form-check-label" for="oldObserver">Use Old Mutation Observer</label>
+            <i class="fa-solid fa-rotate text-warning-emphasis ms-1" data-bs-toggle="tooltip" data-bs-title="Requires Page Reload."></i>
+            <i class="fa-solid fa-circle-info ms-1" data-bs-toggle="tooltip" data-bs-title="This Updates All Links on every Mutation Event."></i>
         </div>
         <div class="form-check form-switch">
             <input class="form-check-input options" type="checkbox" role="switch" id="contextMenu">

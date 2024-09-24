@@ -31,6 +31,7 @@ async function onInstalled(details) {
         anchorLinks: false,
         noOpener: true,
         noReferrer: false,
+        oldObserver: false,
         contextMenu: true,
         showUpdate: false,
     })

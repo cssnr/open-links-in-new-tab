@@ -11,10 +11,10 @@ if (!chrome.storage.onChanged.hasListener(onChanged)) {
 }
 
 ;(async () => {
-    const storage = await chrome.storage.sync.get(['options', 'sites'])
-    console.debug('options, sites:', storage.options, storage.sites)
-    options = storage.options
-    if (storage.sites?.includes(window.location.host)) {
+    const items = await chrome.storage.sync.get(['options', 'sites'])
+    console.debug('options, sites:', items.options, items.sites)
+    options = items.options
+    if (items.sites?.includes(window.location.host)) {
         console.log(`Enabled Host: ${window.location.host}`)
         await activateTab('green')
     }
@@ -32,10 +32,8 @@ async function activateTab(color) {
         badgeText: 'On',
         badgeColor: color,
     })
-    if (!init) {
-        await tabInit()
-    }
     console.info('Activating Tab...')
+    tabInit()
     tabEnabled = true
     // updateLinks()
     // const observer = new MutationObserver(updateLinks)
@@ -51,21 +49,57 @@ async function activateTab(color) {
     // }
 }
 
-async function tabInit() {
-    console.debug('tabInit')
+function tabInit() {
+    if (init) {
+        return console.debug('%c Already tabInit', 'color: Yellow')
+    }
     init = true
+    console.debug('%c Performing tabInit', 'color: Lime')
     updateLinks()
-    // const { options } = await chrome.storage.sync.get(['options'])
-    const observer = new MutationObserver(updateLinks)
+    let observer
+    if (options.oldObserver) {
+        console.debug('%c MutationObserver: updateLinks', 'color: Orange')
+        observer = new MutationObserver(updateLinks)
+    } else {
+        console.debug('%c MutationObserver: mutationObserver', 'color: Lime')
+        observer = new MutationObserver(mutationObserver)
+    }
     observer.observe(document.body, {
         attributes: options.onAttributes,
         childList: true,
         subtree: true,
     })
+    // if (options.onScroll) {
+    console.debug('addEventListener: onScroll')
+    const processChange = debounce(onScroll)
+    document.addEventListener('scroll', processChange)
+    // }
+}
+
+function onScroll() {
     if (options.onScroll) {
-        console.debug('Enabling onScroll...')
-        const processChange = debounce(updateLinks)
-        document.addEventListener('scroll', processChange)
+        updateLinks()
+    }
+}
+
+function mutationObserver(mutationList) {
+    // console.debug('mutationList:', mutationList)
+    for (const mutation of mutationList) {
+        console.debug('%c mutation:', 'color: Aqua', mutation)
+        mutation.addedNodes.forEach((el) => {
+            // console.debug('el:', el)
+            const links = findLinks(el)
+            // console.debug('links:', links)
+            console.debug('%c findLinks:', 'color: Yellow', links)
+            for (const link of links) {
+                console.debug(
+                    '%c mutationObserver: addEventListener:',
+                    'color: Lime',
+                    link
+                )
+                link.addEventListener('click', clickLink)
+            }
+        })
     }
 }
 
@@ -75,11 +109,14 @@ async function tabInit() {
  * @function updateLinks
  */
 function updateLinks() {
-    console.debug('Updating Links...')
-    const elements = document.getElementsByTagName('a')
-    for (const element of elements) {
-        if (element.href !== '#') {
-            element.addEventListener('click', clickLink)
+    console.debug('Updating All Links...')
+    // const elements = document.getElementsByTagName('a')
+    const links = findLinks(document)
+    console.debug('links:', links)
+    for (const el of links) {
+        if (el.href !== '#') {
+            // console.debug('updateLinks: addEventListener:', el)
+            el.addEventListener('click', clickLink)
             // // This is moved to clickLinks
             // if (!items.options.anchorLinks && element.href.includes('#')) {
             //     const url = new URL(element.href)
@@ -96,6 +133,29 @@ function updateLinks() {
             // }
         }
     }
+}
+
+/**
+ * Recursively Find Links from shadowRoot
+ * @function findLinks
+ * @param {Document|ShadowRoot} root
+ * @return {Object[]}
+ */
+function findLinks(root) {
+    // console.debug('findLinks:', root)
+    const links = []
+    if (root.querySelectorAll) {
+        root.querySelectorAll('a, area').forEach((el) => {
+            links.push(el)
+        })
+    }
+    const roots = Array.from(root.querySelectorAll('*')).filter(
+        (el) => el.shadowRoot
+    )
+    roots.forEach((el) => {
+        links.push(...findLinks(el.shadowRoot))
+    })
+    return links
 }
 
 /**
@@ -154,13 +214,19 @@ function clickLink(event) {
  */
 async function onChanged(changes, namespace) {
     // console.debug('onChanged:', changes, namespace)
-    for (let [key, { newValue }] of Object.entries(changes)) {
+    for (let [key, { oldValue, newValue }] of Object.entries(changes)) {
+        console.debug('oldValue, newValue:', oldValue, newValue)
         if (namespace === 'sync' && key === 'sites') {
             // console.debug('newValue:', newValue)
             await processSitesUpdate(newValue)
         }
         if (namespace === 'sync' && key === 'options') {
             options = newValue
+            // if (oldValue.onScroll !== newValue.onScroll) {
+            //     if (newValue.onScroll) {
+            //     } else {
+            //     }
+            // }
         }
     }
 }
@@ -188,7 +254,7 @@ async function processSitesUpdate(sites) {
  * @param {Function} fn
  * @param {Number} timeout
  */
-function debounce(fn, timeout = 300) {
+function debounce(fn, timeout = 250) {
     let timeoutID
     return (...args) => {
         clearTimeout(timeoutID)
