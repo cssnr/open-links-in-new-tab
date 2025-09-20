@@ -47,7 +47,7 @@
                 data-bs-toggle="tooltip" data-bs-placement="top" data-bs-trigger="hover"
                 data-bs-title="This Extension Requires Host Permissions to Function.">
             <i class="fa-solid fa-check-double me-1"></i> Grant Host Permissions</button>
-        <p class="text-center mb-1 open-oninstall"><a href="../html/oninstall.html" class="">
+        <p class="text-center mb-1 open-permissions"><a href="../html/permissions.html" class="">
             More Information on Permissions</a></p>
         <hr>
     </div>
@@ -55,94 +55,54 @@
     <form id="options-form" class="mb-3">
         <div class="form-check form-switch">
             <input class="form-check-input" type="checkbox" role="switch" id="openBackground">
-            <label class="form-check-label" for="openBackground" aria-describedby="openBackgroundHelp">
-                Open Links in Background
-                <span class="text-warning-emphasis me-1" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Experimental Feature.">
-                    <i class="fa-solid fa-flask ms-1"></i>
-                </span>
-                <span data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Open Updated Links in the Background.">
-                    <i class="fa-solid fa-circle-info ms-1"></i>
-                </span>
-            </label>
+            <label class="form-check-label" for="openBackground">Open Links in Background</label>
+            <i class="fa-solid fa-flask text-warning-emphasis ms-1" data-bs-toggle="tooltip" data-bs-title="Experimental Feature."></i>
+            <i class="fa-solid fa-circle-info ms-1" data-bs-toggle="tooltip" data-bs-title="Open Updated Links in the Background."></i>
         </div>
         <div class="form-check form-switch">
             <input class="form-check-input" type="checkbox" role="switch" id="onScroll">
             <label class="form-check-label" for="onScroll" aria-describedby="onScrollHelp">
                 Update Links On Scroll
-                <span class="text-warning-emphasis me-1" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Experimental Feature.">
-                    <i class="fa-solid fa-flask ms-1"></i>
-                </span>
-                <span data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Update Links after Every Scroll Event.">
-                    <i class="fa-solid fa-circle-info ms-1"></i>
-                </span>
             </label>
+            <i class="fa-solid fa-flask text-warning-emphasis ms-1" data-bs-toggle="tooltip" data-bs-title="Experimental Feature."></i>
+            <i class="fa-solid fa-circle-info ms-1" data-bs-toggle="tooltip" data-bs-title="Update Links after Every Scroll Event."></i>
         </div>
         <div class="form-check form-switch">
             <input class="form-check-input" type="checkbox" role="switch" id="onAttributes">
-            <label class="form-check-label" for="onAttributes" aria-describedby="onAttributesHelp">
-                Update Links On Attributes
-                <span data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Update Links on All Attribute Changes.">
-                    <i class="fa-solid fa-circle-info ms-1"></i>
-                </span>
-            </label>
+            <label class="form-check-label" for="onAttributes">Update Links On Attributes</label>
+            <i class="fa-solid fa-rotate text-warning-emphasis ms-1" data-bs-toggle="tooltip" data-bs-title="Requires Page Reload."></i>
+            <i class="fa-solid fa-circle-info ms-1" data-bs-toggle="tooltip" data-bs-title="Update Links on All Attribute Changes."></i>
         </div>
         <div class="form-check form-switch">
             <input class="form-check-input" type="checkbox" role="switch" id="anchorLinks">
-            <label class="form-check-label" for="anchorLinks" aria-describedby="anchorLinksHelp">
-                Update Anchor Links
-                <span data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Open Same Origin Anchor Links in New Tab.">
-                    <i class="fa-solid fa-circle-info ms-1"></i>
-                </span>
-            </label>
-        </div>
-        <div class="form-check form-switch">
-            <input class="form-check-input" type="checkbox" role="switch" id="autoReload">
-            <label class="form-check-label" for="autoReload" aria-describedby="autoReloadHelp">
-                Auto Reload on Disable
-                <span data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Auto Reload Pages when Disabling a Site.">
-                    <i class="fa-solid fa-circle-info ms-1"></i>
-                </span>
-            </label>
-        </div>
-        <div class="form-check form-switch">
-            <input class="form-check-input" type="checkbox" role="switch" id="updateAll"
-                   data-warning="text-danger-emphasis" data-related="updateAllWarning" data-reverse="yes">
-            <label class="form-check-label" for="updateAll" aria-describedby="updateAllHelp">
-                Update All Tabs on Change
-                <span data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="WARNING: Disabling this can cause unexpected behaviors.">
-                    <i class="fa-solid fa-circle-info ms-1"></i>
-                </span>
-            </label>
-        </div>
-        <div id="updateAllWarning" class="ms-5 text-warning-emphasis small" style="display: none">
-            Disabling this option may cause unexpected behavior when enabling/disabling sites.
+            <label class="form-check-label" for="anchorLinks">Update Anchor Links</label>
+            <i class="fa-solid fa-circle-info ms-1" data-bs-toggle="tooltip" data-bs-title="Open Same Origin Anchor Links in New Tab."></i>
         </div>
         <div class="form-check form-switch">
             <input class="form-check-input" type="checkbox" role="switch" id="noOpener">
-            <label class="form-check-label" for="noOpener" aria-describedby="noOpenerHelp">
-                Add Noopener to Links
-                <span data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Disable if You Have Issues With Opened Links.">
-                    <i class="fa-solid fa-circle-info ms-1"></i>
-                </span>
-            </label>
+            <label class="form-check-label" for="noOpener">Add noopener to Links</label>
+            <i class="fa-solid fa-circle-info ms-1" data-bs-toggle="tooltip" data-bs-title="Disable if You Have Issues With Opened Links."></i>
+        </div>
+        <div class="form-check form-switch">
+            <input class="form-check-input" type="checkbox" role="switch" id="noReferrer">
+            <label class="form-check-label" for="noReferrer">Add noreferrer to Links</label>
+            <i class="fa-solid fa-circle-info ms-1" data-bs-toggle="tooltip" data-bs-title="Include the noreferrer flag on Opened Links."></i>
+        </div>
+        <div class="form-check form-switch">
+            <input class="form-check-input" type="checkbox" role="switch" id="oldObserver">
+            <label class="form-check-label" for="oldObserver">Use Old Mutation Observer</label>
+            <i class="fa-solid fa-rotate text-warning-emphasis ms-1" data-bs-toggle="tooltip" data-bs-title="Requires Page Reload."></i>
+            <i class="fa-solid fa-circle-info ms-1" data-bs-toggle="tooltip" data-bs-title="This Updates All Links on every Mutation Event."></i>
         </div>
         <div class="form-check form-switch">
             <input class="form-check-input options" type="checkbox" role="switch" id="contextMenu">
-            <label class="form-check-label" for="contextMenu" aria-describedby="contextMenuHelp">
-                Enable Right Click Menu
-                <span data-bs-toggle="tooltip" data-bs-title="Show Context Menu on Right Click.">
-                    <i class="fa-solid fa-circle-info ms-1"></i>
-                </span>
-            </label>
+            <label class="form-check-label" for="contextMenu">Enable Right Click Menu</label>
+            <i class="fa-solid fa-circle-info ms-1" data-bs-toggle="tooltip" data-bs-title="Show Context Menu on Right Click."></i>
         </div>
         <div class="form-check form-switch">
             <input class="form-check-input options" type="checkbox" role="switch" id="showUpdate">
-            <label class="form-check-label" for="showUpdate" aria-describedby="showUpdateHelp">
-                Show Release Notes on Update
-                <span data-bs-toggle="tooltip" data-bs-title="Show Release Notes on Version Update.">
-                    <i class="fa-solid fa-circle-info ms-1"></i>
-                </span>
-            </label>
+            <label class="form-check-label" for="showUpdate">Show Release Notes on Update</label>
+            <i class="fa-solid fa-circle-info ms-1" data-bs-toggle="tooltip" data-bs-title="Show Release Notes on Version Update."></i>
         </div>
     </form>
 

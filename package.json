@@ -7,23 +7,24 @@
     "lint": "npm run lint:eslint && npm run lint:web-ext",
     "chrome": "npm run manifest:chrome && web-ext run --source-dir ./src/ --target=chromium",
     "firefox": "npm run manifest:firefox && web-ext run --source-dir ./src/",
-    "manifest:chrome": "npx json-merger -p -am concat -o src/manifest.json manifest.json manifest-chrome.json",
-    "manifest:firefox": "npx json-merger -p -am concat -o src/manifest.json manifest.json manifest-firefox.json",
+    "manifest:chrome": "npx json-merger -p --am concat -o src/manifest.json manifest.json manifest-chrome.json",
+    "manifest:firefox": "npx json-merger -p --am concat -o src/manifest.json manifest.json manifest-firefox.json",
     "build:chrome": "npm run manifest:chrome && npx web-ext build -n {name}-chrome-{version}.zip -o -s src",
     "build:firefox": "npm run manifest:firefox && npx web-ext build -n {name}-firefox-{version}.zip -o -s src",
-    "build": "npm run build:chrome && npm run build:firefox"
+    "build": "npm run build:chrome && npm run build:firefox",
+    "prettier": "npx prettier --check ."
   },
   "dependencies": {
-    "@fortawesome/fontawesome-free": "^6.6.0",
-    "bootstrap": "^5.3.3",
+    "@fortawesome/fontawesome-free": "^7.0.1",
+    "bootstrap": "^5.3.8",
     "jquery": "^3.7.1"
   },
   "devDependencies": {
-    "@types/chrome": "^0.0.268",
-    "eslint": "^8.57.0",
-    "gulp": "^4.0.2",
-    "json-merger": "^1.1.10",
-    "prettier": "^3.3.3",
-    "web-ext": "^8.2.0"
+    "@types/chrome": "^0.1.12",
+    "eslint": "^9.36.0",
+    "gulp": "^5.0.1",
+    "json-merger": "^3.0.0",
+    "prettier": "^3.6.2",
+    "web-ext": "^8.10.0"
   }
 }

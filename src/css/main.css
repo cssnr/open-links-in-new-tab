@@ -5,3 +5,10 @@ svg {
     width: 1em;
     margin-bottom: 0.15em;
 }
+
+.text-ellipsis {
+    max-width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}

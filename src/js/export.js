@@ -1,5 +1,7 @@
 // JS Exports
 
+export const githubURL = 'https://github.com/cssnr/open-links-in-new-tab'
+
 /**
  * Get URL for Current Tab
  * @function toggleSite
@@ -19,10 +21,10 @@ export async function toggleSite(tab) {
     } else {
         console.log(`Disabling Site: ${url.hostname}`)
         sites.splice(sites.indexOf(url.hostname), 1)
-        await chrome.action.setBadgeBackgroundColor({
-            tabId: tab.id,
-            color: 'red',
-        })
+        // await chrome.action.setBadgeBackgroundColor({
+        //     tabId: tab.id,
+        //     color: 'red',
+        // })
     }
     console.debug('sites:', sites)
     await chrome.storage.sync.set({ sites })
@@ -73,13 +75,13 @@ export async function checkPerms() {
 
 /**
  * Grant Permissions Click Callback
- * Promise from requestPerms is ignored so we can close the popup immediately
  * @function grantPerms
  * @param {MouseEvent} event
  * @param {Boolean=} close
  */
 export async function grantPerms(event, close = false) {
     console.debug('grantPerms:', event)
+    // noinspection ES6MissingAwait
     requestPerms()
     if (close) {
         window.close()
@@ -118,7 +120,7 @@ export async function onRemoved(permissions) {
 }
 
 /**
- * Save Options Callback
+ * Save Options Input Callback
  * @function saveOptions
  * @param {InputEvent} event
  */
@@ -128,24 +130,18 @@ export async function saveOptions(event) {
     let value
     if (event.target.type === 'checkbox') {
         value = event.target.checked
-        // // TODO: Placeholder until updateAll get fixed
-        // if (event.target.id === 'updateAll') {
-        //     console.log('nextElementSibling:', event.target.nextElementSibling)
-        //     disableWarning(event.target.nextElementSibling, value)
-        // }
-    } else if (event.target.type === 'text') {
-        value = event.target.value
     }
-    if (value !== undefined) {
-        options[event.target.id] = value
-        console.info(`Set: ${event.target.id}:`, value)
-        await chrome.storage.sync.set({ options })
+    if (value === undefined) {
+        return console.warn('No Value:', value)
     }
+    options[event.target.id] = value
+    await chrome.storage.sync.set({ options })
+    console.log(`%s Set: ${event.target.id}:`, 'color: Yellow', value)
 }
 
 /**
- * Update Options
- * @function initOptions
+ * Update Options Handler
+ * @function updateOptions
  * @param {Object} options
  */
 export function updateOptions(options) {
@@ -160,7 +156,7 @@ export function updateOptions(options) {
                 el.value = value
             }
             if (el.dataset.reverse) {
-                value = !!(value ^ !!el.dataset.reverse)
+                value = !!(value ^ !!el.dataset.reverse) // NOSONAR
             }
             if (el.dataset.related) {
                 hideShowElement(`#${el.dataset.related}`, value)
@@ -213,14 +209,17 @@ function addWarningClass(element, value, warning) {
  * Update DOM with Manifest Details
  * @function updateManifest
  */
-export function updateManifest() {
+export async function updateManifest() {
     const manifest = chrome.runtime.getManifest()
-    document
-        .querySelectorAll('.version')
-        .forEach((el) => (el.textContent = manifest.version))
-    document
-        .querySelectorAll('[href="homepage_url"]')
-        .forEach((el) => (el.href = manifest.homepage_url))
+    document.querySelectorAll('.version').forEach((el) => {
+        el.textContent = manifest.version
+    })
+    document.querySelectorAll('[href="homepage_url"]').forEach((el) => {
+        el.href = manifest.homepage_url
+    })
+    document.querySelectorAll('[href="version_url"]').forEach((el) => {
+        el.href = `${githubURL}/releases/tag/${manifest.version}`
+    })
 }
 
 /**
