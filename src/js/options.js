@@ -30,8 +30,8 @@ document
     .getElementById('options-form')
     .addEventListener('submit', (e) => e.preventDefault())
 document
-    .querySelectorAll('.open-oninstall')
-    .forEach((el) => el.addEventListener('click', openOnInstall))
+    .querySelectorAll('.open-permissions')
+    .forEach((el) => el.addEventListener('click', openPermissions))
 document
     .querySelectorAll('[data-bs-toggle="tooltip"]')
     .forEach((el) => new bootstrap.Tooltip(el))
@@ -45,9 +45,12 @@ hostsInput.addEventListener('change', hostsInputChange)
  */
 async function initOptions() {
     console.debug('initOptions')
+    // noinspection ES6MissingAwait
     updateManifest()
-    await setShortcuts()
-    await checkPerms()
+    // noinspection ES6MissingAwait
+    setShortcuts()
+    // noinspection ES6MissingAwait
+    checkPerms()
 
     const { options, sites } = await chrome.storage.sync.get([
         'options',
@@ -77,13 +80,13 @@ function onChanged(changes, namespace) {
 }
 
 /**
- * Open OnInstall Page Click Callback
- * @function openOnInstall
+ * Open Permissions Page Click Callback
+ * @function openPermissions
  * @param {MouseEvent} event
  */
-async function openOnInstall(event) {
-    console.debug('openOnInstall', event)
-    const url = chrome.runtime.getURL('/html/oninstall.html')
+async function openPermissions(event) {
+    console.debug('openPermissions', event)
+    const url = chrome.runtime.getURL('/html/permissions.html')
     await chrome.tabs.create({ active: true, url })
     window.close()
 }
@@ -224,22 +227,23 @@ async function importHosts(event) {
 async function hostsInputChange(event) {
     console.debug('hostsInputChange:', event, hostsInput)
     event.preventDefault()
-    const fileReader = new FileReader()
-    fileReader.onload = async function doBannedImport() {
-        const result = JSON.parse(fileReader.result.toString())
-        console.debug('result:', result)
-        const { sites } = await chrome.storage.sync.get(['sites'])
-        let count = 0
-        for (const pid of result) {
-            if (!sites.includes(pid)) {
-                sites.push(pid)
-                count += 1
-            }
+    const file = event.target.files.item(0)
+    const text = await file.text()
+    const data = JSON.parse(text)
+    console.debug('data:', data)
+    const { sites } = await chrome.storage.sync.get(['sites'])
+    let count = 0
+    for (const pid of data) {
+        if (!sites.includes(pid)) {
+            sites.push(pid)
+            count++
         }
-        showToast(`Imported ${count}/${result.length} Hosts.`, 'success')
+    }
+    if (count) {
         await chrome.storage.sync.set({ sites })
     }
-    fileReader.readAsText(hostsInput.files[0])
+    const type = count ? 'success' : 'warning'
+    showToast(`Imported ${count}/${data.length} Hosts.`, type)
 }
 
 /**

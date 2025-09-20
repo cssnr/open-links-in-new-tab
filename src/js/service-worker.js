@@ -1,29 +1,19 @@
 // JS Background Service Worker
 
-import { checkPerms, enableSite, requestPerms, toggleSite } from './export.js'
+import {
+    checkPerms,
+    enableSite,
+    requestPerms,
+    toggleSite,
+    githubURL,
+} from './export.js'
 
-chrome.runtime.onStartup.addListener(onStartup)
 chrome.runtime.onInstalled.addListener(onInstalled)
+chrome.runtime.onStartup.addListener(onStartup)
 chrome.contextMenus.onClicked.addListener(onClicked)
 chrome.commands.onCommand.addListener(onCommand)
 chrome.runtime.onMessage.addListener(onMessage)
 chrome.storage.onChanged.addListener(onChanged)
-
-/**
- * On Startup Callback
- * @function onStartup
- */
-async function onStartup() {
-    console.log('onStartup')
-    if (typeof browser !== 'undefined') {
-        console.log('Firefox CTX Menu Workaround')
-        const { options } = await chrome.storage.sync.get(['options'])
-        console.debug('options:', options)
-        if (options.contextMenu) {
-            createContextMenus()
-        }
-    }
-}
 
 /**
  * Installed Callback
@@ -32,38 +22,35 @@ async function onStartup() {
  */
 async function onInstalled(details) {
     console.log('onInstalled:', details)
-    const githubURL = 'https://github.com/cssnr/open-links-in-new-tab'
     const installURL =
         'https://open-links-in-new-tab.cssnr.com/docs/?install=new'
-    const uninstallURL = new URL(
-        'https://open-links-in-new-tab.cssnr.com/uninstall/'
-    )
     const options = await setDefaultOptions({
+        toggleGlobally: false,
         openBackground: false,
         onScroll: false,
         onAttributes: false,
         anchorLinks: false,
-        autoReload: true,
-        updateAll: true,
         noOpener: true,
+        noReferrer: false,
+        oldObserver: false,
         contextMenu: true,
         showUpdate: false,
     })
     if (options.contextMenu) {
         createContextMenus()
     }
-    const manifest = chrome.runtime.getManifest()
     if (details.reason === chrome.runtime.OnInstalledReason.INSTALL) {
         const hasPerms = await checkPerms()
         if (hasPerms) {
             chrome.runtime.openOptionsPage()
         } else {
-            const url = chrome.runtime.getURL('/html/oninstall.html')
+            const url = chrome.runtime.getURL('/html/permissions.html')
             await chrome.tabs.create({ active: true, url })
         }
         await chrome.tabs.create({ active: false, url: installURL })
     } else if (details.reason === chrome.runtime.OnInstalledReason.UPDATE) {
         if (options.showUpdate) {
+            const manifest = chrome.runtime.getManifest()
             if (manifest.version !== details.previousVersion) {
                 const url = `${githubURL}/releases/tag/${manifest.version}`
                 console.log(`Update url: ${url}`)
@@ -71,9 +58,37 @@ async function onInstalled(details) {
             }
         }
     }
-    uninstallURL.searchParams.append('version', manifest.version)
-    console.log('uninstallURL:', uninstallURL.href)
-    await chrome.runtime.setUninstallURL(uninstallURL.href)
+    checkToggleGlobally(options)
+    setUninstallURL()
+}
+
+/**
+ * On Startup Callback
+ * @function onStartup
+ */
+async function onStartup() {
+    console.log('onStartup')
+    const { options } = await chrome.storage.sync.get(['options'])
+    console.debug('options:', options)
+    // noinspection JSUnresolvedReference
+    if (typeof browser !== 'undefined') {
+        console.log('Firefox Startup Workarounds')
+        if (options.contextMenu) {
+            createContextMenus()
+        }
+        setUninstallURL()
+    }
+    // Set Global Badge Background Color
+    // await chrome.action.setBadgeBackgroundColor({ color: 'green' })
+    checkToggleGlobally(options)
+}
+
+function setUninstallURL() {
+    const manifest = chrome.runtime.getManifest()
+    const url = new URL('https://open-links-in-new-tab.cssnr.com/uninstall/')
+    url.searchParams.append('version', manifest.version)
+    chrome.runtime.setUninstallURL(url.href)
+    console.debug(`setUninstallURL: ${url.href}`)
 }
 
 /**
@@ -105,10 +120,10 @@ async function onClicked(ctx, tab) {
  * Command Callback
  * @function onCommand
  * @param {String} command
+ * @param {chrome.tabs.Tab} tab
  */
-async function onCommand(command) {
-    console.debug('onCommand:', command)
-    const [tab] = await chrome.tabs.query({ currentWindow: true, active: true })
+async function onCommand(command, tab) {
+    console.debug(`command: ${command} tab:`, tab)
     if (command === 'toggle-site') {
         console.debug('toggle-site')
         const hasPerms = await checkPerms()
@@ -136,13 +151,15 @@ function onMessage(message, sender) {
     const tabId = message.tabId || sender.tab?.id
     if (message.badgeColor) {
         console.debug(`tabId: ${tabId} color: ${message.badgeColor}`)
+        // noinspection JSIgnoredPromiseFromCall
         chrome.action.setBadgeBackgroundColor({
             tabId: tabId,
             color: message.badgeColor,
         })
     }
-    if (message.badgeText) {
+    if (typeof message.badgeText !== 'undefined') {
         console.debug(`tabId: ${tabId} text: ${message.badgeText}`)
+        // noinspection JSIgnoredPromiseFromCall
         chrome.action.setBadgeText({
             tabId: tabId,
             text: message.badgeText,
@@ -169,7 +186,19 @@ function onChanged(changes, namespace) {
                     chrome.contextMenus.removeAll()
                 }
             }
+            if (oldValue.toggleGlobally !== newValue.toggleGlobally) {
+                checkToggleGlobally(newValue)
+            }
         }
+    }
+}
+
+function checkToggleGlobally(options) {
+    if (options.toggleGlobally) {
+        chrome.action.setBadgeText({ text: 'Glo' })
+        chrome.action.setBadgeBackgroundColor({ color: 'yellow' })
+    } else {
+        chrome.action.setBadgeText({ text: '' })
     }
 }
 

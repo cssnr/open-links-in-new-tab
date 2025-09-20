@@ -12,22 +12,66 @@
 </head>
 <body>
 
+<div class="container-fluid p-2">
+    <div class="d-flex flex-row align-items-center">
+        <div class="dropdown">
+            <a class="nav-link" id="bs-theme-dropdown" title="Theme Switcher" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <i id="theme-icon" class="fa-solid fa-circle-half-stroke fa-lg" style="min-width: 20px;"></i> <i class="fa-solid fa-caret-down fa-xs mx-1"></i></a>
+            <ul class="dropdown-menu auto dropdown-menu-end" aria-labelledby="bs-theme-dropdown">
+                <li><button class="dropdown-item" data-bs-theme-value="dark" aria-pressed="false">
+                    <i class="fa-regular fa-moon" style="min-width: 16px;"></i> <span class="ms-3">Dark</span></button></li>
+                <li><button class="dropdown-item" data-bs-theme-value="light" aria-pressed="false">
+                    <i class="fa-solid fa-sun" style="min-width: 16px;"></i> <span class="ms-3">Light</span></button></li>
+                <li><button class="dropdown-item" data-bs-theme-value="auto" aria-pressed="false">
+                    <i class="fa-solid fa-circle-half-stroke" style="min-width: 16px;"></i> <span class="ms-3">Auto</span></button></li>
+            </ul>
+        </div>
+
+        <div class="flex-fill text-center">
+            <a class="link-body-emphasis text-decoration-none fs-4" title="Home Page" href="homepage_url">
+                <!--                <img src="../images/logo32.png" alt="Logo" class="mb-1" style="height: 1.1em;">-->
+                Open in New Tab</a>
+            <a class="link-body-emphasis text-decoration-none small" title="Release Notes" href="version_url">
+                v<span class="version"></span></a>
+        </div>
+
+        <div class="">
+            <a class="btn btn-sm btn-outline-info" role="button" href="../html/options.html" title="Options">
+                <i class="fa-solid fa-gears"></i></a>
+        </div>
+    </div> <!-- d-flex -->
+</div> <!-- container-fluid -->
+
+<hr class="my-0">
+
 <div class="container-fluid p-3">
     <div class="d-none grant-perms">
         <button class="btn btn-lg btn-success w-100 mb-1 grant-permissions" type="button"
                 data-bs-toggle="tooltip" data-bs-placement="top" data-bs-trigger="hover"
                 data-bs-title="This Extension Requires Host Permissions to Function.">
             <i class="fa-solid fa-check-double me-1"></i> Grant Host Permissions</button>
-        <p class="text-center"><a href="../html/oninstall.html" class="">
+        <p class="text-center"><a href="../html/permissions.html" class="">
             More Information on Permissions</a></p>
     </div>
-    <label for="toggle-site" class="w-100 mb-3 has-perms">
-        <div id="switch" class="border border-secondary border-2 rounded p-2">
-            <p class="mb-1 text-center text-break small mb-2">
-                <kbd id="site-hostname">Invalid Site</kbd>
-            </p>
-            <div class="form-check form-switch form-select-lg m-auto d-flex justify-content-center">
-                <input class="form-check-input me-3" type="checkbox" role="switch" id="toggle-site" style="margin-top: 0.4em;" disabled>
+
+    <label for="toggle-global" class="w-100 has-perms">
+        <div class="border border-secondary border-2 rounded p-1 mb-2 text-center">
+            <div class="form-check form-switch form-select-lg m-auto d-flex justify-content-center align-items-center py-0">
+                <input class="form-check-input me-3" type="checkbox" role="switch" id="toggle-global">
+                Toggle Globally
+            </div>
+        </div>
+    </label>
+
+    <label for="toggle-site" class="w-100 has-perms">
+        <div id="site-switch" class="border border-secondary border-2 rounded p-1 mb-2 text-center">
+            <!--            <div class="text-center">-->
+            <kbd id="site-hostname" class="text-center text-ellipsis d-inline-block ">
+                No Access to the Current Tab
+            </kbd> <!-- hostname -->
+            <!--            </div>-->
+            <div class="form-check form-switch form-select-lg m-auto d-flex justify-content-center align-items-center py-0">
+                <input class="form-check-input me-3" type="checkbox" role="switch" id="toggle-site" disabled>
                 Open Links in New Tab
             </div>
         </div>
@@ -38,92 +82,54 @@
     <form id="options-form" class="mb-3">
         <div class="form-check form-switch">
             <input class="form-check-input" type="checkbox" role="switch" id="openBackground">
-            <label class="form-check-label" for="openBackground" aria-describedby="openBackgroundHelp">
-                Open Links in Background
-                <span class="text-warning-emphasis me-1" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Experimental Feature.">
-                    <i class="fa-solid fa-flask ms-1"></i>
-                </span>
-                <span data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Open Updated Links in the Background.">
-                    <i class="fa-solid fa-circle-info ms-1"></i>
-                </span>
-            </label>
+            <label class="form-check-label" for="openBackground">Open Links in Background</label>
+            <i class="fa-solid fa-flask text-warning-emphasis ms-1" data-bs-toggle="tooltip" data-bs-title="Experimental Feature."></i>
+            <i class="fa-solid fa-circle-info ms-1" data-bs-toggle="tooltip" data-bs-title="Open Updated Links in the Background."></i>
         </div>
         <div class="form-check form-switch">
             <input class="form-check-input" type="checkbox" role="switch" id="onScroll">
             <label class="form-check-label" for="onScroll" aria-describedby="onScrollHelp">
                 Update Links On Scroll
-                <span class="text-warning-emphasis me-1" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Experimental Feature.">
-                    <i class="fa-solid fa-flask ms-1"></i>
-                </span>
-                <span data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Update Links after Every Scroll Event.">
-                    <i class="fa-solid fa-circle-info ms-1"></i>
-                </span>
             </label>
+            <i class="fa-solid fa-flask text-warning-emphasis ms-1" data-bs-toggle="tooltip" data-bs-title="Experimental Feature."></i>
+            <i class="fa-solid fa-circle-info ms-1" data-bs-toggle="tooltip" data-bs-title="Update Links after Every Scroll Event."></i>
         </div>
         <div class="form-check form-switch">
             <input class="form-check-input" type="checkbox" role="switch" id="onAttributes">
-            <label class="form-check-label" for="onAttributes" aria-describedby="onAttributesHelp">
-                Update Links On Attributes
-                <span data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Update Links on All Attribute Changes.">
-                    <i class="fa-solid fa-circle-info ms-1"></i>
-                </span>
-            </label>
+            <label class="form-check-label" for="onAttributes">Update Links On Attributes</label>
+            <i class="fa-solid fa-rotate text-warning-emphasis ms-1" data-bs-toggle="tooltip" data-bs-title="Requires Page Reload."></i>
+            <i class="fa-solid fa-circle-info ms-1" data-bs-toggle="tooltip" data-bs-title="Update Links on All Attribute Changes."></i>
         </div>
         <div class="form-check form-switch">
             <input class="form-check-input" type="checkbox" role="switch" id="anchorLinks">
-            <label class="form-check-label" for="anchorLinks" aria-describedby="anchorLinksHelp">
-                Update Anchor Links
-                <span data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Open Same Origin Anchor Links in New Tab.">
-                    <i class="fa-solid fa-circle-info ms-1"></i>
-                </span>
-            </label>
-        </div>
-        <div class="form-check form-switch">
-            <input class="form-check-input" type="checkbox" role="switch" id="autoReload">
-            <label class="form-check-label" for="autoReload" aria-describedby="autoReloadHelp">
-                Auto Reload on Disable
-                <span data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Auto Reload Pages when Disabling a Site.">
-                    <i class="fa-solid fa-circle-info ms-1"></i>
-                </span>
-            </label>
-        </div>
-        <div class="form-check form-switch">
-            <input class="form-check-input" type="checkbox" role="switch" id="updateAll" data-warning="text-danger-emphasis" data-reverse="yes">
-            <label class="form-check-label" for="updateAll" aria-describedby="updateAllHelp">
-                Update All Tabs on Change
-                <span data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="WARNING: Disabling this can cause unexpected behaviors.">
-                    <i class="fa-solid fa-circle-info ms-1"></i>
-                </span>
-            </label>
+            <label class="form-check-label" for="anchorLinks">Update Anchor Links</label>
+            <i class="fa-solid fa-circle-info ms-1" data-bs-toggle="tooltip" data-bs-title="Open Same Origin Anchor Links in New Tab."></i>
         </div>
         <div class="form-check form-switch">
             <input class="form-check-input" type="checkbox" role="switch" id="noOpener">
-            <label class="form-check-label" for="noOpener" aria-describedby="noOpenerHelp">
-                Add Noopener to Links
-                <span data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Disable if You Have Issues With Opened Links.">
-                    <i class="fa-solid fa-circle-info ms-1"></i>
-                </span>
-            </label>
+            <label class="form-check-label" for="noOpener">Add noopener to Links</label>
+            <i class="fa-solid fa-circle-info ms-1" data-bs-toggle="tooltip" data-bs-title="Disable if You Have Issues With Opened Links."></i>
+        </div>
+        <div class="form-check form-switch">
+            <input class="form-check-input" type="checkbox" role="switch" id="noReferrer">
+            <label class="form-check-label" for="noReferrer">Add noreferrer to Links</label>
+            <i class="fa-solid fa-circle-info ms-1" data-bs-toggle="tooltip" data-bs-title="Include the noreferrer flag on Opened Links."></i>
+        </div>
+        <div class="form-check form-switch">
+            <input class="form-check-input" type="checkbox" role="switch" id="oldObserver">
+            <label class="form-check-label" for="oldObserver">Use Old Mutation Observer</label>
+            <i class="fa-solid fa-rotate text-warning-emphasis ms-1" data-bs-toggle="tooltip" data-bs-title="Requires Page Reload."></i>
+            <i class="fa-solid fa-circle-info ms-1" data-bs-toggle="tooltip" data-bs-title="This Updates All Links on every Mutation Event."></i>
         </div>
         <div class="form-check form-switch">
             <input class="form-check-input options" type="checkbox" role="switch" id="contextMenu">
-            <label class="form-check-label" for="contextMenu" aria-describedby="contextMenuHelp">
-                Enable Right Click Menu
-                <span data-bs-toggle="tooltip" data-bs-title="Show Context Menu on Right Click.">
-                    <i class="fa-solid fa-circle-info ms-1"></i>
-                </span>
-            </label>
+            <label class="form-check-label" for="contextMenu">Enable Right Click Menu</label>
+            <i class="fa-solid fa-circle-info ms-1" data-bs-toggle="tooltip" data-bs-title="Show Context Menu on Right Click."></i>
         </div>
     </form>
     <div class="d-grid g-2 gap-2 my-2">
-        <a class="btn btn-outline-info w-100" href="../html/options.html">
-            <i class="fa-solid fa-sliders me-1"></i> Open Options</a>
-    </div>
-    <hr>
-    <div class="d-flex justify-content-center align-items-center text-center small">
-        <img src="../images/logo16.png" width="16" height="16" alt="Open Links in New Tab" title="Open Links in New Tab">
-        <a class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover mx-2" rel="noopener"
-           href="homepage_url">Open Links in New Tab</a> v<span class="version"></span>
+        <a class="btn btn-sm btn-outline-info w-100" href="../html/options.html">
+            <i class="fa-solid fa-sliders me-1"></i> More Options</a>
     </div>
 </div> <!-- container -->
 

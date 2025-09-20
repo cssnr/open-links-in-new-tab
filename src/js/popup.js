@@ -5,7 +5,6 @@ import {
     enableSite,
     grantPerms,
     saveOptions,
-    showToast,
     toggleSite,
     updateManifest,
     updateOptions,
@@ -14,8 +13,16 @@ import {
 chrome.storage.onChanged.addListener(onChanged)
 
 document.addEventListener('DOMContentLoaded', initPopup)
-document.getElementById('toggle-site').onclick = toggleSiteClick
-document.getElementById('enable-temp').onclick = enableTempClick
+document
+    .getElementById('toggle-global')
+    .addEventListener('change', toggleGlobalChange)
+document
+    .getElementById('toggle-site')
+    .addEventListener('click', toggleSiteClick)
+document
+    .getElementById('enable-temp')
+    .addEventListener('click', enableTempClick)
+// noinspection JSCheckFunctionSignatures
 document
     .querySelectorAll('.grant-permissions')
     .forEach((el) => el.addEventListener('click', (e) => grantPerms(e, true)))
@@ -29,6 +36,10 @@ document
     .querySelectorAll('[data-bs-toggle="tooltip"]')
     .forEach((el) => new bootstrap.Tooltip(el))
 
+// const globalSwitch = document.getElementById('global-switch')
+const globalToggle = document.getElementById('toggle-global')
+const siteSwitch = document.getElementById('site-switch')
+
 /**
  * Initialize Popup
  * TODO: Cleanup this function
@@ -36,40 +47,49 @@ document
  */
 async function initPopup() {
     console.debug('initPopup')
+    // noinspection ES6MissingAwait
     updateManifest()
-    await checkPerms()
+    // noinspection ES6MissingAwait
+    checkPerms()
 
-    const { options, sites } = await chrome.storage.sync.get([
-        'options',
-        'sites',
-    ])
-    console.debug('options, sites:', options, sites)
-    updateOptions(options)
+    chrome.storage.sync.get(['options']).then((items) => {
+        console.debug('options:', items.options)
+        updateOptions(items.options)
+        if (items.options.toggleGlobally) {
+            // globalSwitch.classList.replace('border-secondary', 'border-success')
+            globalToggle.checked = true
+            globalToggle
+                .closest('div.border')
+                .classList.replace('border-secondary', 'border-success')
+        }
+    })
 
-    const [tab, url] = await checkTab()
-    console.debug('tab, url:', tab, url)
-    console.debug(`url.hostname: ${url?.hostname}`)
-    if (url?.hostname) {
+    const tabInfo = await checkTab()
+    console.debug('tabInfo:', tabInfo)
+    const url = new URL(tabInfo.tab?.url)
+    console.debug('url:', url)
+    if (url.hostname) {
         document.getElementById('site-hostname').textContent = url.hostname
-    }
-    const switchEl = document.getElementById('switch')
-    if (!tab || !url) {
-        switchEl.classList.add('border-danger-subtle')
-        return console.log('Missing tab or url.')
-    }
-
-    console.info(`Valid Site: ${url.hostname}`)
-    const toggleSiteEl = document.getElementById('toggle-site')
-    toggleSiteEl.disabled = false
-    if (sites?.includes(url.hostname)) {
-        toggleSiteEl.checked = true
-        switchEl.classList.add('border-success')
     } else {
-        document.getElementById('enable-temp').classList.remove('disabled')
+        siteSwitch.classList.add('border-danger-subtle')
+        return console.log('%c Missing: url.hostname', 'color: Yellow')
     }
 
-    if (chrome.runtime.lastError) {
-        showToast(chrome.runtime.lastError.message, 'warning')
+    console.info(`%c Valid Site: ${url.hostname}`, 'color: Lime')
+    const toggleSiteInput = document.getElementById('toggle-site')
+    toggleSiteInput.disabled = false
+    const { sites } = await chrome.storage.sync.get(['sites'])
+    console.debug('sites:', sites)
+    if (sites?.includes(url.hostname)) {
+        // Site is manually toggled ON
+        toggleSiteInput.checked = true
+        siteSwitch.classList.add('border-success')
+    } else if (tabInfo.tabEnabled) {
+        // Tab is enabled temporarily or globally here
+        siteSwitch.classList.add('border-warning-subtle')
+    } else {
+        // Tab disabled by all means: not toggled, not temporary, not globally
+        document.getElementById('enable-temp').classList.remove('disabled')
     }
 }
 
@@ -96,6 +116,45 @@ async function popupLinks(event) {
     console.log('url:', url)
     await chrome.tabs.create({ active: true, url })
     return window.close()
+}
+
+/**
+ * Toggle Global Change Callback
+ * @function toggleGlobalChange
+ * @param {MouseEvent} event
+ */
+async function toggleGlobalChange(event) {
+    console.debug('toggleGlobalChange:', event)
+    const enabled = await toggleGlobal()
+    // event.target.checked = !event.target.checked
+    event.target.checked = enabled
+    console.debug('enabled:', enabled)
+    if (enabled) {
+        // globalSwitch.classList.replace('border-success', 'border-secondary')
+        globalToggle
+            .closest('div.border')
+            .classList.replace('border-secondary', 'border-success')
+    } else {
+        // globalSwitch.classList.replace('border-secondary', 'border-success')
+        globalToggle
+            .closest('div.border')
+            .classList.replace('border-success', 'border-secondary')
+    }
+    // window.close()
+}
+
+/**
+ * Toggle Global Handler
+ * @function toggleGlobal
+ * @return {Promise<Boolean>}
+ */
+async function toggleGlobal() {
+    console.debug('toggleGlobal')
+    const { options } = await chrome.storage.sync.get(['options'])
+    options.toggleGlobally = !options.toggleGlobally
+    await chrome.storage.sync.set({ options })
+    console.debug('options.toggleGlobally:', options.toggleGlobally)
+    return options.toggleGlobally
 }
 
 /**
@@ -126,36 +185,33 @@ async function enableTempClick(event) {
 
 /**
  * Check Tab Scripting
- * TODO: REFACTOR to work with updateAll option
  * @function checkTab
- * @return {Promise<*|[chrome.tabs.Tab, URL]>}
+ * @return {Promise<Object>}
  */
 async function checkTab() {
-    let url
     try {
         const [tab] = await chrome.tabs.query({
             currentWindow: true,
             active: true,
         })
-        url = new URL(tab.url)
-        if (!tab?.id || !url.hostname) {
-            return [false, url]
+        console.log('%c tab:', 'color: Aqua', tab)
+        if (!tab?.id) {
+            return console.log('%c NO tab.id', 'color: OrangeRed', tab)
         }
+        console.log('%c tab.id:', 'color: Lime', tab.id)
         const response = await chrome.scripting.executeScript({
             target: { tabId: tab.id },
             injectImmediately: true,
             func: function () {
-                return contentScript
+                // This returns as response[0]?.result
+                console.log('inject: contentScript:', contentScript)
+                return { contentScript, tabEnabled }
             },
         })
         console.log('response:', response)
-        if (!response[0]?.result) {
-            return [false, url]
-        }
-        return [tab, url]
+        return { ...response[0]?.result, tab }
     } catch (e) {
         console.log(e)
-        return [false, url]
     }
 }
 
